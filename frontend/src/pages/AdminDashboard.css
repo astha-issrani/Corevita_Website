@@ -1,0 +1,385 @@
+.admin-page {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: #F4F5F7;
+  font-family: var(--font-main);
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 240px;
+  background: #111;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.admin-sidebar-logo {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: var(--yellow);
+}
+
+.admin-nav {
+  flex: 1;
+  padding: 16px 0;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0;
+  color: rgba(255,255,255,0.6);
+  transition: all 0.2s;
+  position: relative;
+}
+.admin-nav-item:hover { background: rgba(255,255,255,0.06); color: white; }
+.admin-nav-item.active {
+  background: rgba(245,200,0,0.12);
+  color: var(--yellow);
+  border-left: 3px solid var(--yellow);
+}
+
+.nav-badge {
+  background: var(--yellow);
+  color: #111;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 12px;
+  margin-left: auto;
+}
+
+.admin-sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.admin-avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--yellow);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #111;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.admin-user-info p { font-size: 13px; font-weight: 600; color: white; margin: 0; }
+.admin-user-info small { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+.logout-btn {
+  width: 100%;
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: rgba(255,255,255,0.6);
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.logout-btn:hover { background: rgba(255,255,255,0.14); color: white; }
+
+/* Main */
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px 16px;
+  background: white;
+  border-bottom: 1px solid #eee;
+}
+.admin-header h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+.admin-header p { font-size: 13px; color: #888; margin: 0; }
+
+.refresh-btn {
+  background: var(--yellow);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.refresh-btn:hover { background: var(--yellow-dark); }
+
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 28px;
+  background: white;
+  border-bottom: 1px solid #eee;
+  gap: 16px;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+}
+.filter-tab {
+  background: none;
+  border: 1.5px solid #e0e0e0;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s;
+}
+.filter-tab.active {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: #111;
+}
+
+.admin-search {
+  padding: 8px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 20px;
+  font-size: 13px;
+  outline: none;
+  width: 220px;
+  transition: border-color 0.2s;
+}
+.admin-search:focus { border-color: var(--yellow); }
+
+/* Content area */
+.admin-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Message List */
+.message-list {
+  width: 340px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  border-right: 1px solid #eee;
+  background: white;
+}
+
+.admin-loading, .admin-empty {
+  padding: 60px 20px;
+  text-align: center;
+  color: #aaa;
+  font-size: 14px;
+}
+.admin-empty span { font-size: 40px; display: block; margin-bottom: 12px; }
+
+.message-item {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.message-item:hover { background: #fafafa; }
+.message-item.active { background: #fffbeb; border-left: 3px solid var(--yellow); }
+.message-item.unread { background: #fffef5; }
+.message-item.unread .sender-name { font-weight: 800; }
+
+.message-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.message-sender {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sender-avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--yellow);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: #111;
+  flex-shrink: 0;
+}
+.sender-name { font-size: 14px; font-weight: 600; margin: 0 0 2px; }
+.sender-email { font-size: 11px; color: #999; margin: 0; }
+
+.message-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.message-date { font-size: 11px; color: #aaa; }
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--yellow-dark);
+  border-radius: 50%;
+}
+
+.message-subject { font-size: 13px; font-weight: 600; color: #444; margin: 0 0 4px; }
+.message-preview { font-size: 12px; color: #999; margin: 0; line-height: 1.4; }
+
+/* Message Detail */
+.message-detail {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 36px;
+  background: #fafafa;
+}
+
+.detail-empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  gap: 12px;
+  font-size: 15px;
+}
+.detail-empty span { font-size: 48px; }
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.detail-sender-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.detail-avatar {
+  width: 52px;
+  height: 52px;
+  background: var(--yellow);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: #111;
+  flex-shrink: 0;
+}
+.detail-sender-info h3 { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
+.detail-email { font-size: 14px; color: var(--yellow-dark); text-decoration: none; }
+.detail-email:hover { text-decoration: underline; }
+
+.detail-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.reply-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+}
+.delete-btn {
+  background: none;
+  border: 1.5px solid #fca5a5;
+  color: #dc2626;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.delete-btn:hover { background: #fef2f2; }
+
+.detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.detail-tag {
+  background: var(--yellow);
+  color: #111;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.detail-time { font-size: 13px; color: #999; }
+.detail-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+.detail-status.read { background: #f0fdf4; color: #16a34a; }
+.detail-status.unread { background: #fefce8; color: #ca8a04; }
+
+.detail-body {
+  background: white;
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border: 1px solid #eee;
+}
+.detail-body p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #333;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Scrollbar */
+.message-list::-webkit-scrollbar,
+.message-detail::-webkit-scrollbar { width: 4px; }
+.message-list::-webkit-scrollbar-thumb,
+.message-detail::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+
+@media (max-width: 768px) {
+  .admin-sidebar { display: none; }
+  .message-list { width: 100%; border-right: none; }
+  .admin-content { flex-direction: column; }
+}

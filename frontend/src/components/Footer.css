@@ -1,0 +1,120 @@
+.footer {
+  background: var(--yellow);
+  color: var(--black);
+  margin-top: auto;
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 48px;
+  padding: 60px 24px;
+}
+
+.footer-logo {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-links h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-family: var(--font-main);
+}
+.footer-links a {
+  font-size: 14px;
+  color: rgba(0,0,0,0.75);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--black); text-decoration: underline; }
+
+.footer-subscribe h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-family: var(--font-main);
+}
+.footer-subscribe p {
+  font-size: 14px;
+  color: rgba(0,0,0,0.7);
+  margin-bottom: 16px;
+}
+
+.subscribe-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.subscribe-form input {
+  padding: 12px 16px;
+  border: 1.5px solid rgba(0,0,0,0.2);
+  border-radius: var(--radius);
+  font-size: 15px;
+  background: rgba(255,255,255,0.7);
+  outline: none;
+}
+.subscribe-form input:focus {
+  border-color: var(--black);
+  background: white;
+}
+.subscribe-form button {
+  padding: 12px;
+  background: white;
+  color: var(--yellow-dark);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.subscribe-form button:hover { background: #f9f9f9; }
+
+.subscribed-msg {
+  color: #165016;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(0,0,0,0.15);
+  padding: 20px 24px;
+  text-align: center;
+}
+.payment-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.payment-icons span {
+  background: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #333;
+  border: 1px solid #ddd;
+}
+.footer-bottom > p {
+  font-size: 13px;
+  color: rgba(0,0,0,0.65);
+}
+
+@media (max-width: 768px) {
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 40px 16px;
+  }
+}
