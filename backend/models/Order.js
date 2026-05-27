@@ -32,14 +32,16 @@ const orderSchema = new mongoose.Schema({
   },
   trackingNumber: String,
   subtotal: Number,
-  discount: Number,
+  discount: { type: Number, default: 0 },       // pack/volume discount
+  couponCode: { type: String, default: null },   // applied coupon code
+  couponDiscount: { type: Number, default: 0 },  // discount amount from coupon
   shipping: { type: Number, default: 0 },
   total: Number,
   autoRefill: { type: Boolean, default: false },
 }, { timestamps: true });
 
 // Generate order number before save
-orderSchema.pre('save', async function(next) {
+orderSchema.pre('save', async function (next) {
   if (!this.orderNumber) {
     this.orderNumber = 'CV' + Date.now().toString().slice(-8);
   }

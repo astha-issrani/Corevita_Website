@@ -383,3 +383,177 @@
   .message-list { width: 100%; border-right: none; }
   .admin-content { flex-direction: column; }
 }
+/* ── APPEND THESE TO YOUR EXISTING AdminDashboard.css ── */
+
+/* Order status badge */
+.order-status-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.order-status-badge.large { font-size: 14px; padding: 4px 14px; }
+
+/* Order detail layout */
+.order-detail { padding: 0; }
+
+.order-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.order-info-card {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 16px;
+}
+.order-info-card h4 { margin: 0 0 10px; font-size: 14px; }
+.order-info-card p { margin: 4px 0; font-size: 13px; color: #444; }
+
+/* Items */
+.order-items-section { margin: 16px 0; }
+.order-items-section h4 { margin-bottom: 10px; }
+
+.order-item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+}
+.order-item-name { flex: 1; font-weight: 600; }
+.order-item-pack { color: #888; font-size: 12px; }
+.order-item-qty { color: #555; }
+.order-item-price { font-weight: 700; margin-left: auto; }
+
+/* Totals */
+.order-totals-section {
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+.order-total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  font-size: 13px;
+}
+.order-total-row.savings { color: #10b981; }
+.order-total-row.total { font-weight: 700; font-size: 15px; border-top: 1px solid #e5e5e5; margin-top: 6px; padding-top: 8px; }
+
+/* Status update */
+.order-status-update { margin-top: 20px; }
+.order-status-update h4 { margin-bottom: 10px; }
+
+.status-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.status-update-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 2px solid;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.status-update-btn:hover { opacity: 0.85; }
+.status-update-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.tracking-input-row { display: flex; gap: 8px; }
+
+/* ── COUPONS ── */
+.coupon-form-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.coupon-form-card h3 { margin: 0 0 16px; }
+
+.coupon-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.coupon-form-grid .form-group { display: flex; flex-direction: column; gap: 4px; }
+.coupon-form-grid label { font-size: 12px; font-weight: 600; color: #555; }
+.coupon-form-grid input,
+.coupon-form-grid select {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.coupons-table-wrap { overflow-x: auto; }
+
+.coupons-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.coupons-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f5f5f5;
+  font-weight: 700;
+  font-size: 12px;
+  color: #555;
+  border-bottom: 2px solid #e5e5e5;
+}
+.coupons-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.coupons-table tr.coupon-inactive td { opacity: 0.5; }
+
+.coupon-code-cell {
+  font-family: monospace;
+  font-size: 14px;
+  background: #f5f5f5;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.coupon-status-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.coupon-status-badge.active { background: #d1fae5; color: #065f46; }
+.coupon-status-badge.inactive { background: #f3f4f6; color: #6b7280; }
+
+.coupon-actions { display: flex; gap: 6px; align-items: center; }
+
+.coupon-toggle-btn {
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+.coupon-toggle-btn:hover { background: #f5f5f5; }
+
+.coupon-delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.6;
+}
+.coupon-delete-btn:hover { opacity: 1; }

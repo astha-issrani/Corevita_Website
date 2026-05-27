@@ -175,11 +175,22 @@
 .cart-qty span {
   padding: 4px 10px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
-  min-width: 32px;
+  min-width: 48px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+.cart-qty-bottles small {
+  font-size: 9px;
+  font-weight: 500;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .cart-item-remove {
@@ -231,4 +242,80 @@
   margin-top: 12px;
   font-size: 12px;
   color: #888;
+}
+/* ── APPEND THESE TO YOUR EXISTING CartDrawer.css ── */
+
+/* Coupon section in cart */
+.coupon-section {
+  margin: 12px 0 8px;
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.coupon-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.coupon-input {
+  flex: 1;
+  padding: 9px 12px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.coupon-input:focus { border-color: #F5C800; }
+
+.coupon-apply-btn {
+  padding: 9px 16px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.coupon-apply-btn:hover { opacity: 0.85; }
+.coupon-apply-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.coupon-applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #d1fae5;
+  border: 1px solid #6ee7b7;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  color: #065f46;
+}
+
+.coupon-remove-btn {
+  background: none;
+  border: none;
+  color: #065f46;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.7;
+  padding: 0;
+}
+.coupon-remove-btn:hover { opacity: 1; }
+
+.coupon-error {
+  color: #dc2626;
+  font-size: 12px;
+  margin: 6px 0 0;
+}
+
+.coupon-savings-row {
+  color: #10b981 !important;
 }

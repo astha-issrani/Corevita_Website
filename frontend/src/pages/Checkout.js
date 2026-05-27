@@ -5,9 +5,9 @@ import { createOrder } from '../utils/api';
 import './Checkout.css';
 
 export default function Checkout() {
-  const { cartItems, cartTotal, cartSavings, clearCart } = useCart();
+  const { cartItems, cartTotal, cartSavings, cartFinalTotal, coupon, clearCart } = useCart();
   const navigate = useNavigate();
-  const [step, setStep] = useState(1); // 1: info, 2: payment
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
@@ -32,6 +32,9 @@ export default function Checkout() {
     return Object.keys(errs).length === 0;
   };
 
+  const shipping = cartFinalTotal >= 50 ? 0 : 5.99;
+  const total = cartFinalTotal + shipping;
+
   const handlePlaceOrder = async () => {
     setLoading(true);
     try {
@@ -55,8 +58,10 @@ export default function Checkout() {
         guestEmail: form.email,
         subtotal: cartTotal,
         discount: cartSavings,
-        shipping: cartTotal >= 50 ? 0 : 5.99,
-        total: cartTotal + (cartTotal >= 50 ? 0 : 5.99),
+        couponCode: coupon ? coupon.code : null,
+        couponDiscount: coupon ? coupon.discountAmount : 0,
+        shipping,
+        total,
         autoRefill: cartItems.some(i => i.autoRefill),
       };
 
@@ -64,16 +69,15 @@ export default function Checkout() {
       clearCart();
       navigate('/order-success', { state: { order: data } });
     } catch (err) {
-      // Demo: proceed anyway
+      // Demo fallback
       clearCart();
-      navigate('/order-success', { state: { order: { orderNumber: 'CV' + Date.now().toString().slice(-8) } } });
+      navigate('/order-success', {
+        state: { order: { orderNumber: 'CV' + Date.now().toString().slice(-8) } }
+      });
     } finally {
       setLoading(false);
     }
   };
-
-  const shipping = cartTotal >= 50 ? 0 : 5.99;
-  const total = cartTotal + shipping;
 
   if (cartItems.length === 0) {
     return (
@@ -91,15 +95,10 @@ export default function Checkout() {
         <div className="checkout-form-wrap">
           <div className="checkout-logo">COREVITA</div>
 
-          {/* Steps */}
           <div className="checkout-steps">
-            <div className={`step ${step >= 1 ? 'active' : ''}`}>
-              <span>1</span> Contact
-            </div>
+            <div className={`step ${step >= 1 ? 'active' : ''}`}><span>1</span> Contact</div>
             <div className="step-divider">›</div>
-            <div className={`step ${step >= 2 ? 'active' : ''}`}>
-              <span>2</span> Payment
-            </div>
+            <div className={`step ${step >= 2 ? 'active' : ''}`}><span>2</span> Payment</div>
           </div>
 
           {step === 1 && (
@@ -236,8 +235,14 @@ export default function Checkout() {
           </div>
           {cartSavings > 0 && (
             <div className="summary-row savings">
-              <span>Savings</span>
+              <span>Pack Savings</span>
               <span>-${cartSavings.toFixed(2)}</span>
+            </div>
+          )}
+          {coupon && (
+            <div className="summary-row savings">
+              <span>Coupon ({coupon.code})</span>
+              <span>-${coupon.discountAmount.toFixed(2)}</span>
             </div>
           )}
           <div className="summary-row">

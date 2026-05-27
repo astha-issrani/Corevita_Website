@@ -1,12 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import './CartDrawer.css';
 
+const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
 export default function CartDrawer() {
-  const { cartItems, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, cartTotal, cartSavings } = useCart();
+  const {
+    cartItems, isCartOpen, setIsCartOpen,
+    removeFromCart, updateQuantity,
+    cartTotal, cartSavings, cartFinalTotal,
+    coupon, applyCoupon, removeCoupon,
+  } = useCart();
+
   const FREE_SHIPPING_THRESHOLD = 50;
   const toFreeShipping = Math.max(0, FREE_SHIPPING_THRESHOLD - cartTotal);
+
+  const [couponInput, setCouponInput] = useState('');
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState('');
+
+  const handleApplyCoupon = async () => {
+    if (!couponInput.trim()) return;
+    setCouponLoading(true);
+    setCouponError('');
+    try {
+      const { data } = await axios.post(`${API}/coupons/validate`, {
+        code: couponInput.trim(),
+        orderTotal: cartTotal,
+      });
+      applyCoupon(data);
+      setCouponInput('');
+    } catch (err) {
+      setCouponError(err.response?.data?.message || 'Invalid coupon code');
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    removeCoupon();
+    setCouponError('');
+    setCouponInput('');
+  };
 
   return (
     <>
@@ -68,9 +105,11 @@ export default function CartDrawer() {
                     )}
                   </div>
                   <div className="cart-qty">
-                    <button onClick={() => updateQuantity(item.packId, item.quantity - 1)}>−</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.packId, item.quantity + 1)}>+</button>
+                    <button onClick={() => updateQuantity(item.packId, -1)}>−</button>
+                    <span className="cart-qty-bottles">
+                      {item.quantity} <small>bottles</small>
+                    </span>
+                    <button onClick={() => updateQuantity(item.packId, 1)}>+</button>
                   </div>
                 </div>
                 <button className="cart-item-remove" onClick={() => removeFromCart(item.packId)}>🗑</button>
@@ -81,16 +120,53 @@ export default function CartDrawer() {
 
         {cartItems.length > 0 && (
           <div className="cart-footer">
+
+            {/* ── Coupon Section ── */}
+            <div className="coupon-section">
+              {coupon ? (
+                <div className="coupon-applied">
+                  <span>🏷️ <strong>{coupon.code}</strong> — {coupon.message}</span>
+                  <button className="coupon-remove-btn" onClick={handleRemoveCoupon}>✕</button>
+                </div>
+              ) : (
+                <div className="coupon-input-row">
+                  <input
+                    className="coupon-input"
+                    placeholder="Coupon code"
+                    value={couponInput}
+                    onChange={e => { setCouponInput(e.target.value.toUpperCase()); setCouponError(''); }}
+                    onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
+                  />
+                  <button
+                    className="coupon-apply-btn"
+                    onClick={handleApplyCoupon}
+                    disabled={couponLoading || !couponInput.trim()}
+                  >
+                    {couponLoading ? '...' : 'Apply'}
+                  </button>
+                </div>
+              )}
+              {couponError && <p className="coupon-error">{couponError}</p>}
+            </div>
+
+            {/* ── Totals ── */}
             {cartSavings > 0 && (
               <div className="cart-savings-row">
-                <span>Savings</span>
+                <span>Pack Savings</span>
                 <span className="savings-amt">-${cartSavings.toFixed(2)}</span>
+              </div>
+            )}
+            {coupon && (
+              <div className="cart-savings-row coupon-savings-row">
+                <span>Coupon ({coupon.code})</span>
+                <span className="savings-amt">-${coupon.discountAmount.toFixed(2)}</span>
               </div>
             )}
             <div className="cart-subtotal">
               <span>Subtotal</span>
-              <span>${cartTotal.toFixed(2)}</span>
+              <span>${cartFinalTotal.toFixed(2)}</span>
             </div>
+
             <Link
               to="/checkout"
               className="btn-primary checkout-btn"

@@ -202,7 +202,8 @@ export default function ProductDetail() {
       packLabel: selectedPack.label,
       price: selectedPack.price,
       originalPrice: selectedPack.originalPrice,
-      quantity: 1,
+      quantity: selectedPack.quantity,   // e.g. 2, 4, 6 bottles
+      packSize: selectedPack.quantity,   // step size for +/- buttons
       autoRefill,
     });
     setAdded(true);
@@ -293,6 +294,17 @@ export default function ProductDetail() {
                     </div>
                     <div className="pack-label-text">
                       <strong>{pack.label}</strong>
+                      <div className="pack-pills-row">
+                        {Array.from({ length: pack.quantity }).map((_, i) => {
+                          const half = pack.quantity / 2;
+                          const isFree = i >= half;
+                          return (
+                            <span key={i} className={`pack-bottle-pill ${isFree ? 'free' : 'paid'}`}>
+                              🍯 {isFree ? 'FREE' : `#${i + 1}`}
+                            </span>
+                          );
+                        })}
+                      </div>
                       <span className="pack-save">SAVE {pack.savingsPercent}%</span>
                     </div>
                     <div className="pack-price">${pack.price}</div>
