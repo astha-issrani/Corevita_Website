@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import './AdminReviews.css';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -19,20 +19,19 @@ export default function AdminReviews() {
 
   const token = localStorage.getItem('adminToken');
 
-  const fetchReviews = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${API}/api/products/admin/reviews`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await res.json();
-      setReviews(data);
-    } catch {}
-    setLoading(false);
-  };
+const fetchReviews = useCallback(async () => {
+  setLoading(true);
+  try {
+    const res = await fetch(`${API}/api/products/admin/reviews`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await res.json();
+    setReviews(data);
+  } catch {}
+  setLoading(false);
+}, [token]);
 
-  useEffect(() => { fetchReviews(); }, []);
-
+useEffect(() => { fetchReviews(); }, [fetchReviews]);
   const handleApprove = async (id, approved) => {
     await fetch(`${API}/api/products/admin/reviews/${id}`, {
       method: 'PATCH',

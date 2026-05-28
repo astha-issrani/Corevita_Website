@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { getProduct } from '../utils/api';
@@ -229,14 +229,8 @@ export default function ProductDetail() {
 
   const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-  useEffect(() => {
-    getProduct(slug || 'bee-pearl')
-      .then(({ data }) => { setProduct(data); setSelectedPack(data.packs?.[0] || MOCK_PRODUCT.packs[0]); })
-      .catch(() => {});
-    fetchReviews();
-  }, [slug]);
-
-  const fetchReviews = async () => {
+  // ✅ FIXED: useCallback so fetchReviews is stable and safe in dep arrays
+  const fetchReviews = useCallback(async () => {
     try {
       const res = await fetch(`${API}/api/products/${slug || 'bee-pearl'}/reviews`);
       if (res.ok) {
@@ -244,7 +238,15 @@ export default function ProductDetail() {
         setReviews(data);
       }
     } catch {}
-  };
+  }, [slug, API]);
+
+  // ✅ FIXED: fetchReviews is now in the dep array — no more ESLint warning
+  useEffect(() => {
+    getProduct(slug || 'bee-pearl')
+      .then(({ data }) => { setProduct(data); setSelectedPack(data.packs?.[0] || MOCK_PRODUCT.packs[0]); })
+      .catch(() => {});
+    fetchReviews();
+  }, [slug, fetchReviews]);
 
   const handleMouseMove = (e) => {
     const rect = mainImgRef.current.getBoundingClientRect();
@@ -578,7 +580,7 @@ export default function ProductDetail() {
               </div>
               <div className="review-form-field">
                 <label>Review Title</label>
-                <input type="text" placeholder='e.g. "Best supplement I\'ve tried!"' value={reviewForm.title} onChange={e => setReviewForm(f => ({ ...f, title: e.target.value }))} />
+                <input type="text" placeholder='e.g. "Best supplement I have tried!"' value={reviewForm.title} onChange={e => setReviewForm(f => ({ ...f, title: e.target.value }))} />
               </div>
               <div className="review-form-field">
                 <label>Your Review *</label>
