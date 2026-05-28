@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Review = require('../models/Review');
-const { adminAuth } = require('../middleware/adminAuth');
+const adminAuth = require('../middleware/adminAuth');
 
 // GET all reviews for a product (approved ones for public)
 router.get('/:slug/reviews', async (req, res) => {
