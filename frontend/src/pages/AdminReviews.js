@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './AdminReviews.css';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000').replace(/\/api$/, '');
@@ -14,25 +14,36 @@ function StarDisplay({ rating }) {
 export default function AdminReviews() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all'); // all | pending | approved
+  const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
 
-  const token = localStorage.getItem('corevita_token');
+  // ✅ FIX: read token fresh inside each function, not at render time
+  const fetchReviews = useCallback(async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('corevita_token');
+      const res = await fetch(`${API}/api/products/admin/reviews`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) {
+        console.error('Reviews fetch failed:', res.status, res.statusText);
+        setReviews([]);
+        setLoading(false);
+        return;
+      }
+      const data = await res.json();
+      setReviews(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Reviews fetch error:', err);
+      setReviews([]);
+    }
+    setLoading(false);
+  }, []); // ✅ empty deps — no stale token capture
 
-const fetchReviews = useCallback(async () => {
-  setLoading(true);
-  try {
-    const res = await fetch(`${API}/api/products/admin/reviews`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const data = await res.json();
-    setReviews(data);
-  } catch {}
-  setLoading(false);
-}, [token]);
+  useEffect(() => { fetchReviews(); }, [fetchReviews]);
 
-useEffect(() => { fetchReviews(); }, [fetchReviews]);
   const handleApprove = async (id, approved) => {
+    const token = localStorage.getItem('corevita_token'); // ✅ fresh token
     await fetch(`${API}/api/products/admin/reviews/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -43,6 +54,7 @@ useEffect(() => { fetchReviews(); }, [fetchReviews]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this review?')) return;
+    const token = localStorage.getItem('corevita_token'); // ✅ fresh token
     await fetch(`${API}/api/products/admin/reviews/${id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
@@ -84,7 +96,7 @@ useEffect(() => { fetchReviews(); }, [fetchReviews]);
       {/* Filters */}
       <div className="ar-filters">
         <div className="ar-filter-tabs">
-          {['all','pending','approved'].map(f => (
+          {['all', 'pending', 'approved'].map(f => (
             <button key={f} className={`ar-tab ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
               {f.charAt(0).toUpperCase() + f.slice(1)}
               {f === 'pending' && pending > 0 && <span className="ar-badge">{pending}</span>}
