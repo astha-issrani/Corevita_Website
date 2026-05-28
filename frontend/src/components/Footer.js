@@ -24,7 +24,7 @@ export default function Footer() {
         </div>
         <div className="footer-links">
           <h4>Quick links</h4>
-          <Link to="/shop">Search</Link>
+        <Link to="/products/bee-pearl">Shop</Link>
           <Link to="/track-order">Track Your Order</Link>
           <Link to="/contact">Manage Subscription</Link>
           <Link to="/refund-policy">Refund Policy</Link>

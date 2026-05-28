@@ -71,9 +71,9 @@ export default function CartDrawer() {
           {cartItems.length === 0 ? (
             <div className="cart-empty">
               <p>Your cart is empty</p>
-              <Link to="/shop" onClick={() => setIsCartOpen(false)} className="btn-primary" style={{ display: 'inline-block', marginTop: 16 }}>
-                Shop Now
-              </Link>
+             <Link to="/products/bee-pearl" onClick={() => setIsCartOpen(false)} className="btn-primary" style={{ display: 'inline-block', marginTop: 16 }}>
+  Shop Now
+</Link>
             </div>
           ) : (
             cartItems.map(item => (

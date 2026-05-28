@@ -55,7 +55,7 @@ export default function OrderSuccess() {
 
         <div className="success-actions">
           <Link to="/track-order" className="btn-primary">Track Your Order</Link>
-          <Link to="/shop" className="btn-outline">Continue Shopping</Link>
+         <Link to="/products/bee-pearl" className="btn-outline">Continue Shopping</Link>
         </div>
       </div>
     </div>

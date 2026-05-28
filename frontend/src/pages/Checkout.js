@@ -83,7 +83,7 @@ export default function Checkout() {
     return (
       <div className="checkout-empty container">
         <h2>Your cart is empty</h2>
-        <button className="btn-primary" onClick={() => navigate('/shop')}>Continue Shopping</button>
+       <button className="btn-primary" onClick={() => navigate('/products/bee-pearl')}>Continue Shopping</button>
       </div>
     );
   }
