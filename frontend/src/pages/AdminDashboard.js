@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme, FONT_OPTIONS, DEFAULT_FONTS } from '../context/ThemeContext';
 import './AdminDashboard.css';
+import AdminReviews from './AdminReviews';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 function getToken() { return localStorage.getItem('corevita_token'); }
@@ -583,11 +584,12 @@ export default function AdminDashboard() {
   };
 
   const navItems = [
-    { key: 'orders', icon: '📦', label: 'Orders' },
-    { key: 'messages', icon: '✉️', label: 'Messages' },
-    { key: 'coupons', icon: '🏷️', label: 'Coupons' },
-    { key: 'fonts', icon: '🔤', label: 'Fonts' },
-  ];
+  { key: 'orders',   icon: '📦', label: 'Orders' },
+  { key: 'messages', icon: '✉️', label: 'Messages' },
+  { key: 'coupons',  icon: '🏷️', label: 'Coupons' },
+  { key: 'fonts',    icon: '🔤', label: 'Fonts' },
+  { key: 'reviews',  icon: '⭐', label: 'Reviews' },  // ← ADD THIS LINE
+];
 
   return (
     <div className="admin-page">
@@ -609,11 +611,12 @@ export default function AdminDashboard() {
         </div>
       </aside>
       <main className="admin-main">
-        {activeTab === 'orders' && <OrdersTab />}
-        {activeTab === 'messages' && <MessagesTab />}
-        {activeTab === 'coupons' && <CouponsTab />}
-        {activeTab === 'fonts' && <FontsTab />}
-      </main>
+  {activeTab === 'orders'   && <OrdersTab />}
+  {activeTab === 'messages' && <MessagesTab />}
+  {activeTab === 'coupons'  && <CouponsTab />}
+  {activeTab === 'fonts'    && <FontsTab />}
+  {activeTab === 'reviews'  && <AdminReviews />}  {/* ← ADD THIS LINE */}
+</main>
     </div>
   );
 }
