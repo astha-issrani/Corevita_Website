@@ -16,7 +16,8 @@ app.use('/api/orders', require('./routes/orders'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/contact', require('./routes/contact'));
-app.use('/api/coupons', require('./routes/coupons')); // ← NEW
+app.use('/api/coupons', require('./routes/coupons'));
+app.use('/api/settings', require('./routes/settings'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 

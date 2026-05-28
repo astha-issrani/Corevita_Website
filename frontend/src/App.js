@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
@@ -16,7 +17,6 @@ import AdminDashboard from './pages/AdminDashboard';
 import { RefundPolicy, PrivacyPolicy, TermsOfService, ShippingPolicy } from './pages/PolicyPages';
 import './index.css';
 
-// Hide Navbar/Footer on admin pages
 function Layout({ children }) {
   const { pathname } = useLocation();
   const isAdmin = pathname.startsWith('/admin');
@@ -24,9 +24,7 @@ function Layout({ children }) {
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {!isAdmin && <Navbar />}
       {!isAdmin && <CartDrawer />}
-      <main style={{ flex: 1 }}>
-        {children}
-      </main>
+      <main style={{ flex: 1 }}>{children}</main>
       {!isAdmin && <Footer />}
     </div>
   );
@@ -34,28 +32,29 @@ function Layout({ children }) {
 
 function App() {
   return (
-    <CartProvider>
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/products/:slug" element={<ProductDetail />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
-            <Route path="/track-order" element={<TrackOrder />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/refund-policy" element={<RefundPolicy />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="/shipping-policy" element={<ShippingPolicy />} />
-            {/* Admin */}
-            <Route path="/admin" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          </Routes>
-        </Layout>
-      </Router>
-    </CartProvider>
+    <ThemeProvider>
+      <CartProvider>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/products/:slug" element={<ProductDetail />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-success" element={<OrderSuccess />} />
+              <Route path="/track-order" element={<TrackOrder />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/refund-policy" element={<RefundPolicy />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/shipping-policy" element={<ShippingPolicy />} />
+              <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </CartProvider>
+    </ThemeProvider>
   );
 }
 
