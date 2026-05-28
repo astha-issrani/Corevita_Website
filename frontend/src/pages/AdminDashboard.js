@@ -5,7 +5,7 @@ import { useTheme, FONT_OPTIONS, DEFAULT_FONTS } from '../context/ThemeContext';
 import './AdminDashboard.css';
 import AdminReviews from './AdminReviews';
 
-const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api'
 function getToken() { return localStorage.getItem('corevita_token'); }
 const authHeaders = () => ({ Authorization: `Bearer ${getToken()}` });
 

@@ -77,7 +77,7 @@ export function ThemeProvider({ children }) {
 
   // Load saved fonts from backend on mount
   useEffect(() => {
-    axios.get(`${API}/settings/fonts`)
+    axios.get(`${API}/api/settings/fonts`)
       .then(({ data }) => {
         if (data.value) {
           const merged = { ...DEFAULT_FONTS, ...data.value };
@@ -102,8 +102,9 @@ export function ThemeProvider({ children }) {
 
   const saveFonts = async (fontsToSave) => {
     const token = localStorage.getItem('corevita_token');
-    const { data } = await axios.put(
-      `${API}/settings/fonts`,
+    const { data } = 
+    await axios.put(
+  `${API}/api/settings/fonts`,
       { value: fontsToSave },
       { headers: { Authorization: `Bearer ${token}` } }
     );

@@ -17,7 +17,7 @@ export default function AdminReviews() {
   const [filter, setFilter] = useState('all'); // all | pending | approved
   const [search, setSearch] = useState('');
 
-  const token = localStorage.getItem('adminToken');
+  const token = localStorage.getItem('corevita_token');
 
 const fetchReviews = useCallback(async () => {
   setLoading(true);
