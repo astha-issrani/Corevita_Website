@@ -227,7 +227,7 @@ export default function ProductDetail() {
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [reviewSuccess, setReviewSuccess] = useState(false);
 
-  const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000').replace(/\/api$/, '');
 
   // ✅ FIXED: useCallback so fetchReviews is stable and safe in dep arrays
   const fetchReviews = useCallback(async () => {
