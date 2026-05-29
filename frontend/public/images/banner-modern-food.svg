@@ -1,14 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480">
-  <rect width="640" height="480" fill="#E8F4E8"/>
-  <rect y="320" width="640" height="160" fill="#C5E1A5"/>
-  <rect y="300" width="640" height="40" fill="#AED581" opacity="0.6"/>
-  <circle cx="520" cy="80" r="45" fill="#FFF9C4" opacity="0.9"/>
-  <path d="M 0 340 Q 160 280 320 320 T 640 300 L 640 480 L 0 480 Z" fill="#81C784" opacity="0.35"/>
-  <g fill="#558B2F" opacity="0.5">
-    <ellipse cx="120" cy="310" rx="80" ry="25"/>
-    <ellipse cx="400" cy="330" rx="100" ry="28"/>
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#87CEEB"/>
+      <stop offset="100%" stop-color="#E8F4FC"/>
+    </linearGradient>
+    <linearGradient id="field" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#A5D6A7"/>
+      <stop offset="100%" stop-color="#66BB6A"/>
+    </linearGradient>
+    <radialGradient id="plate" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e0e0e0"/>
+    </radialGradient>
+  </defs>
+  <rect width="640" height="480" fill="url(#sky)"/>
+  <rect y="280" width="640" height="200" fill="url(#field)"/>
+  <circle cx="520" cy="70" r="50" fill="#FFF59D"/>
+  <ellipse cx="320" cy="300" rx="200" ry="40" fill="#558B2F" opacity="0.25"/>
+  <!-- Farm rows -->
+  <g opacity="0.4" stroke="#33691E" stroke-width="2" fill="none">
+    <path d="M 40 320 Q 200 290 400 310 T 640 300"/>
+    <path d="M 0 350 Q 180 330 360 345 T 640 335"/>
   </g>
-  <text x="320" y="200" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" font-weight="800" fill="#2E5E2E">Modern Agriculture</text>
-  <text x="320" y="235" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" fill="#444">Nutrient-depleted soil · empty calories</text>
-  <rect x="180" y="360" width="280" height="8" rx="4" fill="#F5C800" opacity="0.7"/>
+  <!-- Plate with modern food -->
+  <g transform="translate(320 255)">
+    <ellipse cx="0" cy="95" rx="130" ry="18" fill="#000" opacity="0.1"/>
+    <ellipse cx="0" cy="55" rx="125" ry="28" fill="url(#plate)" stroke="#bdbdbd" stroke-width="2"/>
+    <ellipse cx="0" cy="48" rx="108" ry="22" fill="#f5f5f5"/>
+    <!-- Vegetables -->
+    <ellipse cx="-45" cy="35" rx="28" ry="18" fill="#E53935" transform="rotate(-15 -45 35)"/>
+    <ellipse cx="-45" cy="28" rx="14" ry="10" fill="#43A047"/>
+    <ellipse cx="40" cy="38" rx="22" ry="14" fill="#FF8F00"/>
+    <ellipse cx="55" cy="32" rx="10" ry="8" fill="#7CB342"/>
+    <ellipse cx="-5" cy="42" rx="26" ry="16" fill="#8BC34A"/>
+    <ellipse cx="15" cy="22" rx="18" ry="12" fill="#C62828"/>
+    <ellipse cx="-25" cy="48" rx="20" ry="12" fill="#FDD835"/>
+    <ellipse cx="25" cy="50" rx="16" ry="10" fill="#6D4C41" opacity="0.5"/>
+  </g>
+  <text x="320" y="88" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="26" font-weight="800" fill="#1B5E20">Modern Food Supply</text>
+  <text x="320" y="118" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#37474F">Looks full — often nutrient-empty</text>
 </svg>

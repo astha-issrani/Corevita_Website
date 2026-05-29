@@ -111,6 +111,11 @@ const PAGES = [
           { key: 'title2', label: 'Section Title', type: 'text' },
           { key: 'body2',  label: 'Intro Paragraph', type: 'textarea', rows: 3 },
           { key: 'body3',  label: 'Second Paragraph (100% bioavailable)', type: 'textarea', rows: 2 },
+          { key: 'body4',  label: 'Third Paragraph', type: 'textarea', rows: 2 },
+          { key: 'mv_p1',  label: 'Key Point 1', type: 'text' },
+          { key: 'mv_p2',  label: 'Key Point 2', type: 'text' },
+          { key: 'mv_p3',  label: 'Key Point 3', type: 'text' },
+          { key: 'mv_p4',  label: 'Key Point 4', type: 'text' },
           { key: 'g1_title', label: 'Group 1 Heading', type: 'text' },
           { key: 'g1_b1', label: 'Group 1 Bullet 1', type: 'textarea', rows: 2 },
           { key: 'g1_b2', label: 'Group 1 Bullet 2', type: 'textarea', rows: 2 },
@@ -126,7 +131,7 @@ const PAGES = [
       {
         key: 'infographic', label: '💊 Capsules Infographic (Arrows + Labels)',
         fields: [
-          { key: 'image_url',    label: 'Center Image URL', type: 'text', hint: 'Upload your capsules image and paste URL. Leave blank to use emoji.' },
+          { key: 'image_url',    label: 'Center Image URL', type: 'text', hint: 'Use /images/capsules-bowl.svg or paste a direct image URL' },
           { key: 'image_alt',    label: 'Image Alt Text',   type: 'text' },
           { key: 'center_emoji', label: 'Center Emoji (fallback if no image)', type: 'text' },
           { key: 'top',          label: 'Top Label',         type: 'textarea', rows: 2 },

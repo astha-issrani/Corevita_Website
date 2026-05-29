@@ -21,13 +21,27 @@ export const DEFAULT_GALLERY_IMAGES = [
 
 export const DEFAULT_CAPSULES_IMAGE = IMG.capsulesBowl;
 
+const BLOCKED_IMAGE_HOSTS = [
+  'unsplash.com',
+  'placeholder',
+  'mixkit.co',
+  'pexels.com',
+  'pixabay.com',
+  'placehold.co',
+  'picsum.photos',
+];
+
 /** Prefer local assets; ignore broken remote URLs from old DB seeds */
 export function resolveBannerImage(url, fallback) {
   if (!url || !String(url).trim()) return fallback;
   const u = String(url).trim();
   if (u.startsWith('/images/')) return u;
-  if (u.includes('unsplash.com') || u.includes('placeholder')) return fallback;
+  if (BLOCKED_IMAGE_HOSTS.some((h) => u.includes(h))) return fallback;
   return u;
+}
+
+export function resolveMediaImage(url, fallback) {
+  return resolveBannerImage(url, fallback);
 }
 
 const GTV_SAMPLE = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample';

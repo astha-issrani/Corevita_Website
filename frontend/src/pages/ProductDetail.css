@@ -126,8 +126,16 @@
 .section-subtitle { text-align: center; color: var(--gray); font-size: 16px; font-weight: 600; margin-bottom: 40px; }
 
 /* ===== BELOW FOLD SECTION ===== */
-.below-fold-section { background: #fafaf8; padding: 80px 0; }
-.below-fold-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+.below-fold-section { background: #fafaf8; padding: 80px 0; overflow: visible; }
+.below-fold-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  overflow: visible;
+}
+.below-fold-col { min-width: 0; }
+.below-fold-col--diagram { overflow: visible; }
 .below-fold-text h2 { font-family: var(--font-heading); font-size: 28px; font-weight: 900; margin-bottom: 16px; }
 .below-fold-text h3 { font-family: var(--font-heading); font-size: 22px; font-weight: 900; margin: 28px 0 12px; }
 .below-fold-text p { font-size: 15px; line-height: 1.75; color: var(--gray-dark); margin-bottom: 12px; }
@@ -154,6 +162,30 @@
 }
 .bf-tagline { font-size: 15px; font-style: italic; color: #555; border-left: 3px solid var(--yellow); padding-left: 14px; margin-top: 20px; }
 
+.below-fold-key-points {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 8px;
+}
+.below-fold-key-points li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--gray-dark);
+  margin-bottom: 10px;
+}
+.below-fold-key-points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+
 /* Scroll reveal */
 .scroll-reveal {
   opacity: 0;
@@ -163,6 +195,9 @@
 .scroll-reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+.scroll-reveal.scroll-reveal-delay {
+  transition-delay: 0.12s;
 }
 
 /* Product gallery photos */
@@ -259,29 +294,29 @@
   max-width: 200px;
 }
 .infographic-callout--left {
-  left: 3%;
+  left: 6%;
   top: 40%;
   transform: translateY(-50%);
-  max-width: 108px;
+  max-width: 112px;
 }
 .infographic-callout--left p { text-align: left; }
 .infographic-callout--right {
-  right: 3%;
+  right: 6%;
   top: 40%;
   transform: translateY(-50%);
-  max-width: 108px;
+  max-width: 112px;
 }
 .infographic-callout--right p { text-align: right; }
 .infographic-callout--bottom-left {
-  left: 3%;
-  bottom: 11%;
-  max-width: 118px;
+  left: 6%;
+  bottom: 12%;
+  max-width: 122px;
 }
 .infographic-callout--bottom-left p { text-align: left; }
 .infographic-callout--bottom-right {
-  right: 3%;
-  bottom: 11%;
-  max-width: 118px;
+  right: 6%;
+  bottom: 12%;
+  max-width: 122px;
 }
 .infographic-callout--bottom-right p { text-align: right; }
 .infographic-brand {
@@ -391,9 +426,12 @@
   .nutrients-grid { grid-template-columns: repeat(2, 1fr); }
   .reviews-grid { grid-template-columns: repeat(2, 1fr); }
   .below-fold-grid { grid-template-columns: 1fr; }
-  .infographic-diagram { min-height: 440px; max-width: 100%; }
+  .below-fold-infographic { padding: 16px 20px 24px; }
+  .infographic-diagram { min-height: 460px; max-width: 100%; padding: 4px 8px; }
   .infographic-callout { max-width: 100px; padding: 4px; }
   .infographic-callout--top { max-width: 170px; }
+  .infographic-callout--left { left: 4%; }
+  .infographic-callout--right { right: 4%; }
   .infographic-callout p { font-size: 10px; }
   .infographic-core { width: 38%; height: 38%; }
 }

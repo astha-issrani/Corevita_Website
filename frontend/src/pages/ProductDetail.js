@@ -11,9 +11,17 @@ import {
   DEFAULT_TESTIMONIAL_VIDEOS,
   IMG,
   resolveBannerImage,
+  resolveMediaImage,
   resolveVideoUrl,
 } from '../constants/media';
 import './ProductDetail.css';
+
+/** Use fallback when admin/DB value is empty whitespace */
+function cv(c, section, field, fallback) {
+  const v = c(section, field, fallback);
+  const s = String(v ?? '').trim();
+  return s || fallback;
+}
 
 const PRODUCT_SLIDES = [
   { id:1, label:'Main', content:(<svg viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" width="240" height="300"><rect x="80" y="60" width="140" height="240" rx="16" fill="white" stroke="#E0E0E0" strokeWidth="2"/><rect x="90" y="30" width="120" height="38" rx="10" fill="#CCCCCC"/><rect x="95" y="34" width="110" height="30" rx="8" fill="#BBBBBB"/><rect x="80" y="120" width="140" height="150" fill="#F5C800"/><ellipse cx="150" cy="175" rx="18" ry="12" fill="#333"/><ellipse cx="150" cy="175" rx="10" ry="11" fill="#F5C800"/><line x1="142" y1="168" x2="142" y2="182" stroke="#333" strokeWidth="1.5"/><line x1="158" y1="168" x2="158" y2="182" stroke="#333" strokeWidth="1.5"/><ellipse cx="140" cy="166" rx="10" ry="6" fill="rgba(255,255,255,0.6)" transform="rotate(-30 140 166)"/><ellipse cx="160" cy="166" rx="10" ry="6" fill="rgba(255,255,255,0.6)" transform="rotate(30 160 166)"/><text x="150" y="130" textAnchor="middle" fontFamily="Arial" fontSize="10" fontWeight="600" fill="#333">CoreVita</text><text x="150" y="205" textAnchor="middle" fontFamily="Arial" fontSize="14" fontWeight="900" fill="#333">BEE PEARL</text><text x="150" y="220" textAnchor="middle" fontFamily="Arial" fontSize="7" fill="#555">CONCENTRATED BEE BREAD</text><text x="150" y="235" textAnchor="middle" fontFamily="Arial" fontSize="6" fill="#666">Traditionally used to support</text><text x="150" y="245" textAnchor="middle" fontFamily="Arial" fontSize="6" fill="#666">vitality and overall wellness</text><text x="150" y="260" textAnchor="middle" fontFamily="Arial" fontSize="7" fill="#555">DIETARY SUPPLEMENT  30 CAPSULES</text></svg>) },
@@ -135,7 +143,7 @@ function BannerImage({ src, alt, fallback }) {
 
 // ── Banner 1: image LEFT, text RIGHT ──────────────────────────────────────────
 function Banner1({c}){
-  const imageUrl = c('banner1','image_url','');
+  const imageUrl = cv(c, 'banner1', 'image_url', IMG.bannerModernFood);
   const title    = c('banner1','title',"Why Modern Food Isn't Enough");
   const body     = c('banner1','body',`Today's food supply is broken. "Empty" calories and nutrient-dead soil mean we have to eat twice as much just to get half the nutrition our grandparents did.
 
@@ -168,14 +176,14 @@ Your body doesn't need more stimulation; it needs repair. Bee Pearl bridges this
 
 // ── Banner 2: text LEFT, image RIGHT ──────────────────────────────────────────
 function Banner2({c}){
-  const imageUrl = c('banner2','image_url','');
-  const title    = c('banner2','title',"CoreVita Bee Pearl: Nature's Gold Standard");
-  const intro    = c('banner2','intro','');
-  const body     = c('banner2','body','');
-  const bullet1  = c('banner2','bullet1','');
-  const bullet2  = c('banner2','bullet2','');
-  const bullet3  = c('banner2','bullet3','');
-  const tagline  = c('banner2','tagline','');
+  const imageUrl = cv(c, 'banner2', 'image_url', IMG.bannerBottle);
+  const title    = cv(c, 'banner2', 'title', "CoreVita Bee Pearl: Nature's Gold Standard");
+  const intro    = cv(c, 'banner2', 'intro', 'Known as "Nature\'s Perfect Food," Bee Bread has been cherished for centuries for its healing power. Its unique enzymatic profile makes it the ultimate tool for restoring vitality.');
+  const body     = cv(c, 'banner2', 'body', 'Packed with over 250 bioactive compounds — including rare enzymes and vitamins — CoreVita Bee Pearl replenishes exactly what your body is missing. These nutrients:');
+  const bullet1  = cv(c, 'banner2', 'bullet1', 'Fuel mitochondria with pre-digested energy your cells absorb instantly.');
+  const bullet2  = cv(c, 'banner2', 'bullet2', 'Repair damaged tissue and neutralize inflammation naturally.');
+  const bullet3  = cv(c, 'banner2', 'bullet3', 'Support deep sleep, mental clarity, and sustained stamina.');
+  const tagline  = cv(c, 'banner2', 'tagline', 'Feel revitalized from the inside out. Harness the concentrated power of the hive to reclaim your energy and resilience.');
 
   return(
     <ScrollReveal className="banner-section banner2-section">
@@ -229,19 +237,34 @@ const INFO_LABEL_DEFAULTS = {
   bottom_right: 'Enzymes for better digestion and nutrient absorption',
 };
 
-/* Arrows from bowl → labels (arrowhead at text) — viewBox 560×520 */
+/* Arrows from bowl → labels — inset so arrowheads are not clipped */
 const INFO_CALLOUTS = [
-  { key: 'top', pos: 'top', path: 'M 280 165 L 280 62' },
-  { key: 'left', pos: 'left', path: 'M 208 232 L 102 232' },
-  { key: 'right', pos: 'right', path: 'M 352 232 L 458 232' },
-  { key: 'bottom_left', pos: 'bottom-left', path: 'M 222 285 Q 175 340 128 400' },
-  { key: 'bottom_right', pos: 'bottom-right', path: 'M 338 285 Q 385 340 432 400' },
+  { key: 'top', pos: 'top', path: 'M 280 172 L 280 88' },
+  { key: 'left', pos: 'left', path: 'M 212 248 L 148 248' },
+  { key: 'right', pos: 'right', path: 'M 348 248 L 412 248' },
+  { key: 'bottom_left', pos: 'bottom-left', path: 'M 224 292 Q 188 348 152 402' },
+  { key: 'bottom_right', pos: 'bottom-right', path: 'M 336 292 Q 372 348 408 402' },
 ];
+
+function InfographicCoreImage({ src, alt, fallback }) {
+  const [imgSrc, setImgSrc] = useState(() => resolveMediaImage(src, fallback));
+  useEffect(() => {
+    setImgSrc(resolveMediaImage(src, fallback));
+  }, [src, fallback]);
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      className="infographic-core-img infographic-core-img--bowl"
+      onError={() => setImgSrc(fallback)}
+    />
+  );
+}
 
 // ── Infographic with visible arrows + editable labels ─────────────────────────
 function Infographic({ c }) {
-  const imageUrl = c('infographic', 'image_url', DEFAULT_CAPSULES_IMAGE);
-  const brand = c('infographic', 'brand', 'CoreVita');
+  const imageUrl = cv(c, 'infographic', 'image_url', DEFAULT_CAPSULES_IMAGE);
+  const brand = cv(c, 'infographic', 'brand', 'CoreVita');
 
   return (
     <div className="infographic-diagram">
@@ -251,7 +274,7 @@ function Infographic({ c }) {
         </div>
       ))}
 
-      <svg className="infographic-arrows-svg" viewBox="0 0 560 520" aria-hidden="true">
+      <svg className="infographic-arrows-svg" viewBox="-20 -12 600 544" aria-hidden="true" overflow="visible">
         <defs>
           <marker id="info-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
             <path d="M0,0 L10,5 L0,10 z" fill="#F5C800" />
@@ -271,10 +294,10 @@ function Infographic({ c }) {
       </svg>
 
       <div className="infographic-core">
-        <img
-          src={imageUrl || DEFAULT_CAPSULES_IMAGE}
+        <InfographicCoreImage
+          src={imageUrl}
           alt={c('infographic', 'image_alt', 'CoreVita Bee Pearl capsules')}
-          className="infographic-core-img infographic-core-img--bowl"
+          fallback={DEFAULT_CAPSULES_IMAGE}
         />
       </div>
       <div className="infographic-brand">{brand}</div>
@@ -341,12 +364,28 @@ function BelowFoldContent({ c }) {
 
   const body2Default = 'Most daily supplements are synthetic, made in a lab, and difficult for your body to absorb. CoreVita Bee Pearl is different. It is a **living, pre-digested superfood**.';
   const body3Default = 'Because the bees have already fermented the pollen, the tough outer shell is broken down, making the nutrients **100% bioavailable** so your cells can use them instantly.';
+  const body4Default = 'Tablets often pass through your system before your body can use them. Bee Pearl delivers enzymes, amino acids, and vitamins in a form your gut recognizes — without the synthetic binders or fillers.';
+
+  const keyPoints = [
+    cv(c, 'below_fold', 'mv_p1', 'No synthetic binders, fillers, or lab-made isolates.'),
+    cv(c, 'below_fold', 'mv_p2', 'Pre-digested by bees — nutrients your body absorbs, not just passes through.'),
+    cv(c, 'below_fold', 'mv_p3', '250+ bioactive compounds working together, not a handful of isolated vitamins.'),
+    cv(c, 'below_fold', 'mv_p4', 'Supports energy, immunity, recovery, and mental clarity from one whole-food source.'),
+  ].filter(Boolean);
 
   return (
     <div className="below-fold-text">
-      <h3>{c('below_fold', 'title2', "Why Your Multivitamin Isn't Enough")}</h3>
-      <p>{renderBoldText(c('below_fold', 'body2', body2Default))}</p>
-      <p>{renderBoldText(c('below_fold', 'body3', body3Default))}</p>
+      <h3>{cv(c, 'below_fold', 'title2', "Why Your Multivitamin Isn't Enough")}</h3>
+      <p>{renderBoldText(cv(c, 'below_fold', 'body2', body2Default))}</p>
+      <p>{renderBoldText(cv(c, 'below_fold', 'body3', body3Default))}</p>
+      <p>{renderBoldText(cv(c, 'below_fold', 'body4', body4Default))}</p>
+      {keyPoints.length > 0 && (
+        <ul className="below-fold-key-points">
+          {keyPoints.map((pt, i) => (
+            <li key={i}>{pt}</li>
+          ))}
+        </ul>
+      )}
       <div className="below-fold-bullets">
         {groups.map((g, i) => (
           <div key={i} className="bf-bullet-group">
@@ -612,14 +651,18 @@ export default function ProductDetail(){
       <Banner2 c={c}/>
 
       {/* ── BELOW FOLD: bullet points + editable infographic ── */}
-      <ScrollReveal className="below-fold-section">
+      <section className="below-fold-section">
         <div className="container below-fold-grid">
-          <BelowFoldContent c={c} />
-          <div className="below-fold-infographic">
-            <Infographic c={c} />
-          </div>
+          <ScrollReveal as="div" className="below-fold-col below-fold-col--text">
+            <BelowFoldContent c={c} />
+          </ScrollReveal>
+          <ScrollReveal as="div" className="below-fold-col below-fold-col--diagram scroll-reveal-delay">
+            <div className="below-fold-infographic">
+              <Infographic c={c} />
+            </div>
+          </ScrollReveal>
         </div>
-      </ScrollReveal>
+      </section>
 
       {/* ── NUTRIENTS ── */}
       <ScrollReveal className="nutrients-section">
