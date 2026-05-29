@@ -43,3 +43,24 @@
   color: var(--gray);
   font-size: 14px;
 }
+
+@media (max-width: 768px) {
+  .policy-page {
+    padding: 40px 0;
+  }
+
+  .policy-page h1 {
+    font-size: clamp(28px, 7vw, 40px);
+    margin-bottom: 28px;
+  }
+
+  .policy-content h2 {
+    font-size: 19px;
+    margin-top: 24px;
+  }
+
+  .policy-content p,
+  .policy-content li {
+    font-size: 14px;
+  }
+}

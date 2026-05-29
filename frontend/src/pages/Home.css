@@ -366,6 +366,44 @@
   }
 }
 
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 32px 0 24px;
+  }
+
+  .hero-pitch-section {
+    padding: 16px 0 48px;
+  }
+
+  .pitch-subtitle {
+    font-size: 17px;
+  }
+
+  .results-section,
+  .stories-section {
+    padding: 48px 0;
+  }
+
+  .stories-title {
+    margin-bottom: 28px;
+    padding: 0 8px;
+  }
+
+  .cta-banner {
+    padding: 48px 0;
+  }
+
+  .cta-inner h2 {
+    font-size: 24px;
+  }
+
+  .btn-pill {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+}
+
 @media (max-width: 600px) {
   .testimonials-grid {
     grid-template-columns: 1fr;
@@ -374,5 +412,20 @@
   .cta-inner {
     flex-direction: column;
     text-align: center;
+  }
+
+  .result-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px 0;
+  }
+
+  .hero-bottle-img {
+    width: min(280px, 85vw);
+  }
+
+  .hero-tagline {
+    font-size: 16px;
   }
 }

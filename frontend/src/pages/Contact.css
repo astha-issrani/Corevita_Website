@@ -94,6 +94,17 @@
   margin-bottom: 24px;
 }
 
+@media (max-width: 768px) {
+  .contact-page {
+    padding: 40px 0 56px;
+  }
+
+  .contact-title {
+    margin-bottom: 28px;
+    padding: 0 8px;
+  }
+}
+
 @media (max-width: 600px) {
   .contact-row {
     grid-template-columns: 1fr;

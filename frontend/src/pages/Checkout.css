@@ -160,6 +160,47 @@
 .summary-row.total { font-size: 18px; font-weight: 800; margin-top: 8px; }
 
 @media (max-width: 900px) {
-  .checkout-grid { grid-template-columns: 1fr; }
+  .checkout-grid { grid-template-columns: 1fr; gap: 28px; }
   .order-summary { position: static; }
+  .checkout-form-wrap { max-width: none; }
+}
+
+@media (max-width: 768px) {
+  .checkout-page {
+    padding: 24px 0 40px;
+  }
+
+  .checkout-logo {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .checkout-steps {
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+    font-size: 12px;
+  }
+
+  .step span {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .order-summary {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+
+  .continue-btn,
+  .place-order-btn {
+    font-size: 15px;
+    padding: 14px;
+  }
 }

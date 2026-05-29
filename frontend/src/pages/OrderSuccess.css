@@ -94,3 +94,40 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
+@media (max-width: 768px) {
+  .success-page {
+    padding: 40px 16px;
+  }
+
+  .success-card h1 {
+    font-size: clamp(28px, 7vw, 36px);
+  }
+
+  .success-msg {
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+
+  .success-steps {
+    gap: 8px;
+  }
+
+  .success-step {
+    min-width: 80px;
+  }
+
+  .step-line {
+    min-width: 16px;
+  }
+
+  .success-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .success-actions .btn-primary,
+  .success-actions .btn-outline {
+    width: 100%;
+  }
+}

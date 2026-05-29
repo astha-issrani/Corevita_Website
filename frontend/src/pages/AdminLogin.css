@@ -80,6 +80,12 @@
   font-size: 11px;
 }
 
+@media (max-width: 768px) {
+  .admin-login-card {
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 480px) {
   .admin-login-page {
     padding: 16px;
