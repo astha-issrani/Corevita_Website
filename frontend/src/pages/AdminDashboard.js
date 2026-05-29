@@ -6,6 +6,7 @@ import './AdminDashboard.css';
 import AdminReviews from './AdminReviews';
 import AdminContent from './AdminContent';
 import AdminProduct from './AdminProduct';
+import AdminBlog from './AdminBlog';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
 function getToken() { return localStorage.getItem('corevita_token'); }
@@ -235,6 +236,7 @@ export default function AdminDashboard() {
     { key: 'reviews',  icon: '⭐', label: 'Reviews' },
     { key: 'content',  icon: '✏️', label: 'Page Content' },
     { key: 'product',  icon: '🛍️', label: 'Product' },
+    { key: 'blog',     icon: '📰', label: 'Blog' },
   ];
 
   const activeLabel = navItems.find((n) => n.key === activeTab)?.label || 'Admin';
@@ -285,6 +287,7 @@ export default function AdminDashboard() {
         {activeTab === 'reviews'  && <AdminReviews />}
         {activeTab === 'content'  && <AdminContent />}
         {activeTab === 'product'  && <AdminProduct />}
+        {activeTab === 'blog'     && <AdminBlog />}
       </main>
     </div>
   );

@@ -1,27 +1,11 @@
 import React from 'react';
 import { useContent } from '../utils/useContent';
+import { renderRichText } from '../utils/renderRichText';
 import './PolicyPages.css';
 
-// Renders bold markdown (**text**) and paragraph breaks
 function RichBody({ text }) {
   if (!text) return null;
-  return (
-    <div className="policy-content">
-      {text.split('\n\n').map((para, i) => {
-        if (!para.trim()) return null;
-        // Heading: line that starts AND ends with **
-        if (/^\*\*[^*]+\*\*$/.test(para.trim())) {
-          return <h2 key={i}>{para.trim().slice(2, -2)}</h2>;
-        }
-        const parts = para.split(/\*\*(.*?)\*\*/g);
-        return (
-          <p key={i}>
-            {parts.map((p, j) => j % 2 === 1 ? <strong key={j}>{p}</strong> : p)}
-          </p>
-        );
-      })}
-    </div>
-  );
+  return renderRichText(text, { className: 'policy-content' });
 }
 
 function PolicyPage({ section, defaultTitle, defaultBody }) {

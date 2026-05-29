@@ -12,6 +12,8 @@ import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
 import TrackOrder from './pages/TrackOrder';
 import Contact from './pages/Contact';
+import BlogList from './pages/BlogList';
+import BlogArticle from './pages/BlogArticle';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import { RefundPolicy, PrivacyPolicy, TermsOfService, ShippingPolicy } from './pages/PolicyPages';
@@ -44,6 +46,8 @@ function App() {
               <Route path="/order-success" element={<OrderSuccess />} />
               <Route path="/track-order" element={<TrackOrder />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/blog" element={<BlogList />} />
+              <Route path="/blog/:slug" element={<BlogArticle />} />
               <Route path="/refund-policy" element={<RefundPolicy />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsOfService />} />

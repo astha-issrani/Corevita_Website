@@ -1,0 +1,67 @@
+.rte {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rte-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background: #fafafa;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 8px 8px 0 0;
+}
+
+.rte-btn {
+  min-width: 36px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1.5px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #333;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.rte-btn:hover {
+  border-color: #F5C800;
+  background: #fffbe6;
+}
+
+.rte-btn-link {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.rte-toolbar-hint {
+  font-size: 11px;
+  color: #999;
+  margin-left: auto;
+}
+
+.rte-area {
+  border-radius: 0 0 8px 8px !important;
+  border-top: none !important;
+  font-family: inherit;
+  line-height: 1.55;
+}
+
+.rte-format-hint {
+  font-size: 11px;
+  color: #888;
+  margin: 0;
+  line-height: 1.45;
+}
+
+@media (max-width: 600px) {
+  .rte-toolbar-hint {
+    width: 100%;
+    margin-left: 0;
+  }
+}

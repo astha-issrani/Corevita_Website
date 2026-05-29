@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { invalidateContent } from '../utils/useContent';
+import RichTextEditor from '../components/RichTextEditor';
 import './AdminContent.css';
 
 const BASE = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
@@ -241,11 +242,16 @@ function SectionEditor({ section, values, onChange }) {
                 {f.hint && <span className="ac-hint"> — {f.hint}</span>}
               </label>
               {f.type === 'textarea' ? (
-                <textarea
+                <RichTextEditor
                   rows={f.rows || 3}
-                  className="ac-input"
                   value={values[f.key] ?? ''}
-                  onChange={e => onChange(section.key, f.key, e.target.value)}
+                  onChange={(v) => onChange(section.key, f.key, v)}
+                />
+              ) : f.type === 'text' && f.rich ? (
+                <RichTextEditor
+                  rows={2}
+                  value={values[f.key] ?? ''}
+                  onChange={(v) => onChange(section.key, f.key, v)}
                 />
               ) : (
                 <input
@@ -385,7 +391,7 @@ export default function AdminContent() {
           ))}
           <div className="ac-tip">
             <strong>💡 Tip</strong>
-            <p>For banner images, upload your image to any image host (e.g. Imgur, Cloudinary) and paste the URL. Changes only go live when you click <em>Save Changes</em>.</p>
+            <p><strong>Formatting:</strong> Use the toolbar for <strong>bold</strong>, <em>italic</em>, and links — or type **bold**, *italic*, [label](url). Changes go live when you click <em>Save Changes</em>.</p>
           </div>
         </div>
 

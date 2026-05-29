@@ -12,10 +12,15 @@ body {
 }
 
 img,
-video,
-svg {
+video {
   max-width: 100%;
   height: auto;
+}
+
+.rich-link {
+  color: var(--yellow-dark);
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 /* Touch-friendly tap targets */

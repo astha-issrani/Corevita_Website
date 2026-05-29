@@ -26,6 +26,7 @@ export default function Footer() {
           <h4>Quick links</h4>
           <Link to="/products/bee-pearl">Search</Link>
           <Link to="/products/bee-pearl">Shop CoreVita</Link>
+          <Link to="/blog">Blog</Link>
           <Link to="/track-order">Track Your Order</Link>
           <Link to="/contact">Manage Subscription</Link>
           <Link to="/refund-policy">Refund Policy</Link>

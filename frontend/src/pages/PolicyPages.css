@@ -44,6 +44,16 @@
   font-size: 14px;
 }
 
+.policy-content .rich-link {
+  color: var(--yellow-dark);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.policy-content em {
+  font-style: italic;
+}
+
 @media (max-width: 768px) {
   .policy-page {
     padding: 40px 0;

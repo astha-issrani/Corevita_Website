@@ -8,8 +8,11 @@ const DEFAULT_PRODUCT_IMAGES = [
   '/images/gallery-lifestyle.svg',
 ];
 
+const seedBlog = require('./seedBlog');
+
 module.exports = async function seedData() {
   try {
+    await seedBlog();
     const existing = await Product.findOne({ slug: 'bee-pearl' });
     if (existing) {
       if (!existing.images || existing.images.length < 3) {
