@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useContent } from '../utils/useContent';
+import { renderBoldText } from '../utils/renderBoldText';
 import './Home.css';
 
 const BASE = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
 const BOTTLE_IMG = `${process.env.PUBLIC_URL || ''}/images/bee-pearl-bottle.svg`;
-
-function renderBoldText(text) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={i}>{part.slice(2, -2)}</strong>;
-    }
-    return part;
-  });
-}
 
 export default function Home() {
   const { c } = useContent('home');

@@ -1,9 +1,23 @@
 const Product = require('./models/Product');
 
+const DEFAULT_PRODUCT_IMAGES = [
+  '/images/bee-pearl-bottle.svg',
+  'https://images.unsplash.com/photo-1584308664944-24d5adfdbeae?w=800&q=85',
+  'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=85',
+  'https://images.unsplash.com/photo-1505751172876-deb54ef2d726?w=800&q=85',
+  'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50e?w=800&q=85',
+];
+
 module.exports = async function seedData() {
   try {
-    const count = await Product.countDocuments();
-    if (count > 0) return;
+    const existing = await Product.findOne({ slug: 'bee-pearl' });
+    if (existing) {
+      if (!existing.images || existing.images.length < 3) {
+        await Product.updateOne({ slug: 'bee-pearl' }, { $set: { images: DEFAULT_PRODUCT_IMAGES } });
+        console.log('Updated bee-pearl gallery images');
+      }
+      return;
+    }
 
     await Product.create({
       name: 'CoreVita Bee Pearl Capsules',
@@ -16,10 +30,7 @@ module.exports = async function seedData() {
       rating: 4.7,
       reviewCount: 400,
       stockLeft: 23,
-      images: [
-        '/images/bee-pearl-bottle.svg',
-        'https://images.unsplash.com/photo-1584308664944-24d5adfdbeae?w=800&q=85',
-      ],
+      images: DEFAULT_PRODUCT_IMAGES,
       benefits: [
         'All day energy without any crashes',
         'Strengthens natural immune defense',

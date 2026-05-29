@@ -38,8 +38,8 @@ const DEFAULTS = [
 
   // ── PRODUCT DETAIL PAGE ────────────────────────────────────────────────────
   { page:'product', section:'hero', field:'title',  value:'CoreVita Bee Pearl Capsules' },
-  { page:'product', section:'hero', field:'desc1',  value:'CoreVita Bee Pearl is designed to restore natural vitality — the hidden root cause behind faster aging, nutrient depletion, and accelerated weight gain.' },
-  { page:'product', section:'hero', field:'desc2',  value:'Just one daily dose helps restore balance from within — naturally supporting your steady energy, recovery, and mental clarity.' },
+  { page:'product', section:'hero', field:'desc1',  value:'CoreVita Bee Pearl is designed to **restore natural vitality** — the hidden root cause behind faster aging, nutrient depletion, and accelerated weight gain.' },
+  { page:'product', section:'hero', field:'desc2',  value:'Just one daily dose helps restore balance from within — naturally supporting your **steady energy, recovery, and mental clarity**.' },
   { page:'product', section:'hero', field:'trust',  value:'🚚 In Stock — Delivery in 5 to 8 business days' },
 
   // ── BANNER 1: Why Modern Food Isn't Enough (image LEFT, text RIGHT) ──
@@ -75,18 +75,18 @@ const DEFAULTS = [
   { page:'product', section:'below_fold', field:'stat1',   value:'92% of people are walking around with critical nutrient gaps that prevent them from feeling their best.' },
   { page:'product', section:'below_fold', field:'stat2',   value:'74% suffer from daily fatigue and mental sludge — clear signs that their body is running on empty reserves.' },
   { page:'product', section:'below_fold', field:'title2',  value:"Why Your Multivitamin Isn't Enough" },
-  { page:'product', section:'below_fold', field:'body2',   value:'Most daily supplements are synthetic, made in a lab, and difficult for your body to absorb. CoreVita Bee Pearl is different. It is a living, pre-digested superfood.' },
-  { page:'product', section:'below_fold', field:'body3',   value:'Because it is 100% bioavailable, your body absorbs the nutrients instantly — no fillers, no wasted effort.' },
+  { page:'product', section:'below_fold', field:'body2',   value:'Most daily supplements are synthetic, made in a lab, and difficult for your body to absorb. CoreVita Bee Pearl is different. It is a **living, pre-digested superfood**.' },
+  { page:'product', section:'below_fold', field:'body3',   value:'Because the bees have already fermented the pollen, the tough outer shell is broken down, making the nutrients **100% bioavailable** so your cells can use them instantly.' },
   { page:'product', section:'below_fold', field:'g1_title', value:'LIVE ENZYMES & CO-ENZYMES:' },
   { page:'product', section:'below_fold', field:'g1_b1', value:'Unlike dry tablets, these active compounds support healthy digestion and nutrient uptake.' },
   { page:'product', section:'below_fold', field:'g1_b2', value:'Fuel metabolic processes that convert food into natural, sustained energy.' },
   { page:'product', section:'below_fold', field:'g2_title', value:'COMPLETE B-COMPLEX & VITAMINS:' },
   { page:'product', section:'below_fold', field:'g2_b1', value:'Packed with natural B-Vitamins (B1, B2, B3, B6, B12) for mental clarity and focus.' },
-  { page:'product', section:'below_fold', field:'g2_b2', value:'Rich in Vitamins A, C, and E to fight oxidative stress.' },
+  { page:'product', section:'below_fold', field:'g2_b2', value:'Rich in Vitamins A, C, and E to fight oxidative stress without the \'synthetic crash.\'' },
   { page:'product', section:'below_fold', field:'g3_title', value:'FREE-FORM AMINO ACIDS:' },
-  { page:'product', section:'below_fold', field:'g3_b1', value:'Contains all 22 amino acids — the raw materials for neurotransmitters, repair, and recovery.' },
-  { page:'product', section:'below_fold', field:'g3_b2', value:'Repair damaged tissue and neutralize inflammation naturally.' },
-  { page:'product', section:'below_fold', field:'g3_b3', value:'Support deep sleep, mental clarity, and sustained stamina.' },
+  { page:'product', section:'below_fold', field:'g3_b1', value:'Contains all 9 essential amino acids necessary for tissue repair and muscle recovery.' },
+  { page:'product', section:'below_fold', field:'g3_b2', value:'Supports neurotransmitter health for better mood and cognitive function.' },
+  { page:'product', section:'below_fold', field:'g3_b3', value:'' },
 
   { page:'product', section:'nutrients',  field:'title',   value:'CoreVita Bee Pearl: The Ultimate Nutrient-Rich Superfood for Energy and Vitality' },
   { page:'product', section:'nutrients',  field:'subtitle',value:"Here's why we chose Bee Pearl for its powerful energy-boosting nutrients:" },

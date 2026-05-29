@@ -4,9 +4,17 @@ import { useCart } from '../context/CartContext';
 import { getProduct } from '../utils/api';
 import { useContent } from '../utils/useContent';
 import { ScrollReveal } from '../utils/useScrollReveal';
+import { renderBoldText } from '../utils/renderBoldText';
 import './ProductDetail.css';
 
-const DEFAULT_INFO_IMAGE = 'https://images.unsplash.com/photo-1584308664944-24d5adfdbeae?w=700&q=85';
+const DEFAULT_CAPSULES_IMAGE = 'https://images.unsplash.com/photo-1584308664944-24d5adfdbeae?w=800&q=85';
+const DEFAULT_GALLERY_IMAGES = [
+  '/images/bee-pearl-bottle.svg',
+  DEFAULT_CAPSULES_IMAGE,
+  'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=85',
+  'https://images.unsplash.com/photo-1505751172876-deb54ef2d726?w=800&q=85',
+  'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50e?w=800&q=85',
+];
 
 const PRODUCT_SLIDES = [
   { id:1, label:'Main', content:(<svg viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" width="240" height="300"><rect x="80" y="60" width="140" height="240" rx="16" fill="white" stroke="#E0E0E0" strokeWidth="2"/><rect x="90" y="30" width="120" height="38" rx="10" fill="#CCCCCC"/><rect x="95" y="34" width="110" height="30" rx="8" fill="#BBBBBB"/><rect x="80" y="120" width="140" height="150" fill="#F5C800"/><ellipse cx="150" cy="175" rx="18" ry="12" fill="#333"/><ellipse cx="150" cy="175" rx="10" ry="11" fill="#F5C800"/><line x1="142" y1="168" x2="142" y2="182" stroke="#333" strokeWidth="1.5"/><line x1="158" y1="168" x2="158" y2="182" stroke="#333" strokeWidth="1.5"/><ellipse cx="140" cy="166" rx="10" ry="6" fill="rgba(255,255,255,0.6)" transform="rotate(-30 140 166)"/><ellipse cx="160" cy="166" rx="10" ry="6" fill="rgba(255,255,255,0.6)" transform="rotate(30 160 166)"/><text x="150" y="130" textAnchor="middle" fontFamily="Arial" fontSize="10" fontWeight="600" fill="#333">CoreVita</text><text x="150" y="205" textAnchor="middle" fontFamily="Arial" fontSize="14" fontWeight="900" fill="#333">BEE PEARL</text><text x="150" y="220" textAnchor="middle" fontFamily="Arial" fontSize="7" fill="#555">CONCENTRATED BEE BREAD</text><text x="150" y="235" textAnchor="middle" fontFamily="Arial" fontSize="6" fill="#666">Traditionally used to support</text><text x="150" y="245" textAnchor="middle" fontFamily="Arial" fontSize="6" fill="#666">vitality and overall wellness</text><text x="150" y="260" textAnchor="middle" fontFamily="Arial" fontSize="7" fill="#555">DIETARY SUPPLEMENT  30 CAPSULES</text></svg>) },
@@ -19,6 +27,7 @@ const PRODUCT_SLIDES = [
 const MOCK_PRODUCT = {
   _id:'mock1', name:'CoreVita Bee Pearl Capsules', slug:'bee-pearl', rating:4.7, reviewCount:400,
   price:49.99, originalPrice:79.99, savingsPercent:37, stockLeft:23,
+  images: DEFAULT_GALLERY_IMAGES,
   benefits:['All day energy without any crashes','Strengthens natural immune defense','Sharper focus & mental clarity','Rich in vitamins for faster recovery'],
   packs:[
     {_id:'pack1',label:'Buy 1 + Get 1 FREE',quantity:2,price:44.99,originalPrice:159.98,savingsPercent:72,badge:'',freeShipping:false},
@@ -185,22 +194,29 @@ const INFO_LABEL_DEFAULTS = {
   bottom_right: 'Enzymes for better digestion and nutrient absorption',
 };
 
+/* Arrows run in the gap between labels (outside) and the bowl (center) — viewBox 560×520 */
 const INFO_CALLOUTS = [
-  { key: 'top', pos: 'top', path: 'M 250 58 Q 250 120 250 188' },
-  { key: 'left', pos: 'left', path: 'M 58 248 Q 130 248 188 255' },
-  { key: 'right', pos: 'right', path: 'M 442 248 Q 370 248 312 255' },
-  { key: 'bottom_left', pos: 'bottom-left', path: 'M 88 418 Q 145 355 198 302' },
-  { key: 'bottom_right', pos: 'bottom-right', path: 'M 412 418 Q 355 355 302 302' },
+  { key: 'top', pos: 'top', path: 'M 280 108 L 280 198' },
+  { key: 'left', pos: 'left', path: 'M 128 248 Q 195 248 218 252' },
+  { key: 'right', pos: 'right', path: 'M 432 248 Q 365 248 342 252' },
+  { key: 'bottom_left', pos: 'bottom-left', path: 'M 148 408 Q 195 355 228 318' },
+  { key: 'bottom_right', pos: 'bottom-right', path: 'M 412 408 Q 365 355 332 318' },
 ];
 
 // ── Infographic with visible arrows + editable labels ─────────────────────────
 function Infographic({ c }) {
-  const imageUrl = c('infographic', 'image_url', DEFAULT_INFO_IMAGE);
+  const imageUrl = c('infographic', 'image_url', DEFAULT_CAPSULES_IMAGE);
   const brand = c('infographic', 'brand', 'CoreVita');
 
   return (
     <div className="infographic-diagram">
-      <svg className="infographic-arrows-svg" viewBox="0 0 500 500" aria-hidden="true">
+      {INFO_CALLOUTS.map(({ key, pos }) => (
+        <div key={key} className={`infographic-callout infographic-callout--${pos}`}>
+          <p>{c('infographic', key, INFO_LABEL_DEFAULTS[key])}</p>
+        </div>
+      ))}
+
+      <svg className="infographic-arrows-svg" viewBox="0 0 560 520" aria-hidden="true">
         <defs>
           <marker id="info-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
             <path d="M0,0 L10,5 L0,10 z" fill="#F5C800" />
@@ -219,15 +235,9 @@ function Infographic({ c }) {
         ))}
       </svg>
 
-      {INFO_CALLOUTS.map(({ key, pos }) => (
-        <div key={key} className={`infographic-callout infographic-callout--${pos}`}>
-          <p>{c('infographic', key, INFO_LABEL_DEFAULTS[key])}</p>
-        </div>
-      ))}
-
       <div className="infographic-core">
         <img
-          src={imageUrl || DEFAULT_INFO_IMAGE}
+          src={imageUrl || DEFAULT_CAPSULES_IMAGE}
           alt={c('infographic', 'image_alt', 'CoreVita Bee Pearl capsules')}
           className="infographic-core-img"
         />
@@ -239,16 +249,38 @@ function Infographic({ c }) {
 
 function BelowFoldContent({ c }) {
   const groups = [
-    { title: c('below_fold', 'g1_title', 'LIVE ENZYMES & CO-ENZYMES:'), bullets: [c('below_fold', 'g1_b1', ''), c('below_fold', 'g1_b2', '')] },
-    { title: c('below_fold', 'g2_title', 'COMPLETE B-COMPLEX & VITAMINS:'), bullets: [c('below_fold', 'g2_b1', ''), c('below_fold', 'g2_b2', '')] },
-    { title: c('below_fold', 'g3_title', 'FREE-FORM AMINO ACIDS:'), bullets: [c('below_fold', 'g3_b1', ''), c('below_fold', 'g3_b2', ''), c('below_fold', 'g3_b3', '')] },
+    {
+      title: c('below_fold', 'g1_title', 'LIVE ENZYMES & CO-ENZYMES:'),
+      bullets: [
+        c('below_fold', 'g1_b1', 'Unlike dry tablets, these active compounds support healthy digestion and nutrient uptake.'),
+        c('below_fold', 'g1_b2', 'Fuel metabolic processes that convert food into natural, sustained energy.'),
+      ],
+    },
+    {
+      title: c('below_fold', 'g2_title', 'COMPLETE B-COMPLEX & VITAMINS:'),
+      bullets: [
+        c('below_fold', 'g2_b1', 'Packed with natural B-Vitamins (B1, B2, B3, B6, B12) for mental clarity and focus.'),
+        c('below_fold', 'g2_b2', 'Rich in Vitamins A, C, and E to fight oxidative stress without the \'synthetic crash.\''),
+      ],
+    },
+    {
+      title: c('below_fold', 'g3_title', 'FREE-FORM AMINO ACIDS:'),
+      bullets: [
+        c('below_fold', 'g3_b1', 'Contains all 9 essential amino acids necessary for tissue repair and muscle recovery.'),
+        c('below_fold', 'g3_b2', 'Supports neurotransmitter health for better mood and cognitive function.'),
+        c('below_fold', 'g3_b3', ''),
+      ],
+    },
   ];
+
+  const body2Default = 'Most daily supplements are synthetic, made in a lab, and difficult for your body to absorb. CoreVita Bee Pearl is different. It is a **living, pre-digested superfood**.';
+  const body3Default = 'Because the bees have already fermented the pollen, the tough outer shell is broken down, making the nutrients **100% bioavailable** so your cells can use them instantly.';
 
   return (
     <div className="below-fold-text">
       <h3>{c('below_fold', 'title2', "Why Your Multivitamin Isn't Enough")}</h3>
-      <p>{c('below_fold', 'body2', 'Most daily supplements are synthetic, made in a lab, and difficult for your body to absorb. CoreVita Bee Pearl is different.')}</p>
-      {c('below_fold', 'body3', '') && <p>{c('below_fold', 'body3', '')}</p>}
+      <p>{renderBoldText(c('below_fold', 'body2', body2Default))}</p>
+      <p>{renderBoldText(c('below_fold', 'body3', body3Default))}</p>
       <div className="below-fold-bullets">
         {groups.map((g, i) => (
           <div key={i} className="bf-bullet-group">
@@ -369,7 +401,10 @@ export default function ProductDetail(){
   const allReviews=[...STATIC_REVIEWS,...reviews.map(r=>({...r,avatar:r.avatarUrl?null:'👤'}))];
   const avgRating=allReviews.reduce((a,r)=>a+r.rating,0)/allReviews.length;
 
-  const galleryUrls=useMemo(()=>(product.images||[]).filter(u=>u&&String(u).trim()),[product.images]);
+  const galleryUrls=useMemo(()=>{
+    const urls=(product.images||[]).filter(u=>u&&String(u).trim());
+    return urls.length>0?urls:DEFAULT_GALLERY_IMAGES;
+  },[product.images]);
   const hasGallery=galleryUrls.length>0;
   const displayTitle=c('hero','title','')||product.name;
   const mainImageUrl=hasGallery?galleryUrls[Math.min(activeSlide,galleryUrls.length-1)]:null;
@@ -454,8 +489,8 @@ export default function ProductDetail(){
             <span className="original-price">${product.originalPrice}</span>
             <span className="stock-badge">⚡ Only {product.stockLeft} Left</span>
           </div>
-          <p className="product-desc">{c('hero','desc1','CoreVita Bee Pearl is designed to restore natural vitality.')}</p>
-          <p className="product-desc">{c('hero','desc2','Just one daily dose helps restore balance from within.')}</p>
+          <p className="product-desc">{renderBoldText(c('hero','desc1','CoreVita Bee Pearl is designed to **restore natural vitality** — the hidden root cause behind faster aging, nutrient depletion, and accelerated weight gain.'))}</p>
+          <p className="product-desc">{renderBoldText(c('hero','desc2','Just one daily dose helps restore balance from within — naturally supporting your **steady energy, recovery, and mental clarity**.'))}</p>
           <ul className="benefit-list">{product.benefits.map((b,i)=><li key={i}><span className="check">✓</span> {b}</li>)}</ul>
 
           <div className="pack-selector">

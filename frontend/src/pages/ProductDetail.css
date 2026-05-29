@@ -131,11 +131,27 @@
 .below-fold-text h2 { font-family: var(--font-heading); font-size: 28px; font-weight: 900; margin-bottom: 16px; }
 .below-fold-text h3 { font-family: var(--font-heading); font-size: 22px; font-weight: 900; margin: 28px 0 12px; }
 .below-fold-text p { font-size: 15px; line-height: 1.75; color: var(--gray-dark); margin-bottom: 12px; }
-.below-fold-bullets { display: flex; flex-direction: column; gap: 18px; margin: 20px 0; }
-.bf-bullet-group h4 { font-size: 13px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; color: #333; }
-.bf-bullet-group ul { padding-left: 18px; }
-.bf-bullet-group li { font-size: 14px; line-height: 1.65; color: var(--gray-dark); margin-bottom: 6px; }
-.bf-bullet-group li::marker { color: var(--yellow-dark); }
+.below-fold-bullets { display: flex; flex-direction: column; gap: 22px; margin: 24px 0; }
+.bf-bullet-group h4 { font-size: 13px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; color: #333; }
+.bf-bullet-group ul { list-style: none; padding: 0; margin: 0; }
+.bf-bullet-group li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--gray-dark);
+  margin-bottom: 8px;
+}
+.bf-bullet-group li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--yellow);
+}
 .bf-tagline { font-size: 15px; font-style: italic; color: #555; border-left: 3px solid var(--yellow); padding-left: 14px; margin-top: 20px; }
 
 /* Scroll reveal */
@@ -172,38 +188,45 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 0;
+  padding: 16px 0;
 }
 .infographic-diagram {
   position: relative;
   width: 100%;
-  max-width: 520px;
-  aspect-ratio: 1;
+  max-width: 580px;
+  min-height: 520px;
   margin: 0 auto;
 }
 .infographic-arrows-svg {
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
+  top: 8%;
+  height: 78%;
   width: 100%;
-  height: 100%;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
 }
 .infographic-core {
   position: absolute;
   left: 50%;
-  top: 52%;
+  top: 46%;
   transform: translate(-50%, -50%);
-  width: 42%;
-  height: 42%;
-  z-index: 2;
+  width: 34%;
+  height: 34%;
+  min-width: 140px;
+  min-height: 140px;
+  max-width: 200px;
+  max-height: 200px;
+  z-index: 4;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #fff;
   border-radius: 50%;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
   overflow: hidden;
+  border: 4px solid #fff;
 }
 .infographic-core-img {
   width: 100%;
@@ -212,13 +235,16 @@
 }
 .infographic-callout {
   position: absolute;
-  z-index: 3;
-  max-width: 130px;
+  z-index: 5;
+  max-width: 128px;
+  padding: 6px 8px;
+  background: #fafaf8;
+  border-radius: 6px;
 }
 .infographic-callout p {
   font-size: 11px;
   font-weight: 600;
-  line-height: 1.45;
+  line-height: 1.5;
   color: #333;
   text-align: center;
   margin: 0;
@@ -227,44 +253,45 @@
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 200px;
+  max-width: 210px;
 }
 .infographic-callout--left {
   left: 0;
-  top: 42%;
+  top: 38%;
   transform: translateY(-50%);
-  text-align: left;
+  max-width: 120px;
 }
 .infographic-callout--left p { text-align: left; }
 .infographic-callout--right {
   right: 0;
-  top: 42%;
+  top: 38%;
   transform: translateY(-50%);
-  text-align: right;
+  max-width: 120px;
 }
 .infographic-callout--right p { text-align: right; }
 .infographic-callout--bottom-left {
-  left: 2%;
-  bottom: 14%;
-  max-width: 140px;
+  left: 0;
+  bottom: 16%;
+  max-width: 132px;
 }
 .infographic-callout--bottom-left p { text-align: left; }
 .infographic-callout--bottom-right {
-  right: 2%;
-  bottom: 14%;
-  max-width: 140px;
+  right: 0;
+  bottom: 16%;
+  max-width: 132px;
 }
 .infographic-callout--bottom-right p { text-align: right; }
 .infographic-brand {
   position: absolute;
-  bottom: 2%;
+  bottom: 4%;
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--font-heading);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 900;
   color: #111;
-  z-index: 3;
+  z-index: 6;
+  letter-spacing: 0.5px;
 }
 
 /* ===== NUTRIENT SECTION ===== */
@@ -348,9 +375,11 @@
   .nutrients-grid { grid-template-columns: repeat(2, 1fr); }
   .reviews-grid { grid-template-columns: repeat(2, 1fr); }
   .below-fold-grid { grid-template-columns: 1fr; }
-  .infographic-diagram { max-width: 100%; }
-  .infographic-callout { max-width: 100px; }
-  .infographic-callout--top { max-width: 160px; }
+  .infographic-diagram { min-height: 440px; max-width: 100%; }
+  .infographic-callout { max-width: 100px; padding: 4px; }
+  .infographic-callout--top { max-width: 170px; }
+  .infographic-callout p { font-size: 10px; }
+  .infographic-core { width: 38%; height: 38%; }
 }
 @media (max-width: 768px) {
   .product-layout { grid-template-columns: 1fr; gap: 32px; }
