@@ -17,8 +17,8 @@ module.exports = async function seedData() {
       reviewCount: 400,
       stockLeft: 23,
       images: [
-        '/images/bee-pearl-1.png',
-        '/images/bee-pearl-2.png',
+        '/images/bee-pearl-bottle.svg',
+        'https://images.unsplash.com/photo-1584308664944-24d5adfdbeae?w=800&q=85',
       ],
       benefits: [
         'All day energy without any crashes',

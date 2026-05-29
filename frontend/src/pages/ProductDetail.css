@@ -138,18 +138,134 @@
 .bf-bullet-group li::marker { color: var(--yellow-dark); }
 .bf-tagline { font-size: 15px; font-style: italic; color: #555; border-left: 3px solid var(--yellow); padding-left: 14px; margin-top: 20px; }
 
-/* Infographic */
-.below-fold-infographic { display: flex; align-items: center; justify-content: center; }
-.infographic-card { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; }
-.infographic-center { font-size: 80px; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.15)); }
-.infographic-labels { position: absolute; inset: 0; }
-.infographic-label { position: absolute; font-size: 12px; font-weight: 600; text-align: center; color: #333; line-height: 1.4; max-width: 110px; }
-.infographic-label.top { top: 0; left: 50%; transform: translateX(-50%); }
-.infographic-label.left { left: 0; top: 50%; transform: translateY(-50%); }
-.infographic-label.right { right: 0; top: 50%; transform: translateY(-50%); }
-.infographic-label.bottom-left { bottom: 10px; left: 0; }
-.infographic-label.bottom-right { bottom: 10px; right: 0; }
-.infographic-brand { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); font-family: var(--font-heading); font-size: 18px; font-weight: 900; color: #333; }
+/* Scroll reveal */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(48px);
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Product gallery photos */
+.product-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 16px;
+}
+.thumb-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sticky-product-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Infographic diagram with arrows */
+.below-fold-infographic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+}
+.infographic-diagram {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+.infographic-arrows-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+.infographic-core {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  width: 42%;
+  height: 42%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.infographic-core-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.infographic-callout {
+  position: absolute;
+  z-index: 3;
+  max-width: 130px;
+}
+.infographic-callout p {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #333;
+  text-align: center;
+  margin: 0;
+}
+.infographic-callout--top {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 200px;
+}
+.infographic-callout--left {
+  left: 0;
+  top: 42%;
+  transform: translateY(-50%);
+  text-align: left;
+}
+.infographic-callout--left p { text-align: left; }
+.infographic-callout--right {
+  right: 0;
+  top: 42%;
+  transform: translateY(-50%);
+  text-align: right;
+}
+.infographic-callout--right p { text-align: right; }
+.infographic-callout--bottom-left {
+  left: 2%;
+  bottom: 14%;
+  max-width: 140px;
+}
+.infographic-callout--bottom-left p { text-align: left; }
+.infographic-callout--bottom-right {
+  right: 2%;
+  bottom: 14%;
+  max-width: 140px;
+}
+.infographic-callout--bottom-right p { text-align: right; }
+.infographic-brand {
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 900;
+  color: #111;
+  z-index: 3;
+}
 
 /* ===== NUTRIENT SECTION ===== */
 .nutrients-section { background: white; padding: 80px 0; }
@@ -232,7 +348,9 @@
   .nutrients-grid { grid-template-columns: repeat(2, 1fr); }
   .reviews-grid { grid-template-columns: repeat(2, 1fr); }
   .below-fold-grid { grid-template-columns: 1fr; }
-  .infographic-card { display: none; }
+  .infographic-diagram { max-width: 100%; }
+  .infographic-callout { max-width: 100px; }
+  .infographic-callout--top { max-width: 160px; }
 }
 @media (max-width: 768px) {
   .product-layout { grid-template-columns: 1fr; gap: 32px; }

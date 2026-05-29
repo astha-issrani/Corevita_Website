@@ -5,6 +5,7 @@ import { useTheme, FONT_OPTIONS, DEFAULT_FONTS } from '../context/ThemeContext';
 import './AdminDashboard.css';
 import AdminReviews from './AdminReviews';
 import AdminContent from './AdminContent';
+import AdminProduct from './AdminProduct';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
 function getToken() { return localStorage.getItem('corevita_token'); }
@@ -221,6 +222,7 @@ export default function AdminDashboard() {
     { key: 'fonts',    icon: '🔤', label: 'Fonts' },
     { key: 'reviews',  icon: '⭐', label: 'Reviews' },
     { key: 'content',  icon: '✏️', label: 'Page Content' },
+    { key: 'product',  icon: '🛍️', label: 'Product' },
   ];
 
   return (
@@ -249,6 +251,7 @@ export default function AdminDashboard() {
         {activeTab === 'fonts'    && <FontsTab />}
         {activeTab === 'reviews'  && <AdminReviews />}
         {activeTab === 'content'  && <AdminContent />}
+        {activeTab === 'product'  && <AdminProduct />}
       </main>
     </div>
   );

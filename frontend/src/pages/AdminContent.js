@@ -106,7 +106,25 @@ const PAGES = [
         ]
       },
       {
-        key: 'infographic', label: '💊 Capsules Infographic Labels',
+        key: 'below_fold', label: '📋 Multivitamin Section (Left Column)',
+        fields: [
+          { key: 'title2', label: 'Section Title', type: 'text' },
+          { key: 'body2',  label: 'Intro Paragraph', type: 'textarea', rows: 3 },
+          { key: 'body3',  label: 'Second Paragraph (100% bioavailable)', type: 'textarea', rows: 2 },
+          { key: 'g1_title', label: 'Group 1 Heading', type: 'text' },
+          { key: 'g1_b1', label: 'Group 1 Bullet 1', type: 'textarea', rows: 2 },
+          { key: 'g1_b2', label: 'Group 1 Bullet 2', type: 'textarea', rows: 2 },
+          { key: 'g2_title', label: 'Group 2 Heading', type: 'text' },
+          { key: 'g2_b1', label: 'Group 2 Bullet 1', type: 'textarea', rows: 2 },
+          { key: 'g2_b2', label: 'Group 2 Bullet 2', type: 'textarea', rows: 2 },
+          { key: 'g3_title', label: 'Group 3 Heading', type: 'text' },
+          { key: 'g3_b1', label: 'Group 3 Bullet 1', type: 'textarea', rows: 2 },
+          { key: 'g3_b2', label: 'Group 3 Bullet 2', type: 'textarea', rows: 2 },
+          { key: 'g3_b3', label: 'Group 3 Bullet 3', type: 'textarea', rows: 2 },
+        ]
+      },
+      {
+        key: 'infographic', label: '💊 Capsules Infographic (Arrows + Labels)',
         fields: [
           { key: 'image_url',    label: 'Center Image URL', type: 'text', hint: 'Upload your capsules image and paste URL. Leave blank to use emoji.' },
           { key: 'image_alt',    label: 'Image Alt Text',   type: 'text' },

@@ -1,9 +1,12 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { getProduct } from '../utils/api';
 import { useContent } from '../utils/useContent';
+import { ScrollReveal } from '../utils/useScrollReveal';
 import './ProductDetail.css';
+
+const DEFAULT_INFO_IMAGE = 'https://images.unsplash.com/photo-1584308664944-24d5adfdbeae?w=700&q=85';
 
 const PRODUCT_SLIDES = [
   { id:1, label:'Main', content:(<svg viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" width="240" height="300"><rect x="80" y="60" width="140" height="240" rx="16" fill="white" stroke="#E0E0E0" strokeWidth="2"/><rect x="90" y="30" width="120" height="38" rx="10" fill="#CCCCCC"/><rect x="95" y="34" width="110" height="30" rx="8" fill="#BBBBBB"/><rect x="80" y="120" width="140" height="150" fill="#F5C800"/><ellipse cx="150" cy="175" rx="18" ry="12" fill="#333"/><ellipse cx="150" cy="175" rx="10" ry="11" fill="#F5C800"/><line x1="142" y1="168" x2="142" y2="182" stroke="#333" strokeWidth="1.5"/><line x1="158" y1="168" x2="158" y2="182" stroke="#333" strokeWidth="1.5"/><ellipse cx="140" cy="166" rx="10" ry="6" fill="rgba(255,255,255,0.6)" transform="rotate(-30 140 166)"/><ellipse cx="160" cy="166" rx="10" ry="6" fill="rgba(255,255,255,0.6)" transform="rotate(30 160 166)"/><text x="150" y="130" textAnchor="middle" fontFamily="Arial" fontSize="10" fontWeight="600" fill="#333">CoreVita</text><text x="150" y="205" textAnchor="middle" fontFamily="Arial" fontSize="14" fontWeight="900" fill="#333">BEE PEARL</text><text x="150" y="220" textAnchor="middle" fontFamily="Arial" fontSize="7" fill="#555">CONCENTRATED BEE BREAD</text><text x="150" y="235" textAnchor="middle" fontFamily="Arial" fontSize="6" fill="#666">Traditionally used to support</text><text x="150" y="245" textAnchor="middle" fontFamily="Arial" fontSize="6" fill="#666">vitality and overall wellness</text><text x="150" y="260" textAnchor="middle" fontFamily="Arial" fontSize="7" fill="#555">DIETARY SUPPLEMENT  30 CAPSULES</text></svg>) },
@@ -115,7 +118,7 @@ function Banner1({c}){
   const paragraphs = body.split('\n\n').filter(Boolean);
 
   return(
-    <div className="banner-section banner1-section">
+    <ScrollReveal className="banner-section banner1-section">
       <div className="container banner-grid">
         {/* Left: image */}
         <div className="banner-img-wrap">
@@ -130,7 +133,7 @@ function Banner1({c}){
           {paragraphs.map((p,i)=><p key={i}>{p}</p>)}
         </div>
       </div>
-    </div>
+    </ScrollReveal>
   );
 }
 
@@ -146,7 +149,7 @@ function Banner2({c}){
   const tagline  = c('banner2','tagline','');
 
   return(
-    <div className="banner-section banner2-section">
+    <ScrollReveal className="banner-section banner2-section">
       <div className="container banner-grid banner-grid-reverse">
         {/* Left: text */}
         <div className="banner-text">
@@ -170,32 +173,94 @@ function Banner2({c}){
           }
         </div>
       </div>
+    </ScrollReveal>
+  );
+}
+
+const INFO_LABEL_DEFAULTS = {
+  top: 'Concentrated Bee Bread to support vitality and overall wellness',
+  left: 'B Vitamins & Minerals for natural energy and well-being',
+  right: 'Antioxidants for immune support and cellular health',
+  bottom_left: 'Amino Acids to aid muscle recovery and tissue repair',
+  bottom_right: 'Enzymes for better digestion and nutrient absorption',
+};
+
+const INFO_CALLOUTS = [
+  { key: 'top', pos: 'top', path: 'M 250 58 Q 250 120 250 188' },
+  { key: 'left', pos: 'left', path: 'M 58 248 Q 130 248 188 255' },
+  { key: 'right', pos: 'right', path: 'M 442 248 Q 370 248 312 255' },
+  { key: 'bottom_left', pos: 'bottom-left', path: 'M 88 418 Q 145 355 198 302' },
+  { key: 'bottom_right', pos: 'bottom-right', path: 'M 412 418 Q 355 355 302 302' },
+];
+
+// ── Infographic with visible arrows + editable labels ─────────────────────────
+function Infographic({ c }) {
+  const imageUrl = c('infographic', 'image_url', DEFAULT_INFO_IMAGE);
+  const brand = c('infographic', 'brand', 'CoreVita');
+
+  return (
+    <div className="infographic-diagram">
+      <svg className="infographic-arrows-svg" viewBox="0 0 500 500" aria-hidden="true">
+        <defs>
+          <marker id="info-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L10,5 L0,10 z" fill="#F5C800" />
+          </marker>
+        </defs>
+        {INFO_CALLOUTS.map(({ key, path }) => (
+          <path
+            key={key}
+            d={path}
+            fill="none"
+            stroke="#F5C800"
+            strokeWidth="4"
+            strokeLinecap="round"
+            markerEnd="url(#info-arrow)"
+          />
+        ))}
+      </svg>
+
+      {INFO_CALLOUTS.map(({ key, pos }) => (
+        <div key={key} className={`infographic-callout infographic-callout--${pos}`}>
+          <p>{c('infographic', key, INFO_LABEL_DEFAULTS[key])}</p>
+        </div>
+      ))}
+
+      <div className="infographic-core">
+        <img
+          src={imageUrl || DEFAULT_INFO_IMAGE}
+          alt={c('infographic', 'image_alt', 'CoreVita Bee Pearl capsules')}
+          className="infographic-core-img"
+        />
+      </div>
+      <div className="infographic-brand">{brand}</div>
     </div>
   );
 }
 
-// ── Infographic with editable labels ──────────────────────────────────────────
-function Infographic({c}){
-  const imageUrl = c('infographic','image_url','');
-  const emoji    = c('infographic','center_emoji','🍯');
-  const brand    = c('infographic','brand','CoreVita');
+function BelowFoldContent({ c }) {
+  const groups = [
+    { title: c('below_fold', 'g1_title', 'LIVE ENZYMES & CO-ENZYMES:'), bullets: [c('below_fold', 'g1_b1', ''), c('below_fold', 'g1_b2', '')] },
+    { title: c('below_fold', 'g2_title', 'COMPLETE B-COMPLEX & VITAMINS:'), bullets: [c('below_fold', 'g2_b1', ''), c('below_fold', 'g2_b2', '')] },
+    { title: c('below_fold', 'g3_title', 'FREE-FORM AMINO ACIDS:'), bullets: [c('below_fold', 'g3_b1', ''), c('below_fold', 'g3_b2', ''), c('below_fold', 'g3_b3', '')] },
+  ];
 
-  return(
-    <div className="infographic-card">
-      <div className="infographic-center">
-        {imageUrl
-          ? <img src={imageUrl} alt={c('infographic','image_alt','CoreVita capsules')} className="infographic-img"/>
-          : <span>{emoji}</span>
-        }
+  return (
+    <div className="below-fold-text">
+      <h3>{c('below_fold', 'title2', "Why Your Multivitamin Isn't Enough")}</h3>
+      <p>{c('below_fold', 'body2', 'Most daily supplements are synthetic, made in a lab, and difficult for your body to absorb. CoreVita Bee Pearl is different.')}</p>
+      {c('below_fold', 'body3', '') && <p>{c('below_fold', 'body3', '')}</p>}
+      <div className="below-fold-bullets">
+        {groups.map((g, i) => (
+          <div key={i} className="bf-bullet-group">
+            <h4>{g.title}</h4>
+            <ul>
+              {g.bullets.filter(Boolean).map((b, j) => (
+                <li key={j}>{b}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
-      <div className="infographic-labels">
-        <div className="infographic-label top">{c('infographic','top','Concentrated Bee Bread to support vitality and overall wellness')}</div>
-        <div className="infographic-label left">{c('infographic','left','B Vitamins & Minerals for natural energy and well-being')}</div>
-        <div className="infographic-label right">{c('infographic','right','Antioxidants for immune support and cellular health')}</div>
-        <div className="infographic-label bottom-left">{c('infographic','bottom_left','Amino Acids to aid muscle recovery and tissue repair')}</div>
-        <div className="infographic-label bottom-right">{c('infographic','bottom_right','Enzymes for better digestion and nutrient absorption')}</div>
-      </div>
-      <div className="infographic-brand">{brand}</div>
     </div>
   );
 }
@@ -304,14 +369,23 @@ export default function ProductDetail(){
   const allReviews=[...STATIC_REVIEWS,...reviews.map(r=>({...r,avatar:r.avatarUrl?null:'👤'}))];
   const avgRating=allReviews.reduce((a,r)=>a+r.rating,0)/allReviews.length;
 
+  const galleryUrls=useMemo(()=>(product.images||[]).filter(u=>u&&String(u).trim()),[product.images]);
+  const hasGallery=galleryUrls.length>0;
+  const displayTitle=c('hero','title','')||product.name;
+  const mainImageUrl=hasGallery?galleryUrls[Math.min(activeSlide,galleryUrls.length-1)]:null;
+
   return(
     <div className="product-page">
       {/* Sticky bottom bar */}
       <div className="sticky-bottom-bar">
         <div className="sticky-product-info">
-          <div className="sticky-img-box">🐝</div>
+          <div className="sticky-img-box">
+            {mainImageUrl
+              ? <img src={mainImageUrl} alt="" className="sticky-product-photo" />
+              : <span>🐝</span>}
+          </div>
           <div>
-            <p>{product.name}</p>
+            <p>{displayTitle}</p>
             <span className="sticky-price">${product.price}</span>
             <span className="sticky-original">${product.originalPrice}</span>
             <span className="badge badge-green">SAVE {product.savingsPercent}%</span>
@@ -327,28 +401,54 @@ export default function ProductDetail(){
             <div className={`product-main-img zoom-source ${isZooming?'zooming':''}`} ref={mainImgRef}
               onMouseEnter={()=>setIsZooming(true)} onMouseLeave={()=>setIsZooming(false)} onMouseMove={handleMouseMove}>
               {isZooming&&<div className="zoom-lens" style={{left:`${zoomPos.x}%`,top:`${zoomPos.y}%`}}/>}
-              <div className="product-img-placeholder slide-fade" key={activeSlide}>{PRODUCT_SLIDES[activeSlide].content}</div>
+              {hasGallery ? (
+                <img
+                  key={activeSlide}
+                  src={mainImageUrl}
+                  alt={displayTitle}
+                  className="product-photo slide-fade"
+                />
+              ) : (
+                <div className="product-img-placeholder slide-fade" key={activeSlide}>
+                  {PRODUCT_SLIDES[activeSlide].content}
+                </div>
+              )}
             </div>
             {isZooming&&(
               <div className="zoom-panel">
-                <div className="zoom-panel-inner" style={{transformOrigin:`${zoomPos.x}% ${zoomPos.y}%`,transform:`scale(${ZOOM_SCALE})`}}>
-                  {PRODUCT_SLIDES[activeSlide].content}
+                <div
+                  className="zoom-panel-inner"
+                  style={{
+                    transformOrigin:`${zoomPos.x}% ${zoomPos.y}%`,
+                    transform:`scale(${ZOOM_SCALE})`,
+                    backgroundImage:hasGallery?`url(${mainImageUrl})`:'none',
+                    backgroundSize:'cover',
+                    backgroundPosition:`${zoomPos.x}% ${zoomPos.y}%`,
+                  }}
+                >
+                  {!hasGallery&&PRODUCT_SLIDES[activeSlide].content}
                 </div>
               </div>
             )}
           </div>
           <div className="product-thumbnails">
-            {PRODUCT_SLIDES.map((slide,i)=>(
-              <div key={slide.id} className={`thumbnail ${activeSlide===i?'active':''}`} onClick={()=>setActiveSlide(i)}>
-                <div className="thumb-inner">{slide.content}</div>
-              </div>
-            ))}
+            {hasGallery
+              ? galleryUrls.map((url,i)=>(
+                <div key={i} className={`thumbnail ${activeSlide===i?'active':''}`} onClick={()=>setActiveSlide(i)}>
+                  <div className="thumb-inner"><img src={url} alt="" className="thumb-photo" /></div>
+                </div>
+              ))
+              : PRODUCT_SLIDES.map((slide,i)=>(
+                <div key={slide.id} className={`thumbnail ${activeSlide===i?'active':''}`} onClick={()=>setActiveSlide(i)}>
+                  <div className="thumb-inner">{slide.content}</div>
+                </div>
+              ))}
           </div>
         </div>
 
         <div className="product-info">
           <div className="product-rating"><span className="stars">★★★★★</span><span className="rating-text">{product.rating}/5 Loved by {product.reviewCount}+ herbalists</span></div>
-          <h1 className="product-title">{c('hero','title',product.name)}</h1>
+          <h1 className="product-title">{displayTitle}</h1>
           <div className="product-pricing">
             <span className="current-price">${product.price}</span>
             <span className="original-price">${product.originalPrice}</span>
@@ -410,26 +510,17 @@ export default function ProductDetail(){
       <Banner2 c={c}/>
 
       {/* ── BELOW FOLD: bullet points + editable infographic ── */}
-      <div className="below-fold-section">
+      <ScrollReveal className="below-fold-section">
         <div className="container below-fold-grid">
-          <div className="below-fold-text">
-            <h3>{c('below_fold','title2',"Why Your Multivitamin Isn't Enough")}</h3>
-            <p>{c('below_fold','body2','Most daily supplements are synthetic, made in a lab, and difficult for your body to absorb. CoreVita Bee Pearl is different.')}</p>
-            <div className="below-fold-bullets">
-              <div className="bf-bullet-group"><h4>LIVE ENZYMES &amp; CO-ENZYMES:</h4><ul><li>Unlike dry tablets, these active compounds support healthy digestion and nutrient uptake.</li><li>Fuel metabolic processes that convert food into natural, sustained energy.</li></ul></div>
-              <div className="bf-bullet-group"><h4>COMPLETE B-COMPLEX &amp; VITAMINS:</h4><ul><li>Packed with natural B-Vitamins (B1, B2, B3, B6, B12) for mental clarity and focus.</li><li>Rich in Vitamins A, C, and E to fight oxidative stress.</li></ul></div>
-              <div className="bf-bullet-group"><h4>FREE-FORM AMINO ACIDS:</h4><ul><li>Contains all 22 amino acids — the raw materials for neurotransmitters, repair, and recovery.</li><li><strong>Repair damaged tissue</strong> and neutralize inflammation naturally.</li><li><strong>Support deep sleep</strong>, mental clarity, and sustained stamina.</li></ul></div>
-            </div>
-          </div>
-          {/* Editable infographic */}
+          <BelowFoldContent c={c} />
           <div className="below-fold-infographic">
-            <Infographic c={c}/>
+            <Infographic c={c} />
           </div>
         </div>
-      </div>
+      </ScrollReveal>
 
       {/* ── NUTRIENTS ── */}
-      <div className="nutrients-section">
+      <ScrollReveal className="nutrients-section">
         <div className="container">
           <h2 className="section-title">{c('nutrients','title','CoreVita Bee Pearl: The Ultimate Nutrient-Rich Superfood for Energy and Vitality')}</h2>
           <p className="section-subtitle">{c('nutrients','subtitle',"Here's why we chose Bee Pearl for its powerful energy-boosting nutrients:")}</p>
@@ -445,10 +536,10 @@ export default function ProductDetail(){
           </div>
           <div className="nutrients-cta"><button className="btn-primary buy-now-btn" onClick={handleAddToCart}>BUY NOW &amp; SAVE</button></div>
         </div>
-      </div>
+      </ScrollReveal>
 
       {/* ── SCIENCE ── */}
-      <div className="science-section">
+      <ScrollReveal className="science-section">
         <div className="container">
           <h2 className="section-title">{c('science','title','The Science Supporting CoreVita')}</h2>
           <p className="section-subtitle">{c('science','subtitle','Results from clinical studies on Bee Bread & Propolis:')}</p>
@@ -457,7 +548,7 @@ export default function ProductDetail(){
           </div>
           <p className="science-tagline"><strong>{c('science','tagline',"With CoreVita Bee Pearl, you're giving your body the nutrients it needs to thrive.")}</strong></p>
         </div>
-      </div>
+      </ScrollReveal>
 
       {/* ── VIDEOS ── */}
       <div className="stories-section">
