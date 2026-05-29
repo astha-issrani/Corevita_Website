@@ -11,7 +11,7 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
-    address: '', city: '', state: '', zipCode: '', country: 'US',
+    address: '', city: '', state: '', zipCode: '', country: '',
   });
   const [errors, setErrors] = useState({});
 
@@ -28,6 +28,7 @@ export default function Checkout() {
     if (!form.address) errs.address = 'Required';
     if (!form.city) errs.city = 'Required';
     if (!form.zipCode) errs.zipCode = 'Required';
+    if (!form.country?.trim()) errs.country = 'Required';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -49,7 +50,7 @@ export default function Checkout() {
           city: form.city,
           state: form.state,
           zipCode: form.zipCode,
-          country: form.country,
+          country: form.country.trim(),
           phone: form.phone,
         },
         guestEmail: form.email,
@@ -154,12 +155,14 @@ export default function Checkout() {
                 </div>
                 <div className="form-group">
                   <label>Country</label>
-                  <select name="country" value={form.country} onChange={handleChange}>
-                    <option value="US">United States</option>
-                    <option value="CA">Canada</option>
-                    <option value="GB">United Kingdom</option>
-                    <option value="AU">Australia</option>
-                  </select>
+                  <input
+                    name="country"
+                    value={form.country}
+                    onChange={handleChange}
+                    placeholder="United States"
+                    autoComplete="country-name"
+                  />
+                  {errors.country && <span className="field-error">{errors.country}</span>}
                 </div>
               </div>
 
