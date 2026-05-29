@@ -1,0 +1,374 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { invalidateContent } from '../utils/useContent';
+import './AdminContent.css';
+
+const BASE = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
+const token = () => localStorage.getItem('corevita_token');
+const hdrs = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` });
+
+const PAGES = [
+  {
+    key: 'home', label: '🏠 Home Page',
+    sections: [
+      {
+        key: 'hero', label: 'Hero Section',
+        fields: [
+          { key: 'badge',    label: 'Stars Badge',  type: 'text' },
+          { key: 'title',    label: 'Main Title',   type: 'textarea', rows: 4 },
+          { key: 'subtitle', label: 'Subtitle',     type: 'text' },
+          { key: 'cta',      label: 'CTA Button',   type: 'text' },
+        ]
+      },
+      {
+        key: 'why', label: 'Why Modern Food Section',
+        fields: [
+          { key: 'title',      label: 'Section Title',     type: 'text' },
+          { key: 'body1',      label: 'Paragraph',         type: 'textarea', rows: 3 },
+          { key: 'stat1_pct',  label: 'Stat 1 %',          type: 'text' },
+          { key: 'stat1_text', label: 'Stat 1 Text',       type: 'textarea', rows: 2 },
+          { key: 'stat2_pct',  label: 'Stat 2 %',          type: 'text' },
+          { key: 'stat2_text', label: 'Stat 2 Text',       type: 'textarea', rows: 2 },
+          { key: 'body2',      label: 'Bottom Paragraph',  type: 'textarea', rows: 3 },
+          { key: 'cta',        label: 'CTA Button',        type: 'text' },
+        ]
+      },
+      {
+        key: 'results', label: 'Real Results Section',
+        fields: [
+          { key: 'title',      label: 'Title',       type: 'text' },
+          { key: 'subtitle',   label: 'Subtitle',    type: 'text' },
+          { key: 'stat1_pct',  label: 'Stat 1 %',   type: 'text' },
+          { key: 'stat1_text', label: 'Stat 1 Text', type: 'textarea', rows: 2 },
+          { key: 'stat2_pct',  label: 'Stat 2 %',   type: 'text' },
+          { key: 'stat2_text', label: 'Stat 2 Text', type: 'textarea', rows: 2 },
+          { key: 'stat3_pct',  label: 'Stat 3 %',   type: 'text' },
+          { key: 'stat3_text', label: 'Stat 3 Text', type: 'textarea', rows: 2 },
+        ]
+      },
+      {
+        key: 'stories', label: 'Stories Section',
+        fields: [{ key: 'title', label: 'Section Title', type: 'text' }]
+      },
+      {
+        key: 'cta_banner', label: 'Bottom CTA Banner',
+        fields: [
+          { key: 'title',    label: 'Title',    type: 'text' },
+          { key: 'subtitle', label: 'Subtitle', type: 'text' },
+          { key: 'cta',      label: 'Button',   type: 'text' },
+        ]
+      },
+    ]
+  },
+  {
+    key: 'product', label: '🛍️ Product Detail Page',
+    sections: [
+      {
+        key: 'hero', label: 'Product Hero',
+        fields: [
+          { key: 'title', label: 'Product Title',    type: 'text' },
+          { key: 'desc1', label: 'Description 1',    type: 'textarea', rows: 3 },
+          { key: 'desc2', label: 'Description 2',    type: 'textarea', rows: 3 },
+          { key: 'trust', label: 'Trust Badge Text', type: 'text' },
+        ]
+      },
+      {
+        key: 'faq', label: 'FAQ Accordion',
+        fields: [
+          { key: 'q1', label: 'Q1', type: 'text' }, { key: 'a1', label: 'A1', type: 'textarea', rows: 3 },
+          { key: 'q2', label: 'Q2', type: 'text' }, { key: 'a2', label: 'A2', type: 'textarea', rows: 3 },
+          { key: 'q3', label: 'Q3', type: 'text' }, { key: 'a3', label: 'A3', type: 'textarea', rows: 3 },
+          { key: 'q4', label: 'Q4', type: 'text' }, { key: 'a4', label: 'A4', type: 'textarea', rows: 3 },
+        ]
+      },
+      {
+        key: 'banner1', label: '🖼️ Banner 1 — Why Modern Food (Image Left)',
+        fields: [
+          { key: 'image_url', label: 'Image URL', type: 'text', hint: 'Paste a full image URL, e.g. https://... Leave blank to hide image.' },
+          { key: 'image_alt', label: 'Image Alt Text', type: 'text' },
+          { key: 'title',     label: 'Section Title', type: 'text' },
+          { key: 'body',      label: 'Body Text (use blank lines to separate paragraphs)', type: 'textarea', rows: 8 },
+        ]
+      },
+      {
+        key: 'banner2', label: '🖼️ Banner 2 — Nature\'s Gold Standard (Image Right)',
+        fields: [
+          { key: 'image_url', label: 'Image URL', type: 'text', hint: 'Paste a full image URL. Leave blank to hide image.' },
+          { key: 'image_alt', label: 'Image Alt Text', type: 'text' },
+          { key: 'title',     label: 'Section Title',  type: 'text' },
+          { key: 'intro',     label: 'Intro Paragraph', type: 'textarea', rows: 3 },
+          { key: 'body',      label: 'Body Paragraph',  type: 'textarea', rows: 3 },
+          { key: 'bullet1',   label: 'Bullet 1',        type: 'text' },
+          { key: 'bullet2',   label: 'Bullet 2',        type: 'text' },
+          { key: 'bullet3',   label: 'Bullet 3',        type: 'text' },
+          { key: 'tagline',   label: 'Closing Tagline', type: 'textarea', rows: 2 },
+        ]
+      },
+      {
+        key: 'infographic', label: '💊 Capsules Infographic Labels',
+        fields: [
+          { key: 'image_url',    label: 'Center Image URL', type: 'text', hint: 'Upload your capsules image and paste URL. Leave blank to use emoji.' },
+          { key: 'image_alt',    label: 'Image Alt Text',   type: 'text' },
+          { key: 'center_emoji', label: 'Center Emoji (fallback if no image)', type: 'text' },
+          { key: 'top',          label: 'Top Label',         type: 'textarea', rows: 2 },
+          { key: 'left',         label: 'Left Label',        type: 'textarea', rows: 2 },
+          { key: 'right',        label: 'Right Label',       type: 'textarea', rows: 2 },
+          { key: 'bottom_left',  label: 'Bottom-Left Label', type: 'textarea', rows: 2 },
+          { key: 'bottom_right', label: 'Bottom-Right Label',type: 'textarea', rows: 2 },
+          { key: 'brand',        label: 'Brand Name',        type: 'text' },
+        ]
+      },
+      {
+        key: 'nutrients', label: 'Nutrient Comparison',
+        fields: [
+          { key: 'title',    label: 'Section Title',    type: 'text' },
+          { key: 'subtitle', label: 'Section Subtitle', type: 'text' },
+        ]
+      },
+      {
+        key: 'science', label: 'Science Stats',
+        fields: [
+          { key: 'title',      label: 'Title',         type: 'text' },
+          { key: 'subtitle',   label: 'Subtitle',      type: 'text' },
+          { key: 'stat1_pct',  label: 'Stat 1 %',      type: 'text' },
+          { key: 'stat1_text', label: 'Stat 1 Text',   type: 'textarea', rows: 2 },
+          { key: 'stat2_pct',  label: 'Stat 2 %',      type: 'text' },
+          { key: 'stat2_text', label: 'Stat 2 Text',   type: 'textarea', rows: 2 },
+          { key: 'stat3_pct',  label: 'Stat 3 %',      type: 'text' },
+          { key: 'stat3_text', label: 'Stat 3 Text',   type: 'textarea', rows: 2 },
+          { key: 'stat4_pct',  label: 'Stat 4 %',      type: 'text' },
+          { key: 'stat4_text', label: 'Stat 4 Text',   type: 'textarea', rows: 2 },
+          { key: 'tagline',    label: 'Bottom Tagline', type: 'textarea', rows: 2 },
+        ]
+      },
+      {
+        key: 'videos', label: 'Video Testimonials',
+        fields: [
+          { key: 'title',        label: 'Section Title',      type: 'text' },
+          { key: 'video1_id',    label: 'Video 1 YouTube ID', type: 'text', hint: 'e.g. dQw4w9WgXcQ' },
+          { key: 'video1_name',  label: 'Video 1 Name',       type: 'text' },
+          { key: 'video1_label', label: 'Video 1 Label',      type: 'text' },
+          { key: 'video2_id',    label: 'Video 2 YouTube ID', type: 'text' },
+          { key: 'video2_name',  label: 'Video 2 Name',       type: 'text' },
+          { key: 'video2_label', label: 'Video 2 Label',      type: 'text' },
+          { key: 'video3_id',    label: 'Video 3 YouTube ID', type: 'text' },
+          { key: 'video3_name',  label: 'Video 3 Name',       type: 'text' },
+          { key: 'video3_label', label: 'Video 3 Label',      type: 'text' },
+          { key: 'video4_id',    label: 'Video 4 YouTube ID', type: 'text' },
+          { key: 'video4_name',  label: 'Video 4 Name',       type: 'text' },
+          { key: 'video4_label', label: 'Video 4 Label',      type: 'text' },
+        ]
+      },
+      {
+        key: 'reviews', label: 'Reviews Section',
+        fields: [{ key: 'title', label: 'Section Title', type: 'textarea', rows: 2 }]
+      },
+    ]
+  },
+  {
+    key: 'policy', label: '📄 Policy Pages',
+    sections: [
+      {
+        key: 'refund', label: 'Refund Policy',
+        fields: [
+          { key: 'title', label: 'Page Title', type: 'text' },
+          { key: 'body',  label: 'Content (use **bold** for headings, blank line for paragraphs)', type: 'textarea', rows: 18 },
+        ]
+      },
+      {
+        key: 'privacy', label: 'Privacy Policy',
+        fields: [
+          { key: 'title', label: 'Page Title', type: 'text' },
+          { key: 'body',  label: 'Content', type: 'textarea', rows: 18 },
+        ]
+      },
+      {
+        key: 'terms', label: 'Terms of Service',
+        fields: [
+          { key: 'title', label: 'Page Title', type: 'text' },
+          { key: 'body',  label: 'Content', type: 'textarea', rows: 18 },
+        ]
+      },
+      {
+        key: 'shipping', label: 'Shipping Policy',
+        fields: [
+          { key: 'title', label: 'Page Title', type: 'text' },
+          { key: 'body',  label: 'Content', type: 'textarea', rows: 18 },
+        ]
+      },
+    ]
+  },
+];
+
+function SectionEditor({ section, values, onChange }) {
+  const [open, setOpen] = useState(true);
+  return (
+    <div className="ac-section">
+      <button className="ac-section-toggle" onClick={() => setOpen(o => !o)}>
+        <span>{section.label}</span>
+        <span className="ac-toggle-icon">{open ? '▼' : '▶'}</span>
+      </button>
+      {open && (
+        <div className="ac-section-fields">
+          {section.fields.map(f => (
+            <div key={f.key} className="ac-field">
+              <label className="ac-label">
+                {f.label}
+                {f.hint && <span className="ac-hint"> — {f.hint}</span>}
+              </label>
+              {f.type === 'textarea' ? (
+                <textarea
+                  rows={f.rows || 3}
+                  className="ac-input"
+                  value={values[f.key] ?? ''}
+                  onChange={e => onChange(section.key, f.key, e.target.value)}
+                />
+              ) : (
+                <input
+                  type="text"
+                  className="ac-input"
+                  value={values[f.key] ?? ''}
+                  onChange={e => onChange(section.key, f.key, e.target.value)}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function AdminContent() {
+  const [activePage, setActivePage] = useState(PAGES[0].key);
+  const [values, setValues] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [resetting, setResetting] = useState(false);
+  const [error, setError] = useState('');
+
+  const loadPage = useCallback(async (page) => {
+    setLoading(true); setError('');
+    try {
+      const res = await fetch(`${BASE}/content/${page}`, { headers: hdrs() });
+      const rows = await res.json();
+      const map = {};
+      rows.forEach(r => { map[`${r.section}__${r.field}`] = r.value; });
+      setValues(map);
+    } catch { setError('Failed to load content.'); }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { loadPage(activePage); }, [activePage, loadPage]);
+
+  const handleChange = (section, field, val) => {
+    setValues(v => ({ ...v, [`${section}__${field}`]: val }));
+  };
+
+  const getPageDef = () => PAGES.find(p => p.key === activePage);
+
+  const handleSave = async () => {
+    setSaving(true); setError('');
+    const pageDef = getPageDef();
+    const fields = [];
+    pageDef.sections.forEach(sec => {
+      sec.fields.forEach(f => {
+        fields.push({ section: sec.key, field: f.key, value: values[`${sec.key}__${f.key}`] || '' });
+      });
+    });
+    try {
+      const res = await fetch(`${BASE}/content/${activePage}`, {
+        method: 'PUT',
+        headers: hdrs(),
+        body: JSON.stringify({ fields }),
+      });
+      if (!res.ok) throw new Error();
+      invalidateContent(activePage);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch { setError('Save failed. Are you logged in as admin?'); }
+    setSaving(false);
+  };
+
+  const handleReset = async () => {
+    if (!window.confirm(`Reset all ${getPageDef().label} content to defaults?`)) return;
+    setResetting(true);
+    try {
+      const res = await fetch(`${BASE}/content/${activePage}/reset`, { method: 'POST', headers: hdrs() });
+      const rows = await res.json();
+      const map = {};
+      rows.forEach(r => { map[`${r.section}__${r.field}`] = r.value; });
+      setValues(map);
+      invalidateContent(activePage);
+    } catch { setError('Reset failed.'); }
+    setResetting(false);
+  };
+
+  const pageDef = getPageDef();
+
+  return (
+    <div className="admin-content-editor">
+      <div className="admin-header">
+        <div>
+          <h1>Page Content Editor</h1>
+          <p>Edit text and images for any page — changes go live instantly after saving</p>
+        </div>
+        <div className="ac-header-actions">
+          <button className="ac-reset-btn" onClick={handleReset} disabled={resetting}>
+            {resetting ? 'Resetting...' : '↺ Reset to Defaults'}
+          </button>
+          <button
+            className="ac-save-btn"
+            onClick={handleSave}
+            disabled={saving}
+            style={{ background: saved ? '#10b981' : '#F5C800', color: saved ? 'white' : '#111' }}
+          >
+            {saving ? 'Saving...' : saved ? '✓ Saved!' : 'Save Changes'}
+          </button>
+        </div>
+      </div>
+
+      {error && <div className="ac-error">{error}</div>}
+
+      <div className="ac-layout">
+        <div className="ac-page-tabs">
+          {PAGES.map(p => (
+            <button
+              key={p.key}
+              className={`ac-page-tab ${activePage === p.key ? 'active' : ''}`}
+              onClick={() => setActivePage(p.key)}
+            >
+              {p.label}
+            </button>
+          ))}
+          <div className="ac-tip">
+            <strong>💡 Tip</strong>
+            <p>For banner images, upload your image to any image host (e.g. Imgur, Cloudinary) and paste the URL. Changes only go live when you click <em>Save Changes</em>.</p>
+          </div>
+        </div>
+
+        <div className="ac-editor-area">
+          {loading ? (
+            <div className="ac-loading">Loading content…</div>
+          ) : (
+            <>
+              <div className="ac-page-title">{pageDef.label}</div>
+              {pageDef.sections.map(sec => (
+                <SectionEditor
+                  key={sec.key}
+                  section={sec}
+                  values={Object.fromEntries(
+                    Object.entries(values)
+                      .filter(([k]) => k.startsWith(`${sec.key}__`))
+                      .map(([k, v]) => [k.replace(`${sec.key}__`, ''), v])
+                  )}
+                  onChange={handleChange}
+                />
+              ))}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

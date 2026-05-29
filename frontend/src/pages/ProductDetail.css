@@ -248,3 +248,108 @@
   .review-form-row { grid-template-columns: 1fr; }
   .review-form-wrapper { padding: 24px 16px; }
 }
+
+/* ===== REVIEW CAROUSEL ===== */
+.review-carousel-wrapper {
+  position: relative;
+  margin-bottom: 48px;
+}
+.review-carousel {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 8px 4px 16px;
+  scrollbar-width: none;
+}
+.review-carousel::-webkit-scrollbar { display: none; }
+.review-carousel .review-card {
+  min-width: 300px;
+  max-width: 300px;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: 2px solid var(--yellow);
+  color: #333;
+  font-size: 28px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+  line-height: 1;
+}
+.carousel-arrow:hover { background: var(--yellow); }
+.carousel-arrow.left { left: -22px; }
+.carousel-arrow.right { right: -22px; }
+
+/* ===== REVIEW AVATAR IMAGE ===== */
+.review-avatar-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--yellow);
+}
+
+/* ===== AVATAR UPLOAD ===== */
+.avatar-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.avatar-preview {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--yellow);
+}
+.avatar-preview-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--yellow-light);
+  border: 2px dashed var(--yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+.avatar-upload-btn {
+  padding: 8px 16px;
+  background: var(--yellow);
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.avatar-upload-btn:hover { background: var(--yellow-dark); }
+.avatar-remove-btn {
+  background: none;
+  border: 1.5px solid #fca5a5;
+  color: #dc2626;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .carousel-arrow { display: none; }
+  .review-carousel { padding: 8px 16px 16px; }
+}

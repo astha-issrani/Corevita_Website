@@ -5,9 +5,9 @@ import { createOrder } from '../utils/api';
 import './Checkout.css';
 
 export default function Checkout() {
-  const { cartItems, cartTotal, cartSavings, cartFinalTotal, coupon, clearCart } = useCart();
+  const { cartItems, cartGroups, cartTotal, cartSavings, cartFinalTotal, coupon, clearCart } = useCart();
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(1); // 1: info, 2: payment
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
@@ -31,9 +31,6 @@ export default function Checkout() {
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
-
-  const shipping = cartFinalTotal >= 50 ? 0 : 5.99;
-  const total = cartFinalTotal + shipping;
 
   const handlePlaceOrder = async () => {
     setLoading(true);
@@ -69,21 +66,22 @@ export default function Checkout() {
       clearCart();
       navigate('/order-success', { state: { order: data } });
     } catch (err) {
-      // Demo fallback
+      // Demo: proceed anyway
       clearCart();
-      navigate('/order-success', {
-        state: { order: { orderNumber: 'CV' + Date.now().toString().slice(-8) } }
-      });
+      navigate('/order-success', { state: { order: { orderNumber: 'CV' + Date.now().toString().slice(-8) } } });
     } finally {
       setLoading(false);
     }
   };
 
-  if (cartItems.length === 0) {
+  const shipping = cartFinalTotal >= 50 ? 0 : 5.99;
+  const total = cartFinalTotal + shipping;
+
+  if (!cartItems || cartItems.length === 0) {
     return (
       <div className="checkout-empty container">
         <h2>Your cart is empty</h2>
-       <button className="btn-primary" onClick={() => navigate('/products/bee-pearl')}>Continue Shopping</button>
+        <button className="btn-primary" onClick={() => navigate('/shop')}>Continue Shopping</button>
       </div>
     );
   }
@@ -95,10 +93,15 @@ export default function Checkout() {
         <div className="checkout-form-wrap">
           <div className="checkout-logo">COREVITA</div>
 
+          {/* Steps */}
           <div className="checkout-steps">
-            <div className={`step ${step >= 1 ? 'active' : ''}`}><span>1</span> Contact</div>
+            <div className={`step ${step >= 1 ? 'active' : ''}`}>
+              <span>1</span> Contact
+            </div>
             <div className="step-divider">›</div>
-            <div className={`step ${step >= 2 ? 'active' : ''}`}><span>2</span> Payment</div>
+            <div className={`step ${step >= 2 ? 'active' : ''}`}>
+              <span>2</span> Payment
+            </div>
           </div>
 
           {step === 1 && (
@@ -214,19 +217,30 @@ export default function Checkout() {
         <div className="order-summary">
           <h3>Order Summary</h3>
           <div className="summary-items">
-            {cartItems.map(item => (
-              <div key={item.packId} className="summary-item">
-                <div className="summary-item-img">🐝</div>
-                <div className="summary-item-info">
-                  <p>{item.name}</p>
-                  <small>{item.packLabel}</small>
-                  {item.autoRefill && <small style={{ color: 'green', display: 'block' }}>📦 Auto Refill</small>}
+            {Object.entries(cartGroups || {}).map(([groupId, bottles]) => {
+              const sample = bottles[0];
+              const groupTotal = bottles.reduce((s, b) => s + b.price, 0);
+              return (
+                <div key={groupId}>
+                  <div className="summary-group-label">
+                    <strong>{sample.packLabel}</strong>
+                    {sample.autoRefill && <small style={{ color: 'green', display: 'block' }}>📦 Auto Refill</small>}
+                  </div>
+                  {bottles.map(bottle => (
+                    <div key={bottle.packId} className="summary-item">
+                      <div className="summary-item-img">{bottle.isFree ? '🆓' : '🐝'}</div>
+                      <div className="summary-item-info">
+                        <p>{bottle.bottleLabel}</p>
+                        <small>{bottle.name}</small>
+                      </div>
+                      <div className="summary-item-price">
+                        {bottle.isFree ? <span style={{color:'#10b981',fontWeight:700}}>FREE</span> : `$${bottle.price.toFixed(2)}`}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="summary-item-price">
-                  ${(item.price * item.quantity).toFixed(2)}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <hr className="divider" />
           <div className="summary-row">

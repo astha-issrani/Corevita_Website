@@ -4,12 +4,12 @@ import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import './CartDrawer.css';
 
-const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000').replace(/\/api$/, '');
+const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
 
 export default function CartDrawer() {
   const {
-    cartItems, isCartOpen, setIsCartOpen,
-    removeFromCart, updateQuantity,
+    cartItems, cartGroups, isCartOpen, setIsCartOpen,
+    removeGroup, updateQuantity,
     cartTotal, cartSavings, cartFinalTotal,
     coupon, applyCoupon, removeCoupon,
   } = useCart();
@@ -27,7 +27,7 @@ export default function CartDrawer() {
     setCouponError('');
     try {
       const { data } = await axios.post(`${API}/coupons/validate`, {
-        code: couponInput.trim(),
+        code: couponInput.trim().toUpperCase(),
         orderTotal: cartTotal,
       });
       applyCoupon(data);
@@ -39,89 +39,131 @@ export default function CartDrawer() {
     }
   };
 
-  const handleRemoveCoupon = () => {
-    removeCoupon();
-    setCouponError('');
-    setCouponInput('');
-  };
+  const handleRemoveCoupon = () => { removeCoupon(); setCouponError(''); setCouponInput(''); };
+
+  const groupIds = Object.keys(cartGroups);
+  const totalBottles = cartItems.length;
+
+  const BottleSVG = () => (
+    <svg viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg" width="52" height="52">
+      <rect x="10" y="14" width="60" height="82" rx="8" fill="white" stroke="#E0E0E0" strokeWidth="1.5"/>
+      <rect x="14" y="4" width="52" height="14" rx="5" fill="#BBBBBB"/>
+      <rect x="10" y="38" width="60" height="52" fill="#F5C800"/>
+      <ellipse cx="40" cy="56" rx="8" ry="5" fill="#333"/>
+      <ellipse cx="40" cy="56" rx="4" ry="5" fill="#F5C800"/>
+      <text x="40" y="72" textAnchor="middle" fontFamily="Arial" fontSize="7" fontWeight="900" fill="#333">BEE PEARL</text>
+    </svg>
+  );
 
   return (
     <>
       <div className={`cart-overlay ${isCartOpen ? 'open' : ''}`} onClick={() => setIsCartOpen(false)} />
       <div className={`cart-drawer ${isCartOpen ? 'open' : ''}`}>
+
+        {/* Header */}
         <div className="cart-header">
-          <h3>Cart • {cartItems.length} item{cartItems.length !== 1 ? 's' : ''}</h3>
+          <h3>Cart • {totalBottles} bottle{totalBottles !== 1 ? 's' : ''}</h3>
           <button className="cart-close" onClick={() => setIsCartOpen(false)}>✕</button>
         </div>
 
+        {/* Free shipping bar */}
         {cartTotal >= FREE_SHIPPING_THRESHOLD ? (
-          <div className="free-shipping-bar achieved">
-            🎉 Congrats! You get FREE shipping!
-          </div>
+          <div className="free-shipping-bar achieved">🎉 Congrats! You get FREE shipping!</div>
         ) : (
           <div className="free-shipping-bar">
             <div className="shipping-progress-wrap">
-              <div className="shipping-progress" style={{ width: `${(cartTotal / FREE_SHIPPING_THRESHOLD) * 100}%` }} />
+              <div className="shipping-progress" style={{ width: `${Math.min(100, (cartTotal / FREE_SHIPPING_THRESHOLD) * 100)}%` }} />
             </div>
             <p>Add <strong>${toFreeShipping.toFixed(2)}</strong> more for FREE shipping</p>
           </div>
         )}
 
+        {/* Items */}
         <div className="cart-items">
-          {cartItems.length === 0 ? (
+          {groupIds.length === 0 ? (
             <div className="cart-empty">
               <p>Your cart is empty</p>
-             <Link to="/products/bee-pearl" onClick={() => setIsCartOpen(false)} className="btn-primary" style={{ display: 'inline-block', marginTop: 16 }}>
-  Shop Now
-</Link>
+              <Link to="/products/bee-pearl" onClick={() => setIsCartOpen(false)} className="btn-primary" style={{ display: 'inline-block', marginTop: 16 }}>
+                Shop Now
+              </Link>
             </div>
           ) : (
-            cartItems.map(item => (
-              <div key={item.packId} className="cart-item">
-                <div className="cart-item-img">
-                  <svg viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg" width="72" height="72">
-                    <rect x="10" y="14" width="60" height="82" rx="8" fill="white" stroke="#E0E0E0" strokeWidth="1.5"/>
-                    <rect x="14" y="4" width="52" height="14" rx="5" fill="#BBBBBB"/>
-                    <rect x="10" y="38" width="60" height="52" fill="#F5C800"/>
-                    <ellipse cx="40" cy="56" rx="8" ry="5" fill="#333"/>
-                    <ellipse cx="40" cy="56" rx="4" ry="5" fill="#F5C800"/>
-                    <ellipse cx="36" cy="52" rx="5" ry="3" fill="rgba(255,255,255,0.55)" transform="rotate(-30 36 52)"/>
-                    <ellipse cx="44" cy="52" rx="5" ry="3" fill="rgba(255,255,255,0.55)" transform="rotate(30 44 52)"/>
-                    <text x="40" y="72" textAnchor="middle" fontFamily="Arial" fontSize="7" fontWeight="900" fill="#333">BEE PEARL</text>
-                    <text x="40" y="82" textAnchor="middle" fontFamily="Arial" fontSize="4.5" fill="#555">DIETARY SUPPLEMENT</text>
-                  </svg>
-                </div>
-                <div className="cart-item-info">
-                  <p className="cart-item-name">{item.name}</p>
-                  <p className="cart-item-pack">{item.packLabel}</p>
-                  {item.autoRefill && <p className="cart-item-refill">📦 Auto Refill Monthly</p>}
-                  <div className="cart-item-price-row">
-                    {item.originalPrice > item.price && (
-                      <span className="cart-item-original">${(item.originalPrice * item.quantity).toFixed(2)}</span>
-                    )}
-                    <span className="cart-item-price">${(item.price * item.quantity).toFixed(2)}</span>
-                    {item.originalPrice > item.price && (
-                      <span className="cart-item-savings">(You save ${((item.originalPrice - item.price) * item.quantity).toFixed(2)})</span>
-                    )}
+            groupIds.map(groupId => {
+              const bottles = cartGroups[groupId];
+              const sample = bottles[0];
+              const packCount = bottles.length / sample.packSize;
+              const packTotal = cartItems
+                .filter(i => i.groupId === groupId)
+                .reduce((s, i) => s + i.price, 0);
+              const packOriginal = cartItems
+                .filter(i => i.groupId === groupId)
+                .reduce((s, i) => s + i.originalPrice, 0);
+
+              return (
+                <div key={groupId} className="cart-group">
+                  {/* Pack header */}
+                  <div className="cart-group-header">
+                    <div className="cart-group-title">
+                      <strong>{sample.name}</strong>
+                      <span className="cart-group-pack-label">{sample.packLabel}</span>
+                      {sample.autoRefill && <span className="cart-item-refill">📦 Auto Refill Monthly</span>}
+                    </div>
+                    <div className="cart-group-controls">
+                      <div className="cart-pack-qty">
+                        <button onClick={() => updateQuantity(groupId, -1)}>−</button>
+                        <span>{packCount} pack{packCount !== 1 ? 's' : ''}</span>
+                        <button onClick={() => updateQuantity(groupId, 1)}>+</button>
+                      </div>
+                      <button className="cart-item-remove" onClick={() => removeGroup(groupId)}>🗑</button>
+                    </div>
                   </div>
-                  <div className="cart-qty">
-                    <button onClick={() => updateQuantity(item.packId, -1)}>−</button>
-                    <span className="cart-qty-bottles">
-                      {item.quantity} <small>bottles</small>
-                    </span>
-                    <button onClick={() => updateQuantity(item.packId, 1)}>+</button>
+
+                  {/* Individual bottle rows */}
+                  <div className="cart-bottle-rows">
+                    {bottles.map((bottle, idx) => (
+                      <div key={bottle.packId} className={`cart-bottle-row ${bottle.isFree ? 'free-bottle' : ''}`}>
+                        <div className="cart-bottle-img">
+                          <BottleSVG />
+                          {bottle.isFree && <span className="free-tag">FREE</span>}
+                        </div>
+                        <div className="cart-bottle-info">
+                          <span className="cart-bottle-label">{bottle.bottleLabel}</span>
+                          <span className="cart-bottle-sublabel">{sample.name}</span>
+                        </div>
+                        <div className="cart-bottle-price">
+                          {bottle.isFree ? (
+                            <>
+                              <span className="bottle-original-price">${bottle.originalPrice.toFixed(2)}</span>
+                              <span className="bottle-free-price">FREE</span>
+                            </>
+                          ) : (
+                            <span className="bottle-paid-price">${bottle.price.toFixed(2)}</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Pack subtotal */}
+                  <div className="cart-group-subtotal">
+                    <span>Pack total</span>
+                    <div className="cart-group-subtotal-prices">
+                      {packOriginal > packTotal && (
+                        <span className="cart-group-original">${packOriginal.toFixed(2)}</span>
+                      )}
+                      <span className="cart-group-final">${packTotal.toFixed(2)}</span>
+                    </div>
                   </div>
                 </div>
-                <button className="cart-item-remove" onClick={() => removeFromCart(item.packId)}>🗑</button>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
-        {cartItems.length > 0 && (
+        {/* Footer */}
+        {groupIds.length > 0 && (
           <div className="cart-footer">
-
-            {/* ── Coupon Section ── */}
+            {/* Coupon */}
             <div className="coupon-section">
               {coupon ? (
                 <div className="coupon-applied">
@@ -132,7 +174,7 @@ export default function CartDrawer() {
                 <div className="coupon-input-row">
                   <input
                     className="coupon-input"
-                    placeholder="Coupon code"
+                    placeholder="COUPON CODE"
                     value={couponInput}
                     onChange={e => { setCouponInput(e.target.value.toUpperCase()); setCouponError(''); }}
                     onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
@@ -149,7 +191,7 @@ export default function CartDrawer() {
               {couponError && <p className="coupon-error">{couponError}</p>}
             </div>
 
-            {/* ── Totals ── */}
+            {/* Totals */}
             {cartSavings > 0 && (
               <div className="cart-savings-row">
                 <span>Pack Savings</span>
@@ -157,7 +199,7 @@ export default function CartDrawer() {
               </div>
             )}
             {coupon && (
-              <div className="cart-savings-row coupon-savings-row">
+              <div className="cart-savings-row">
                 <span>Coupon ({coupon.code})</span>
                 <span className="savings-amt">-${coupon.discountAmount.toFixed(2)}</span>
               </div>
@@ -167,15 +209,11 @@ export default function CartDrawer() {
               <span>${cartFinalTotal.toFixed(2)}</span>
             </div>
 
-            <Link
-              to="/checkout"
-              className="btn-primary checkout-btn"
-              onClick={() => setIsCartOpen(false)}
-            >
+            <Link to="/checkout" className="btn-primary checkout-btn" onClick={() => setIsCartOpen(false)}>
               Checkout
             </Link>
             <div className="cart-payment-icons">
-              <span>💳</span> <span>Apple Pay</span> <span>Google Pay</span> <span>Visa</span>
+              <span>💳</span><span>Apple Pay</span><span>Google Pay</span><span>Visa</span>
             </div>
           </div>
         )}

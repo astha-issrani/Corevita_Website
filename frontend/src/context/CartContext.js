@@ -11,24 +11,71 @@ export function CartProvider({ children }) {
   });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
-
-  // Coupon state
-  const [coupon, setCoupon] = useState(null); // { code, discountType, discountValue, discountAmount, message }
+  const [coupon, setCoupon] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('corevita_cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
+  // Each pack explodes into individual bottle rows.
+  // e.g. Buy 1+1 FREE → 2 rows: { bottleLabel: '#1 (Paid)', isFree: false }, { bottleLabel: 'FREE', isFree: true }
   const addToCart = (item) => {
+    const packSize = item.packSize || item.quantity || 1;
+    const half = packSize / 2;
+    const pricePerBottle = parseFloat((item.price / (packSize / 2)).toFixed(2)); // paid bottles only
+    const originalPerBottle = item.originalPrice
+      ? parseFloat((item.originalPrice / packSize).toFixed(2))
+      : pricePerBottle;
+
+    const newRows = Array.from({ length: packSize }, (_, i) => {
+      const isFree = i >= half;
+      return {
+        // unique id per bottle row
+        packId: `${item.packId}_bottle_${i}`,
+        groupId: item.packId,          // all bottles in same pack share groupId
+        productId: item.productId,
+        name: item.name,
+        packLabel: item.packLabel,
+        bottleIndex: i + 1,
+        bottleLabel: isFree ? 'FREE Bottle' : `Bottle #${i + 1}`,
+        isFree,
+        price: isFree ? 0 : pricePerBottle,
+        originalPrice: originalPerBottle,
+        packSize,
+        quantity: 1,
+        autoRefill: item.autoRefill,
+      };
+    });
+
     setCartItems(prev => {
-      const existing = prev.find(i => i.packId === item.packId && i.productId === item.productId);
-      if (existing) {
-        return prev.map(i => i.packId === item.packId && i.productId === item.productId
-          ? { ...i, quantity: i.quantity + item.quantity }
-          : i
-        );
+      // If same groupId already exists, remove old rows first (re-add)
+      const withoutGroup = prev.filter(i => i.groupId !== item.packId);
+      // Check if group already there — if so just increase by adding another set
+      const existingGroup = prev.filter(i => i.groupId === item.packId);
+      if (existingGroup.length > 0) {
+        // Add another full pack set with offset ids
+        const offset = existingGroup.length / packSize;
+        const extraRows = Array.from({ length: packSize }, (_, i) => {
+          const isFree = i >= half;
+          return {
+            packId: `${item.packId}_bottle_${offset * packSize + i}`,
+            groupId: item.packId,
+            productId: item.productId,
+            name: item.name,
+            packLabel: item.packLabel,
+            bottleIndex: offset * packSize + i + 1,
+            bottleLabel: isFree ? 'FREE Bottle' : `Bottle #${offset * packSize + i + 1}`,
+            isFree,
+            price: isFree ? 0 : pricePerBottle,
+            originalPrice: originalPerBottle,
+            packSize,
+            quantity: 1,
+            autoRefill: item.autoRefill,
+          };
+        });
+        return [...prev, ...extraRows];
       }
-      return [...prev, item];
+      return [...withoutGroup, ...newRows];
     });
     setIsCartOpen(true);
   };
@@ -37,41 +84,77 @@ export function CartProvider({ children }) {
     setCartItems(prev => prev.filter(i => i.packId !== packId));
   };
 
-  // increment/decrement by the pack's bottle count (step), not by 1
-  const updateQuantity = (packId, delta) => {
+  // Remove entire pack group
+  const removeGroup = (groupId) => {
+    setCartItems(prev => prev.filter(i => i.groupId !== groupId));
+  };
+
+  // For individual bottle rows, quantity is always 1; +/- adds/removes whole packs
+  const updateQuantity = (groupId, delta) => {
     setCartItems(prev => {
-      const item = prev.find(i => i.packId === packId);
-      if (!item) return prev;
-      const step = item.packSize || 1;
-      const newQty = item.quantity + (delta * step);
-      if (newQty < step) return prev.filter(i => i.packId !== packId);
-      return prev.map(i => i.packId === packId ? { ...i, quantity: newQty } : i);
+      const group = prev.filter(i => i.groupId === groupId);
+      if (!group.length) return prev;
+      const packSize = group[0].packSize || 1;
+      const half = packSize / 2;
+      const pricePerBottle = group.find(b => !b.isFree)?.price || 0;
+      const originalPerBottle = group[0].originalPrice || 0;
+      const sample = group[0];
+
+      if (delta > 0) {
+        // Add one more pack set
+        const offset = group.length / packSize;
+        const extraRows = Array.from({ length: packSize }, (_, i) => {
+          const isFree = i >= half;
+          return {
+            packId: `${groupId}_bottle_${offset * packSize + i}_${Date.now()}`,
+            groupId,
+            productId: sample.productId,
+            name: sample.name,
+            packLabel: sample.packLabel,
+            bottleIndex: offset * packSize + i + 1,
+            bottleLabel: isFree ? 'FREE Bottle' : `Bottle #${offset * packSize + i + 1}`,
+            isFree,
+            price: isFree ? 0 : pricePerBottle,
+            originalPrice: originalPerBottle,
+            packSize,
+            quantity: 1,
+            autoRefill: sample.autoRefill,
+          };
+        });
+        return [...prev, ...extraRows];
+      } else {
+        // Remove last pack set
+        if (group.length <= packSize) return prev.filter(i => i.groupId !== groupId);
+        const toRemove = group.slice(-packSize).map(i => i.packId);
+        return prev.filter(i => !toRemove.includes(i.packId));
+      }
     });
   };
 
-  const clearCart = () => {
-    setCartItems([]);
-    setCoupon(null);
-  };
-
-  const applyCoupon = (couponData) => setCoupon(couponData);
+  const clearCart = () => { setCartItems([]); setCoupon(null); };
+  const applyCoupon = (data) => setCoupon(data);
   const removeCoupon = () => setCoupon(null);
 
-  // cartCount = number of packs (not individual bottles)
-  const cartCount = cartItems.reduce((sum, i) => sum + Math.round(i.quantity / (i.packSize || 1)), 0);
-  const cartTotal = cartItems.reduce((sum, i) => sum + i.price * Math.round(i.quantity / (i.packSize || 1)), 0);
-  const cartSavings = cartItems.reduce((sum, i) => sum + ((i.originalPrice || i.price) - i.price) * Math.round(i.quantity / (i.packSize || 1)), 0);
-
-  // Final total after coupon
+  // Totals — only count paid bottles for price
+  const cartTotal = cartItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const cartSavings = cartItems.reduce((sum, i) => sum + Math.max(0, (i.originalPrice - i.price) * i.quantity), 0);
+  const cartCount = cartItems.length; // total bottle rows
   const couponDiscount = coupon ? coupon.discountAmount : 0;
   const cartFinalTotal = Math.max(0, cartTotal - couponDiscount);
 
+  // Unique groups for display grouping
+  const cartGroups = cartItems.reduce((acc, item) => {
+    if (!acc[item.groupId]) acc[item.groupId] = [];
+    acc[item.groupId].push(item);
+    return acc;
+  }, {});
+
   return (
     <CartContext.Provider value={{
-      cartItems, addToCart, removeFromCart, updateQuantity, clearCart,
+      cartItems, cartGroups, addToCart, removeFromCart, removeGroup, updateQuantity, clearCart,
       cartCount, cartTotal, cartSavings, cartFinalTotal,
       coupon, applyCoupon, removeCoupon,
-      isCartOpen, setIsCartOpen
+      isCartOpen, setIsCartOpen,
     }}>
       {children}
     </CartContext.Provider>
