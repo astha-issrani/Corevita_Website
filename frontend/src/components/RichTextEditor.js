@@ -15,7 +15,6 @@ export default function RichTextEditor({ value, onChange, rows = 4, placeholder 
       onChange(next);
       requestAnimationFrame(() => {
         el.focus();
-        const pos = start + before.length + selected.length + after.length;
         el.setSelectionRange(start + before.length, start + before.length + selected.length);
       });
     },
