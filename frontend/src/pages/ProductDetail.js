@@ -282,18 +282,27 @@ function Infographic({ c }) {
   );
 }
 
-function StoryVideoCard({ src, name, label }) {
-  if (!src) return null;
+function StoryVideoCard({ src, name, label, fallbackSrc }) {
+  const [videoSrc, setVideoSrc] = useState(src);
+  useEffect(() => {
+    setVideoSrc(src);
+  }, [src]);
+
+  if (!src && !fallbackSrc) return null;
+
   return (
     <div className="story-video-card">
       <div className="story-video-wrapper">
         <video
+          key={videoSrc}
           className="story-video-player"
-          src={src}
+          src={videoSrc}
           controls
           playsInline
-          preload="metadata"
-          controlsList="nodownload"
+          preload="auto"
+          onError={() => {
+            if (fallbackSrc && videoSrc !== fallbackSrc) setVideoSrc(fallbackSrc);
+          }}
         />
       </div>
       <div className="story-video-info">
@@ -451,6 +460,7 @@ export default function ProductDetail(){
 
   const videos=[0,1,2,3].map((i)=>({
     src:resolveVideoUrl(c,i),
+    fallback:DEFAULT_TESTIMONIAL_VIDEOS[i]?.url,
     name:c('videos',`video${i+1}_name`,DEFAULT_TESTIMONIAL_VIDEOS[i]?.name||`Customer ${i+1}`),
     label:c('videos',`video${i+1}_label`,DEFAULT_TESTIMONIAL_VIDEOS[i]?.label||''),
   }));
@@ -648,7 +658,7 @@ export default function ProductDetail(){
           <h2 className="section-title">{c('videos','title','Real Stories, Real Results: How CoreVita Is Changing Lives')}</h2>
           <div className="stories-grid">
             {videos.map((s,i)=>(
-              <StoryVideoCard key={i} src={s.src} name={s.name} label={s.label} />
+              <StoryVideoCard key={i} src={s.src} fallbackSrc={s.fallback} name={s.name} label={s.label} />
             ))}
           </div>
         </div>

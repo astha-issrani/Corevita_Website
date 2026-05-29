@@ -164,7 +164,7 @@ const PAGES = [
         key: 'videos', label: 'Video Testimonials',
         fields: [
           { key: 'title',        label: 'Section Title', type: 'text' },
-          { key: 'video1_url',   label: 'Video 1 URL (MP4)', type: 'text', hint: 'Direct .mp4 link — plays with sound in browser' },
+          { key: 'video1_url',   label: 'Video 1 URL (MP4)', type: 'text', hint: 'Direct .mp4 URL (e.g. Google sample bucket links)' },
           { key: 'video1_name',  label: 'Video 1 Name', type: 'text' },
           { key: 'video1_label', label: 'Video 1 Label', type: 'text' },
           { key: 'video2_url',   label: 'Video 2 URL (MP4)', type: 'text' },
