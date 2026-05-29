@@ -219,7 +219,6 @@ export default function Checkout() {
           <div className="summary-items">
             {Object.entries(cartGroups || {}).map(([groupId, bottles]) => {
               const sample = bottles[0];
-              const groupTotal = bottles.reduce((s, b) => s + b.price, 0);
               return (
                 <div key={groupId}>
                   <div className="summary-group-label">
