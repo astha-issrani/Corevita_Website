@@ -2,6 +2,8 @@
 
 export const IMG = {
   bottle: '/images/bee-pearl-bottle.svg',
+  bannerModernFood: '/images/banner-modern-food.svg',
+  bannerBottle: '/images/bee-pearl-bottle.svg',
   capsulesBowl: '/images/capsules-bowl.svg',
   galleryCapsules: '/images/gallery-capsules.svg',
   gallerySupplements: '/images/gallery-supplements.svg',
@@ -18,6 +20,15 @@ export const DEFAULT_GALLERY_IMAGES = [
 ];
 
 export const DEFAULT_CAPSULES_IMAGE = IMG.capsulesBowl;
+
+/** Prefer local assets; ignore broken remote URLs from old DB seeds */
+export function resolveBannerImage(url, fallback) {
+  if (!url || !String(url).trim()) return fallback;
+  const u = String(url).trim();
+  if (u.startsWith('/images/')) return u;
+  if (u.includes('unsplash.com') || u.includes('placeholder')) return fallback;
+  return u;
+}
 
 /** Free Mixkit MP4s — HTML5 video with controls, sound enabled when user plays */
 export const DEFAULT_TESTIMONIAL_VIDEOS = [

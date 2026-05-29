@@ -9,6 +9,8 @@ import {
   DEFAULT_GALLERY_IMAGES,
   DEFAULT_CAPSULES_IMAGE,
   DEFAULT_TESTIMONIAL_VIDEOS,
+  IMG,
+  resolveBannerImage,
   resolveVideoUrl,
 } from '../constants/media';
 import './ProductDetail.css';
@@ -116,22 +118,43 @@ function ReviewCarousel({reviews}){
   );
 }
 
+function BannerImage({ src, alt, fallback }) {
+  const [imgSrc, setImgSrc] = useState(() => resolveBannerImage(src, fallback));
+  useEffect(() => {
+    setImgSrc(resolveBannerImage(src, fallback));
+  }, [src, fallback]);
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      className="banner-img"
+      onError={() => setImgSrc(fallback)}
+    />
+  );
+}
+
 // ── Banner 1: image LEFT, text RIGHT ──────────────────────────────────────────
 function Banner1({c}){
   const imageUrl = c('banner1','image_url','');
   const title    = c('banner1','title',"Why Modern Food Isn't Enough");
-  const body     = c('banner1','body','');
+  const body     = c('banner1','body',`Today's food supply is broken. "Empty" calories and nutrient-dead soil mean we have to eat twice as much just to get half the nutrition our grandparents did.
+
+92% of people are walking around with critical nutrient gaps that prevent them from feeling their best.
+
+74% suffer from daily fatigue and mental sludge — clear signs that their body is running on empty reserves.
+
+Your body doesn't need more stimulation; it needs repair. Bee Pearl bridges this gap by delivering concentrated, pre-digested nutrients in their raw form — exactly how your body was designed to use them.`);
   const paragraphs = body.split('\n\n').filter(Boolean);
 
   return(
     <ScrollReveal className="banner-section banner1-section">
       <div className="container banner-grid">
-        {/* Left: image */}
         <div className="banner-img-wrap">
-          {imageUrl
-            ? <img src={imageUrl} alt={c('banner1','image_alt','Banner image')} className="banner-img"/>
-            : <img src="/images/gallery-honey-wellness.svg" alt="" className="banner-img" />
-          }
+          <BannerImage
+            src={imageUrl}
+            alt={c('banner1','image_alt','Modern food and agriculture')}
+            fallback={IMG.bannerModernFood}
+          />
         </div>
         {/* Right: text */}
         <div className="banner-text">
@@ -164,23 +187,38 @@ function Banner2({c}){
           {body  && <p>{body}</p>}
           {(bullet1||bullet2||bullet3) && (
             <ul className="banner-bullets">
-              {bullet1 && <li><strong>Fuel mitochondria</strong> — {bullet1}</li>}
-              {bullet2 && <li><strong>Repair damaged tissue</strong> — {bullet2}</li>}
-              {bullet3 && <li><strong>Support deep sleep</strong> — {bullet3}</li>}
+              {bullet1 && <li>{formatBannerBullet(bullet1, 'Fuel mitochondria')}</li>}
+              {bullet2 && <li>{formatBannerBullet(bullet2, 'Repair damaged tissue')}</li>}
+              {bullet3 && <li>{formatBannerBullet(bullet3, 'Support deep sleep')}</li>}
             </ul>
           )}
           {tagline && <p className="banner-tagline">{tagline}</p>}
         </div>
         {/* Right: image */}
-        <div className="banner-img-wrap">
-          {imageUrl
-            ? <img src={imageUrl} alt={c('banner2','image_alt','Product image')} className="banner-img"/>
-            : <img src="/images/bee-pearl-bottle.svg" alt="" className="banner-img" />
-          }
+        <div className="banner-img-wrap banner-img-wrap--product">
+          <BannerImage
+            src={imageUrl}
+            alt={c('banner2','image_alt','CoreVita Bee Pearl bottle')}
+            fallback={IMG.bannerBottle}
+          />
         </div>
       </div>
     </ScrollReveal>
   );
+}
+
+function formatBannerBullet(text, label) {
+  const t = String(text).trim();
+  if (t.toLowerCase().startsWith(label.toLowerCase())) {
+    const rest = t.slice(label.length).replace(/^\s*[—–-]\s*/, '').trim();
+    return (
+      <>
+        <strong>{label}</strong>
+        {rest ? <> — {rest}</> : null}
+      </>
+    );
+  }
+  return t;
 }
 
 const INFO_LABEL_DEFAULTS = {
@@ -191,13 +229,13 @@ const INFO_LABEL_DEFAULTS = {
   bottom_right: 'Enzymes for better digestion and nutrient absorption',
 };
 
-/* Arrows run in the gap between labels (outside) and the bowl (center) — viewBox 560×520 */
+/* Arrows from bowl → labels (arrowhead at text) — viewBox 560×520 */
 const INFO_CALLOUTS = [
-  { key: 'top', pos: 'top', path: 'M 280 108 L 280 198' },
-  { key: 'left', pos: 'left', path: 'M 128 248 Q 195 248 218 252' },
-  { key: 'right', pos: 'right', path: 'M 432 248 Q 365 248 342 252' },
-  { key: 'bottom_left', pos: 'bottom-left', path: 'M 148 408 Q 195 355 228 318' },
-  { key: 'bottom_right', pos: 'bottom-right', path: 'M 412 408 Q 365 355 332 318' },
+  { key: 'top', pos: 'top', path: 'M 280 165 L 280 62' },
+  { key: 'left', pos: 'left', path: 'M 208 232 L 102 232' },
+  { key: 'right', pos: 'right', path: 'M 352 232 L 458 232' },
+  { key: 'bottom_left', pos: 'bottom-left', path: 'M 222 285 Q 175 340 128 400' },
+  { key: 'bottom_right', pos: 'bottom-right', path: 'M 338 285 Q 385 340 432 400' },
 ];
 
 // ── Infographic with visible arrows + editable labels ─────────────────────────

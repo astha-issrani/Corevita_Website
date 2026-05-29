@@ -43,20 +43,20 @@ const DEFAULTS = [
   { page:'product', section:'hero', field:'trust',  value:'🚚 In Stock — Delivery in 5 to 8 business days' },
 
   // ── BANNER 1: Why Modern Food Isn't Enough (image LEFT, text RIGHT) ──
-  { page:'product', section:'banner1', field:'image_url', value:'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=900&q=80' },
+  { page:'product', section:'banner1', field:'image_url', value:'/images/banner-modern-food.svg' },
   { page:'product', section:'banner1', field:'image_alt', value:'Modern agriculture and pesticide use' },
   { page:'product', section:'banner1', field:'title',     value:"Why Modern Food Isn't Enough" },
   { page:'product', section:'banner1', field:'body',      value:'Today\'s food supply is broken. "Empty" calories and nutrient-dead soil mean we have to eat twice as much just to get half the nutrition our grandparents did.\n\n92% of people are walking around with critical nutrient gaps that prevent them from feeling their best.\n\n74% suffer from daily fatigue and mental sludge — clear signs that their body is running on empty reserves.\n\nYour body doesn\'t need more stimulation; it needs repair. Bee Pearl bridges this gap by delivering concentrated, pre-digested nutrients in their raw form — exactly how your body was designed to use them.' },
 
   // ── BANNER 2: Nature's Gold Standard (text LEFT, image RIGHT) ──
-  { page:'product', section:'banner2', field:'image_url', value:'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=900&q=80' },
+  { page:'product', section:'banner2', field:'image_url', value:'/images/bee-pearl-bottle.svg' },
   { page:'product', section:'banner2', field:'image_alt', value:'CoreVita Bee Pearl product bottle' },
   { page:'product', section:'banner2', field:'title',     value:"CoreVita Bee Pearl: Nature's Gold Standard" },
   { page:'product', section:'banner2', field:'intro',     value:'Known as "Nature\'s Perfect Food," Bee Bread has been cherished for centuries for its healing power. Its unique enzymatic profile makes it the ultimate tool for restoring vitality.' },
   { page:'product', section:'banner2', field:'body',      value:'Packed with over 250 bioactive compounds — including rare enzymes and vitamins — CoreVita Bee Pearl replenishes exactly what your body is missing. These nutrients:' },
-  { page:'product', section:'banner2', field:'bullet1',   value:'pre-digested energy your cells absorb instantly.' },
-  { page:'product', section:'banner2', field:'bullet2',   value:'damaged tissue and neutralize inflammation naturally.' },
-  { page:'product', section:'banner2', field:'bullet3',   value:'deep sleep, mental clarity, and sustained stamina.' },
+  { page:'product', section:'banner2', field:'bullet1',   value:'Fuel mitochondria with pre-digested energy your cells absorb instantly.' },
+  { page:'product', section:'banner2', field:'bullet2',   value:'Repair damaged tissue and neutralize inflammation naturally.' },
+  { page:'product', section:'banner2', field:'bullet3',   value:'Support deep sleep, mental clarity, and sustained stamina.' },
   { page:'product', section:'banner2', field:'tagline',   value:'Feel revitalized from the inside out. Harness the concentrated power of the hive to reclaim your energy and resilience.' },
 
   // ── INFOGRAPHIC / CAPSULES SECTION ──
