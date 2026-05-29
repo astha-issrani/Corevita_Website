@@ -3,7 +3,7 @@ const router = express.Router();
 const Review = require('../models/Review');
 const adminAuth = require('../middleware/adminAuth');
 
-// ---- ADMIN ROUTES FIRST (before /:slug routes) ----
+// ── ADMIN ROUTES FIRST (must be before /:slug routes to avoid Express treating "admin" as a slug) ──
 
 router.get('/admin/reviews', adminAuth, async (req, res) => {
   try {
@@ -34,7 +34,7 @@ router.delete('/admin/reviews/:id', adminAuth, async (req, res) => {
   }
 });
 
-// ---- PUBLIC ROUTES (/:slug routes after) ----
+// ── PUBLIC ROUTES (/:slug must come after admin routes) ──
 
 router.get('/:slug/reviews', async (req, res) => {
   try {
@@ -48,13 +48,15 @@ router.get('/:slug/reviews', async (req, res) => {
 
 router.post('/:slug/reviews', async (req, res) => {
   try {
-    const { name, email, title, body, rating } = req.body;
+    const { name, email, title, body, rating, avatarBase64 } = req.body;
     if (!name || !body || !rating) return res.status(400).json({ message: 'Name, review, and rating are required.' });
     if (rating < 1 || rating > 5) return res.status(400).json({ message: 'Rating must be 1-5.' });
+
     const review = new Review({
       productSlug: req.params.slug,
       name, email, title, body, rating,
       approved: false,
+      avatarUrl: avatarBase64 || '', // store base64 data URL from frontend
     });
     await review.save();
     res.status(201).json({ message: 'Review submitted successfully! It will appear after approval.' });
