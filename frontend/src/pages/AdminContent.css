@@ -165,6 +165,12 @@
 }
 .ac-hint { font-weight: 400; color: #888; font-size: 12px; }
 
+.ac-price-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
 .ac-input {
   border: 1.5px solid #e0e0e0;
   border-radius: 8px;
@@ -189,9 +195,83 @@
 .ac-editor-area::-webkit-scrollbar-thumb,
 .ac-page-tabs::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
 
-@media (max-width: 900px) {
-  .ac-layout { flex-direction: column; }
-  .ac-page-tabs { width: 100%; flex-direction: row; flex-wrap: wrap; border-right: none; border-bottom: 1px solid #eee; padding: 10px; }
-  .ac-page-tab { flex: 1; text-align: center; min-width: 120px; }
-  .ac-tip { display: none; }
+@media (max-width: 1024px) {
+  .admin-content-editor {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .admin-content-editor .admin-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 18px 16px 14px;
+  }
+
+  .ac-header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .ac-save-btn,
+  .ac-reset-btn,
+  .admin-content-editor .admin-header > .ac-save-btn {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .ac-layout {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .ac-page-tabs {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding: 10px 12px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .ac-page-tab {
+    flex: 0 0 auto;
+    text-align: center;
+    min-width: max-content;
+    white-space: nowrap;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .ac-tip {
+    display: none;
+  }
+
+  .ac-editor-area {
+    padding: 16px;
+  }
+
+  .ac-page-title {
+    font-size: 18px;
+  }
+
+  .ac-price-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .ac-price-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ac-section-fields {
+    padding: 14px;
+  }
 }

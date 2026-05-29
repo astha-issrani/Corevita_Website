@@ -54,8 +54,106 @@
 .ar-btn.unapprove { background: #6b7280; color: white; }
 .ar-btn.delete { background: #fee2e2; color: #dc2626; }
 
+@media (max-width: 1024px) {
+  .admin-reviews {
+    padding: 16px;
+    max-width: none;
+  }
+
+  .ar-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .ar-refresh-btn {
+    width: 100%;
+  }
+
+  .ar-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .ar-stat-card {
+    padding: 14px;
+  }
+
+  .ar-stat-val {
+    font-size: 26px;
+  }
+
+  .ar-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ar-filter-tabs {
+    flex-wrap: wrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ar-search {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
 @media (max-width: 768px) {
-  .ar-stats { grid-template-columns: repeat(2, 1fr); }
-  .ar-filters { flex-direction: column; align-items: stretch; }
-  .ar-search { width: 100%; }
+  .ar-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ar-table thead {
+    display: none;
+  }
+
+  .ar-table,
+  .ar-table tbody,
+  .ar-table tr,
+  .ar-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .ar-table tr {
+    margin-bottom: 14px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 12px;
+    background: white;
+  }
+
+  .ar-table tbody td {
+    padding: 6px 0;
+    border: none;
+  }
+
+  .ar-table tbody td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #999;
+    letter-spacing: 0.4px;
+    margin-bottom: 2px;
+  }
+
+  .ar-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .ar-review-text {
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .ar-stats {
+    grid-template-columns: 1fr;
+  }
 }

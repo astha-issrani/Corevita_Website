@@ -378,10 +378,261 @@
 .message-list::-webkit-scrollbar-thumb,
 .message-detail::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
 
-@media (max-width: 768px) {
-  .admin-sidebar { display: none; }
-  .message-list { width: 100%; border-right: none; }
-  .admin-content { flex-direction: column; }
+/* ── Mobile top bar + drawer nav ── */
+.admin-mobile-topbar {
+  display: none;
+}
+
+.admin-sidebar-overlay {
+  display: none;
+}
+
+.admin-mobile-back {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .admin-page {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .admin-mobile-topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #111;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    flex-shrink: 0;
+  }
+
+  .admin-menu-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .admin-mobile-title {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-mobile-logout {
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .admin-sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 210;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .admin-nav-open .admin-sidebar-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 220;
+    width: min(280px, 88vw);
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+  }
+
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .admin-main {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px 16px 14px;
+  }
+
+  .admin-header > div:last-child,
+  .admin-header .ac-header-actions,
+  .admin-header [style*='display: flex'] {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .admin-header h1 {
+    font-size: 20px;
+  }
+
+  .admin-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 16px;
+    gap: 10px;
+  }
+
+  .filter-tabs {
+    flex-wrap: wrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .admin-search {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  .fonts-panel {
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+
+  .fonts-grid,
+  .font-live-preview {
+    padding: 16px;
+  }
+
+  .message-list {
+    width: 100%;
+    border-right: none;
+    max-height: none;
+  }
+
+  .message-detail {
+    padding: 20px 16px;
+  }
+
+  .admin-mobile-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    padding: 8px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+  }
+
+  .admin-content.has-detail .message-list {
+    display: none;
+  }
+
+  .admin-content:not(.has-detail) .message-detail {
+    display: none;
+  }
+
+  .admin-content.has-detail .message-detail {
+    display: block;
+    flex: 1;
+    width: 100%;
+  }
+
+  .detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .detail-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .reply-btn,
+  .delete-btn {
+    flex: 1;
+    text-align: center;
+    min-width: 120px;
+  }
+
+  .order-item-row {
+    flex-wrap: wrap;
+  }
+
+  .order-item-price {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 4px;
+  }
+
+  .tracking-input-row {
+    flex-direction: column;
+  }
+
+  .tracking-input-row .admin-search {
+    width: 100%;
+  }
+
+  .coupons-table-wrap {
+    margin: 0 16px 24px;
+  }
+
+  .coupon-form-card {
+    margin: 0 16px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header h1 {
+    font-size: 18px;
+  }
+
+  .filter-tab {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .status-btn-group {
+    gap: 6px;
+  }
+
+  .status-update-btn {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
 }
 
 /* ── FONTS TAB ── */

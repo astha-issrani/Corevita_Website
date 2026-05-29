@@ -107,7 +107,7 @@ export default function AdminProduct() {
                 <label className="ac-label">Product name</label>
                 <input className="ac-input" value={form.name} onChange={e => set('name', e.target.value)} />
               </div>
-              <div className="ac-field" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 12 }}>
+              <div className="ac-field ac-price-grid">
                 <div>
                   <label className="ac-label">Price ($)</label>
                   <input className="ac-input" value={form.price} onChange={e => set('price', e.target.value)} />

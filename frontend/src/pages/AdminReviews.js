@@ -134,7 +134,7 @@ export default function AdminReviews() {
             <tbody>
               {filtered.map(r => (
                 <tr key={r._id} className={!r.approved ? 'ar-row-pending' : ''}>
-                  <td>
+                  <td data-label="Customer">
                     <div className="ar-customer">
                       <div className="ar-avatar">{r.name[0].toUpperCase()}</div>
                       <div>
@@ -143,21 +143,21 @@ export default function AdminReviews() {
                       </div>
                     </div>
                   </td>
-                  <td><StarDisplay rating={r.rating} /></td>
-                  <td>
+                  <td data-label="Rating"><StarDisplay rating={r.rating} /></td>
+                  <td data-label="Review">
                     <div className="ar-review-text">
                       {r.title && <strong className="ar-review-title">"{r.title}"</strong>}
                       <p>{r.body.length > 120 ? r.body.slice(0, 120) + '...' : r.body}</p>
                     </div>
                   </td>
-                  <td><span className="ar-slug">{r.productSlug}</span></td>
-                  <td><span className="ar-date">{new Date(r.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span></td>
-                  <td>
+                  <td data-label="Product"><span className="ar-slug">{r.productSlug}</span></td>
+                  <td data-label="Date"><span className="ar-date">{new Date(r.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span></td>
+                  <td data-label="Status">
                     <span className={`ar-status ${r.approved ? 'approved' : 'pending'}`}>
                       {r.approved ? '✔ Approved' : '⏳ Pending'}
                     </span>
                   </td>
-                  <td>
+                  <td data-label="Actions">
                     <div className="ar-actions">
                       {!r.approved ? (
                         <button className="ar-btn approve" onClick={() => handleApprove(r._id, true)}>Approve</button>
