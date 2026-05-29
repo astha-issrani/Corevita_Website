@@ -155,22 +155,21 @@ Your body doesn't need more stimulation; it needs repair. Bee Pearl bridges this
   const paragraphs = body.split('\n\n').filter(Boolean);
 
   return(
-    <ScrollReveal className="banner-section banner1-section">
+    <section className="banner-section banner1-section">
       <div className="container banner-grid">
-        <div className="banner-img-wrap">
+        <ScrollReveal as="div" className="banner-img-wrap banner-img-reveal banner-reveal-from-left">
           <BannerImage
             src={imageUrl}
             alt={c('banner1','image_alt','Modern food and agriculture')}
             fallback={IMG.bannerModernFood}
           />
-        </div>
-        {/* Right: text */}
-        <div className="banner-text">
+        </ScrollReveal>
+        <ScrollReveal as="div" className="banner-text scroll-reveal-delay">
           <h2>{title}</h2>
           {paragraphs.map((p,i)=><p key={i}>{p}</p>)}
-        </div>
+        </ScrollReveal>
       </div>
-    </ScrollReveal>
+    </section>
   );
 }
 
@@ -186,10 +185,9 @@ function Banner2({c}){
   const tagline  = cv(c, 'banner2', 'tagline', 'Feel revitalized from the inside out. Harness the concentrated power of the hive to reclaim your energy and resilience.');
 
   return(
-    <ScrollReveal className="banner-section banner2-section">
+    <section className="banner-section banner2-section">
       <div className="container banner-grid banner-grid-reverse">
-        {/* Left: text */}
-        <div className="banner-text">
+        <ScrollReveal as="div" className="banner-text">
           <h2>{title}</h2>
           {intro && <p>{intro}</p>}
           {body  && <p>{body}</p>}
@@ -201,17 +199,16 @@ function Banner2({c}){
             </ul>
           )}
           {tagline && <p className="banner-tagline">{tagline}</p>}
-        </div>
-        {/* Right: image */}
-        <div className="banner-img-wrap banner-img-wrap--product">
+        </ScrollReveal>
+        <ScrollReveal as="div" className="banner-img-wrap banner-img-wrap--product banner-img-reveal banner-reveal-from-right scroll-reveal-delay">
           <BannerImage
             src={imageUrl}
             alt={c('banner2','image_alt','CoreVita Bee Pearl bottle')}
             fallback={IMG.bannerBottle}
           />
-        </div>
+        </ScrollReveal>
       </div>
-    </ScrollReveal>
+    </section>
   );
 }
 
