@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <rect width="600" height="600" fill="#FFFBEB"/>
+  <text x="300" y="48" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" font-weight="800" fill="#111">BEE PEARL CAPSULES</text>
+  <text x="300" y="78" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="#666">30 count · dietary supplement</text>
+  <g transform="translate(300,320)">
+    <ellipse cx="0" cy="80" rx="160" ry="35" fill="#eee" stroke="#ddd" stroke-width="2"/>
+    <ellipse cx="-70" cy="20" rx="36" ry="18" fill="#F5C800" transform="rotate(-20)"/>
+    <ellipse cx="0" cy="5" rx="40" ry="20" fill="#FFE566"/>
+    <ellipse cx="75" cy="15" rx="34" ry="17" fill="#E6B800" transform="rotate(25)"/>
+    <ellipse cx="-40" cy="45" rx="30" ry="15" fill="#F5C800"/>
+    <ellipse cx="45" cy="40" rx="32" ry="16" fill="#FFE566" transform="rotate(10)"/>
+    <ellipse cx="0" cy="55" rx="28" ry="14" fill="#E6B800"/>
+  </g>
+  <text x="300" y="520" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#333">Concentrated bee bread · pre-digested nutrients</text>
+</svg>

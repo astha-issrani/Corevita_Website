@@ -2,10 +2,10 @@ const Product = require('./models/Product');
 
 const DEFAULT_PRODUCT_IMAGES = [
   '/images/bee-pearl-bottle.svg',
-  'https://images.unsplash.com/photo-1584308664944-24d5adfdbeae?w=800&q=85',
-  'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=85',
-  'https://images.unsplash.com/photo-1505751172876-deb54ef2d726?w=800&q=85',
-  'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50e?w=800&q=85',
+  '/images/gallery-capsules.svg',
+  '/images/gallery-supplements.svg',
+  '/images/gallery-honey-wellness.svg',
+  '/images/gallery-lifestyle.svg',
 ];
 
 module.exports = async function seedData() {

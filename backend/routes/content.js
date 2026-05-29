@@ -60,7 +60,7 @@ const DEFAULTS = [
   { page:'product', section:'banner2', field:'tagline',   value:'Feel revitalized from the inside out. Harness the concentrated power of the hive to reclaim your energy and resilience.' },
 
   // ── INFOGRAPHIC / CAPSULES SECTION ──
-  { page:'product', section:'infographic', field:'image_url',    value:'https://images.unsplash.com/photo-1584308664944-24d5adfdbeae?w=700&q=85' },
+  { page:'product', section:'infographic', field:'image_url',    value:'/images/capsules-bowl.svg' },
   { page:'product', section:'infographic', field:'image_alt',    value:'CoreVita Bee Pearl capsules' },
   { page:'product', section:'infographic', field:'center_emoji', value:'🍯' },
   { page:'product', section:'infographic', field:'top',          value:'Concentrated Bee Bread to support vitality and overall wellness' },
@@ -106,16 +106,20 @@ const DEFAULTS = [
   { page:'product', section:'reviews', field:'title',      value:'400+ People Are Already Thriving With The Healing Power Of Bee Pearl' },
 
   { page:'product', section:'videos', field:'title',        value:'Real Stories, Real Results: How CoreVita Is Changing Lives' },
-  { page:'product', section:'videos', field:'video1_id',    value:'dQw4w9WgXcQ' },
+  { page:'product', section:'videos', field:'video1_url',   value:'https://assets.mixkit.co/videos/preview/mixkit-woman-taking-pills-from-a-container-3982-large.mp4' },
+  { page:'product', section:'videos', field:'video1_id',    value:'' },
   { page:'product', section:'videos', field:'video1_name',  value:'Sandra M., 62' },
   { page:'product', section:'videos', field:'video1_label', value:'Energy & Vitality' },
-  { page:'product', section:'videos', field:'video2_id',    value:'dQw4w9WgXcQ' },
+  { page:'product', section:'videos', field:'video2_url',   value:'https://assets.mixkit.co/videos/preview/mixkit-close-up-of-yellow-pills-and-capsules-3983-large.mp4' },
+  { page:'product', section:'videos', field:'video2_id',    value:'' },
   { page:'product', section:'videos', field:'video2_name',  value:'James R., 55' },
   { page:'product', section:'videos', field:'video2_label', value:'Immune Support' },
-  { page:'product', section:'videos', field:'video3_id',    value:'dQw4w9WgXcQ' },
+  { page:'product', section:'videos', field:'video3_url',   value:'https://assets.mixkit.co/videos/preview/mixkit-woman-drinking-a-green-juice-smoothie-4635-large.mp4' },
+  { page:'product', section:'videos', field:'video3_id',    value:'' },
   { page:'product', section:'videos', field:'video3_name',  value:'Linda K., 49' },
   { page:'product', section:'videos', field:'video3_label', value:'Mental Clarity' },
-  { page:'product', section:'videos', field:'video4_id',    value:'dQw4w9WgXcQ' },
+  { page:'product', section:'videos', field:'video4_url',   value:'https://assets.mixkit.co/videos/preview/mixkit-woman-doing-yoga-on-a-mat-32809-large.mp4' },
+  { page:'product', section:'videos', field:'video4_id',    value:'' },
   { page:'product', section:'videos', field:'video4_name',  value:'Denise W., 58' },
   { page:'product', section:'videos', field:'video4_label', value:'Sleep & Recovery' },
 

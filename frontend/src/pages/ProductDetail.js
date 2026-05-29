@@ -5,16 +5,13 @@ import { getProduct } from '../utils/api';
 import { useContent } from '../utils/useContent';
 import { ScrollReveal } from '../utils/useScrollReveal';
 import { renderBoldText } from '../utils/renderBoldText';
-import './ProductDetail.css';
-
-const DEFAULT_CAPSULES_IMAGE = 'https://images.unsplash.com/photo-1584308664944-24d5adfdbeae?w=800&q=85';
-const DEFAULT_GALLERY_IMAGES = [
-  '/images/bee-pearl-bottle.svg',
+import {
+  DEFAULT_GALLERY_IMAGES,
   DEFAULT_CAPSULES_IMAGE,
-  'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=85',
-  'https://images.unsplash.com/photo-1505751172876-deb54ef2d726?w=800&q=85',
-  'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50e?w=800&q=85',
-];
+  DEFAULT_TESTIMONIAL_VIDEOS,
+  resolveVideoUrl,
+} from '../constants/media';
+import './ProductDetail.css';
 
 const PRODUCT_SLIDES = [
   { id:1, label:'Main', content:(<svg viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" width="240" height="300"><rect x="80" y="60" width="140" height="240" rx="16" fill="white" stroke="#E0E0E0" strokeWidth="2"/><rect x="90" y="30" width="120" height="38" rx="10" fill="#CCCCCC"/><rect x="95" y="34" width="110" height="30" rx="8" fill="#BBBBBB"/><rect x="80" y="120" width="140" height="150" fill="#F5C800"/><ellipse cx="150" cy="175" rx="18" ry="12" fill="#333"/><ellipse cx="150" cy="175" rx="10" ry="11" fill="#F5C800"/><line x1="142" y1="168" x2="142" y2="182" stroke="#333" strokeWidth="1.5"/><line x1="158" y1="168" x2="158" y2="182" stroke="#333" strokeWidth="1.5"/><ellipse cx="140" cy="166" rx="10" ry="6" fill="rgba(255,255,255,0.6)" transform="rotate(-30 140 166)"/><ellipse cx="160" cy="166" rx="10" ry="6" fill="rgba(255,255,255,0.6)" transform="rotate(30 160 166)"/><text x="150" y="130" textAnchor="middle" fontFamily="Arial" fontSize="10" fontWeight="600" fill="#333">CoreVita</text><text x="150" y="205" textAnchor="middle" fontFamily="Arial" fontSize="14" fontWeight="900" fill="#333">BEE PEARL</text><text x="150" y="220" textAnchor="middle" fontFamily="Arial" fontSize="7" fill="#555">CONCENTRATED BEE BREAD</text><text x="150" y="235" textAnchor="middle" fontFamily="Arial" fontSize="6" fill="#666">Traditionally used to support</text><text x="150" y="245" textAnchor="middle" fontFamily="Arial" fontSize="6" fill="#666">vitality and overall wellness</text><text x="150" y="260" textAnchor="middle" fontFamily="Arial" fontSize="7" fill="#555">DIETARY SUPPLEMENT  30 CAPSULES</text></svg>) },
@@ -133,7 +130,7 @@ function Banner1({c}){
         <div className="banner-img-wrap">
           {imageUrl
             ? <img src={imageUrl} alt={c('banner1','image_alt','Banner image')} className="banner-img"/>
-            : <div className="banner-img-placeholder banner-img-fallback" style={{backgroundImage:'url(https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=900&q=80)'}} />
+            : <img src="/images/gallery-honey-wellness.svg" alt="" className="banner-img" />
           }
         </div>
         {/* Right: text */}
@@ -178,7 +175,7 @@ function Banner2({c}){
         <div className="banner-img-wrap">
           {imageUrl
             ? <img src={imageUrl} alt={c('banner2','image_alt','Product image')} className="banner-img"/>
-            : <div className="banner-img-placeholder banner-img-fallback" style={{backgroundImage:'url(https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=900&q=80)'}} />
+            : <img src="/images/bee-pearl-bottle.svg" alt="" className="banner-img" />
           }
         </div>
       </div>
@@ -239,10 +236,32 @@ function Infographic({ c }) {
         <img
           src={imageUrl || DEFAULT_CAPSULES_IMAGE}
           alt={c('infographic', 'image_alt', 'CoreVita Bee Pearl capsules')}
-          className="infographic-core-img"
+          className="infographic-core-img infographic-core-img--bowl"
         />
       </div>
       <div className="infographic-brand">{brand}</div>
+    </div>
+  );
+}
+
+function StoryVideoCard({ src, name, label }) {
+  if (!src) return null;
+  return (
+    <div className="story-video-card">
+      <div className="story-video-wrapper">
+        <video
+          className="story-video-player"
+          src={src}
+          controls
+          playsInline
+          preload="metadata"
+          controlsList="nodownload"
+        />
+      </div>
+      <div className="story-video-info">
+        <strong>{name}</strong>
+        <span>{label}</span>
+      </div>
     </div>
   );
 }
@@ -392,10 +411,10 @@ export default function ProductDetail(){
     label:c('science',`stat${n}_text`,''),
   }));
 
-  const videos=[1,2,3,4].map(n=>({
-    videoId:c('videos',`video${n}_id`,'dQw4w9WgXcQ'),
-    name:c('videos',`video${n}_name`,`Person ${n}`),
-    label:c('videos',`video${n}_label`,''),
+  const videos=[0,1,2,3].map((i)=>({
+    src:resolveVideoUrl(c,i),
+    name:c('videos',`video${i+1}_name`,DEFAULT_TESTIMONIAL_VIDEOS[i]?.name||`Customer ${i+1}`),
+    label:c('videos',`video${i+1}_label`,DEFAULT_TESTIMONIAL_VIDEOS[i]?.label||''),
   }));
 
   const allReviews=[...STATIC_REVIEWS,...reviews.map(r=>({...r,avatar:r.avatarUrl?null:'👤'}))];
@@ -591,12 +610,7 @@ export default function ProductDetail(){
           <h2 className="section-title">{c('videos','title','Real Stories, Real Results: How CoreVita Is Changing Lives')}</h2>
           <div className="stories-grid">
             {videos.map((s,i)=>(
-              <div key={i} className="story-video-card">
-                <div className="story-video-wrapper">
-                  <iframe src={`https://www.youtube.com/embed/${s.videoId}?rel=0&modestbranding=1`} title={s.name} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen/>
-                </div>
-                <div className="story-video-info"><strong>{s.name}</strong><span>{s.label}</span></div>
-              </div>
+              <StoryVideoCard key={i} src={s.src} name={s.name} label={s.label} />
             ))}
           </div>
         </div>
