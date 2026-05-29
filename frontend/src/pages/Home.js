@@ -37,7 +37,6 @@ export default function Home() {
 
   const heroTitle = c('hero', 'title', "YOU'RE NOT TIRED,\nBURNED OUT, OR LAZY\n—\nYOU'RE\nUNDERNOURISHED.");
   const heroLines = heroTitle.split('\n');
-  const dashIndex = heroLines.findIndex(l => l.trim() === '—' || l.trim() === '-');
   const accentIndex = heroLines.findIndex(l => l.toUpperCase().includes('UNDERNOURISHED'));
 
   const stats = [
