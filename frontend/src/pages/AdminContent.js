@@ -16,6 +16,7 @@ const PAGES = [
           { key: 'badge',    label: 'Stars Badge',  type: 'text' },
           { key: 'title',    label: 'Main Title',   type: 'textarea', rows: 4 },
           { key: 'subtitle', label: 'Subtitle',     type: 'text' },
+          { key: 'body',     label: 'Pitch Paragraph', type: 'textarea', rows: 4 },
           { key: 'cta',      label: 'CTA Button',   type: 'text' },
         ]
       },
@@ -37,6 +38,7 @@ const PAGES = [
         fields: [
           { key: 'title',      label: 'Title',       type: 'text' },
           { key: 'subtitle',   label: 'Subtitle',    type: 'text' },
+          { key: 'heading',    label: 'Stats Column Heading', type: 'text' },
           { key: 'stat1_pct',  label: 'Stat 1 %',   type: 'text' },
           { key: 'stat1_text', label: 'Stat 1 Text', type: 'textarea', rows: 2 },
           { key: 'stat2_pct',  label: 'Stat 2 %',   type: 'text' },
@@ -251,11 +253,21 @@ export default function AdminContent() {
     setLoading(true); setError('');
     try {
       const res = await fetch(`${BASE}/content/${page}`, { headers: hdrs() });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || `HTTP ${res.status}`);
+      }
       const rows = await res.json();
+      if (!Array.isArray(rows)) throw new Error('Invalid response');
       const map = {};
-      rows.forEach(r => { map[`${r.section}__${r.field}`] = r.value; });
+      rows.forEach(r => { map[`${r.section}__${r.field}`] = r.value ?? ''; });
       setValues(map);
-    } catch { setError('Failed to load content.'); }
+    } catch (e) {
+      setError(e.message === 'Invalid response' || e.message?.startsWith('HTTP')
+        ? 'Failed to load content. Is the API running?'
+        : `Failed to load content: ${e.message}`);
+      setValues({});
+    }
     setLoading(false);
   }, []);
 
@@ -292,15 +304,22 @@ export default function AdminContent() {
 
   const handleReset = async () => {
     if (!window.confirm(`Reset all ${getPageDef().label} content to defaults?`)) return;
-    setResetting(true);
+    setResetting(true); setError('');
     try {
       const res = await fetch(`${BASE}/content/${activePage}/reset`, { method: 'POST', headers: hdrs() });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || 'Reset failed');
+      }
       const rows = await res.json();
+      if (!Array.isArray(rows)) throw new Error('Invalid response');
       const map = {};
-      rows.forEach(r => { map[`${r.section}__${r.field}`] = r.value; });
+      rows.forEach(r => { map[`${r.section}__${r.field}`] = r.value ?? ''; });
       setValues(map);
       invalidateContent(activePage);
-    } catch { setError('Reset failed.'); }
+    } catch (e) {
+      setError(e.message || 'Reset failed. Are you logged in as admin?');
+    }
     setResetting(false);
   };
 

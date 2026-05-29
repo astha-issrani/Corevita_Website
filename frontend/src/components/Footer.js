@@ -24,7 +24,8 @@ export default function Footer() {
         </div>
         <div className="footer-links">
           <h4>Quick links</h4>
-        <Link to="/products/bee-pearl">Shop</Link>
+          <Link to="/products/bee-pearl">Search</Link>
+          <Link to="/products/bee-pearl">Shop CoreVita</Link>
           <Link to="/track-order">Track Your Order</Link>
           <Link to="/contact">Manage Subscription</Link>
           <Link to="/refund-policy">Refund Policy</Link>
@@ -65,7 +66,7 @@ export default function Footer() {
           <span>Venmo</span>
           <span>Visa</span>
         </div>
-        <p>© 2026, Corevita. Powered by Shrine</p>
+        <p>© 2024, Corevita Powered by Shrine</p>
       </div>
     </footer>
   );

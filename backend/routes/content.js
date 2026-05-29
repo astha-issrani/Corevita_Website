@@ -5,10 +5,11 @@ const adminAuth = require('../middleware/adminAuth');
 
 const DEFAULTS = [
   // ── HOME PAGE ──────────────────────────────────────────────────────────────
-  { page:'home', section:'hero',    field:'badge',      value:'★★★★★  4.8 STARS FROM 400+ REVIEWS' },
+  { page:'home', section:'hero',    field:'badge',      value:'4.8 STARS FROM 400+ REVIEWS' },
   { page:'home', section:'hero',    field:'title',      value:"YOU'RE NOT TIRED,\nBURNED OUT, OR LAZY\n—\nYOU'RE\nUNDERNOURISHED." },
   { page:'home', section:'hero',    field:'subtitle',   value:'CoreVita restores what your body has been missing.' },
-  { page:'home', section:'hero',    field:'cta',        value:'Shop Now →' },
+  { page:'home', section:'hero',    field:'body',       value:'With 20+ amino acids, minerals, and enzymes, **CoreVita Bee Pearl** is nature\'s most concentrated multivitamin — and your shortcut to steady energy, faster recovery, and mental clarity in 30 days.' },
+  { page:'home', section:'hero',    field:'cta',        value:'TRY COREVITA BEE PEARL >' },
 
   { page:'home', section:'why',     field:'title',      value:"Why Modern Food Isn't Enough" },
   { page:'home', section:'why',     field:'body1',      value:'Today\'s food supply is broken. "Empty" calories and nutrient-dead soil mean we have to eat twice as much just to get half the nutrition our grandparents did.' },
@@ -24,9 +25,10 @@ const DEFAULTS = [
   { page:'home', section:'results', field:'stat1_pct',  value:'93' },
   { page:'home', section:'results', field:'stat1_text', value:'Reported steady, all-day energy without the afternoon crash.' },
   { page:'home', section:'results', field:'stat2_pct',  value:'89' },
-  { page:'home', section:'results', field:'stat2_text', value:'Noticed significantly sharper focus and eliminated brain fog.' },
-  { page:'home', section:'results', field:'stat3_pct',  value:'87' },
-  { page:'home', section:'results', field:'stat3_text', value:'Felt a measurable improvement in overall mood and wellbeing.' },
+  { page:'home', section:'results', field:'stat2_text', value:'Noticed significantly sharper focus and reduced brain fog.' },
+  { page:'home', section:'results', field:'stat3_pct',  value:'95' },
+  { page:'home', section:'results', field:'stat3_text', value:'Felt a measurable improvement in overall mood and daily vitality.' },
+  { page:'home', section:'results', field:'heading',    value:'Here is what they said:' },
 
   { page:'home', section:'stories', field:'title',      value:'Real Stories, Real Results: How CoreVita Is Changing Lives' },
 
@@ -41,20 +43,20 @@ const DEFAULTS = [
   { page:'product', section:'hero', field:'trust',  value:'🚚 In Stock — Delivery in 5 to 8 business days' },
 
   // ── BANNER 1: Why Modern Food Isn't Enough (image LEFT, text RIGHT) ──
-  { page:'product', section:'banner1', field:'image_url', value:'' },
+  { page:'product', section:'banner1', field:'image_url', value:'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=900&q=80' },
   { page:'product', section:'banner1', field:'image_alt', value:'Modern agriculture and pesticide use' },
   { page:'product', section:'banner1', field:'title',     value:"Why Modern Food Isn't Enough" },
   { page:'product', section:'banner1', field:'body',      value:'Today\'s food supply is broken. "Empty" calories and nutrient-dead soil mean we have to eat twice as much just to get half the nutrition our grandparents did.\n\n92% of people are walking around with critical nutrient gaps that prevent them from feeling their best.\n\n74% suffer from daily fatigue and mental sludge — clear signs that their body is running on empty reserves.\n\nYour body doesn\'t need more stimulation; it needs repair. Bee Pearl bridges this gap by delivering concentrated, pre-digested nutrients in their raw form — exactly how your body was designed to use them.' },
 
   // ── BANNER 2: Nature's Gold Standard (text LEFT, image RIGHT) ──
-  { page:'product', section:'banner2', field:'image_url', value:'' },
+  { page:'product', section:'banner2', field:'image_url', value:'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=900&q=80' },
   { page:'product', section:'banner2', field:'image_alt', value:'CoreVita Bee Pearl product bottle' },
   { page:'product', section:'banner2', field:'title',     value:"CoreVita Bee Pearl: Nature's Gold Standard" },
   { page:'product', section:'banner2', field:'intro',     value:'Known as "Nature\'s Perfect Food," Bee Bread has been cherished for centuries for its healing power. Its unique enzymatic profile makes it the ultimate tool for restoring vitality.' },
   { page:'product', section:'banner2', field:'body',      value:'Packed with over 250 bioactive compounds — including rare enzymes and vitamins — CoreVita Bee Pearl replenishes exactly what your body is missing. These nutrients:' },
-  { page:'product', section:'banner2', field:'bullet1',   value:'Fuel mitochondria with pre-digested energy your cells absorb instantly.' },
-  { page:'product', section:'banner2', field:'bullet2',   value:'Repair damaged tissue and neutralize inflammation naturally.' },
-  { page:'product', section:'banner2', field:'bullet3',   value:'Support deep sleep, mental clarity, and sustained stamina.' },
+  { page:'product', section:'banner2', field:'bullet1',   value:'pre-digested energy your cells absorb instantly.' },
+  { page:'product', section:'banner2', field:'bullet2',   value:'damaged tissue and neutralize inflammation naturally.' },
+  { page:'product', section:'banner2', field:'bullet3',   value:'deep sleep, mental clarity, and sustained stamina.' },
   { page:'product', section:'banner2', field:'tagline',   value:'Feel revitalized from the inside out. Harness the concentrated power of the hive to reclaim your energy and resilience.' },
 
   // ── INFOGRAPHIC / CAPSULES SECTION ──
@@ -136,8 +138,14 @@ router.get('/:page', async (req, res) => {
     if (docs.length === 0) {
       const pageDefaults = DEFAULTS.filter(d => d.page === req.params.page);
       if (pageDefaults.length) {
-        await PageContent.insertMany(pageDefaults, { ordered: false }).catch(() => {});
-        return res.json(pageDefaults);
+        try {
+          const inserted = await PageContent.insertMany(pageDefaults, { ordered: false });
+          return res.json(inserted);
+        } catch {
+          const docs = await PageContent.find({ page: req.params.page });
+          if (docs.length) return res.json(docs);
+          return res.json(pageDefaults);
+        }
       }
     }
     res.json(docs);
@@ -178,8 +186,8 @@ router.post('/:page/reset', adminAuth, async (req, res) => {
   try {
     await PageContent.deleteMany({ page: req.params.page });
     const pageDefaults = DEFAULTS.filter(d => d.page === req.params.page);
-    await PageContent.insertMany(pageDefaults, { ordered: false }).catch(() => {});
-    res.json(pageDefaults);
+    const inserted = await PageContent.insertMany(pageDefaults, { ordered: false });
+    res.json(inserted.length ? inserted : pageDefaults);
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 

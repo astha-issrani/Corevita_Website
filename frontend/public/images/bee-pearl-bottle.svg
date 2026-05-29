@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 420" width="280" height="420">
+  <defs>
+    <filter id="shadow" x="-20%" y="-10%" width="140%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.12"/>
+    </filter>
+    <linearGradient id="cap" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f5f5f5"/>
+      <stop offset="100%" stop-color="#d8d8d8"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#shadow)">
+    <rect x="78" y="52" width="124" height="318" rx="18" fill="#fff" stroke="#e8e8e8" stroke-width="1.5"/>
+    <rect x="88" y="22" width="104" height="42" rx="12" fill="url(#cap)"/>
+    <rect x="92" y="26" width="96" height="34" rx="10" fill="#ececec"/>
+    <path d="M78 118 h124 v148 H78z" fill="#F5C800"/>
+    <text x="140" y="98" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" fill="#222">CoreVita</text>
+    <ellipse cx="140" cy="178" rx="22" ry="14" fill="none" stroke="#222" stroke-width="1.8"/>
+    <ellipse cx="140" cy="178" rx="12" ry="13" fill="#F5C800" stroke="#222" stroke-width="1.2"/>
+    <line x1="128" y1="170" x2="128" y2="186" stroke="#222" stroke-width="1.5"/>
+    <line x1="152" y1="170" x2="152" y2="186" stroke="#222" stroke-width="1.5"/>
+    <ellipse cx="126" cy="168" rx="11" ry="6" fill="rgba(255,255,255,0.55)" transform="rotate(-28 126 168)"/>
+    <ellipse cx="154" cy="168" rx="11" ry="6" fill="rgba(255,255,255,0.55)" transform="rotate(28 154 168)"/>
+    <text x="140" y="218" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="900" fill="#111">BEE PEARL</text>
+    <text x="140" y="236" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="8" font-weight="600" fill="#333" letter-spacing="1">CONCENTRATED BEE BREAD</text>
+    <text x="140" y="300" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="7" fill="#666">DIETARY SUPPLEMENT</text>
+    <text x="140" y="314" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="7" fill="#666">30 CAPSULES</text>
+  </g>
+</svg>

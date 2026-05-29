@@ -121,7 +121,7 @@ function Banner1({c}){
         <div className="banner-img-wrap">
           {imageUrl
             ? <img src={imageUrl} alt={c('banner1','image_alt','Banner image')} className="banner-img"/>
-            : <div className="banner-img-placeholder"><span>🌱</span><p>Add an image in Admin → Page Content → Banner 1</p></div>
+            : <div className="banner-img-placeholder banner-img-fallback" style={{backgroundImage:'url(https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=900&q=80)'}} />
           }
         </div>
         {/* Right: text */}
@@ -166,7 +166,7 @@ function Banner2({c}){
         <div className="banner-img-wrap">
           {imageUrl
             ? <img src={imageUrl} alt={c('banner2','image_alt','Product image')} className="banner-img"/>
-            : <div className="banner-img-placeholder"><span>🍯</span><p>Add an image in Admin → Page Content → Banner 2</p></div>
+            : <div className="banner-img-placeholder banner-img-fallback" style={{backgroundImage:'url(https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=900&q=80)'}} />
           }
         </div>
       </div>

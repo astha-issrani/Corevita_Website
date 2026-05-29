@@ -16,7 +16,7 @@ export default function Navbar() {
         <div className="navbar-inner container">
           <Link to="/" className="navbar-logo">COREVITA</Link>
           <div className={`navbar-links ${menuOpen ? 'open' : ''}`}>
-           
+            <Link to="/products/bee-pearl" onClick={() => setMenuOpen(false)}>Shop CoreVita</Link>
             <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
             <Link to="/track-order" onClick={() => setMenuOpen(false)}>Track Your Order</Link>
           </div>

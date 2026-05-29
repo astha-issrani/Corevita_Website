@@ -19,6 +19,7 @@ app.use('/api/cart', require('./routes/cart'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/coupons', require('./routes/coupons'));
 app.use('/api/settings', require('./routes/settings'));
+app.use('/api/content', require('./routes/content'));
 app.use('/api/products', require('./routes/reviews'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));

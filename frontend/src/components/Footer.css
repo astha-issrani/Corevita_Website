@@ -1,6 +1,6 @@
 .footer {
   background: var(--yellow);
-  color: var(--black);
+  color: var(--white);
   margin-top: auto;
 }
 
@@ -16,6 +16,7 @@
   font-size: 28px;
   font-weight: 900;
   letter-spacing: 1px;
+  color: var(--black);
 }
 
 .footer-links {
@@ -23,29 +24,38 @@
   flex-direction: column;
   gap: 10px;
 }
+
 .footer-links h4 {
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 8px;
   font-family: var(--font-main);
+  color: var(--white);
 }
+
 .footer-links a {
   font-size: 14px;
-  color: rgba(0,0,0,0.75);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: opacity 0.2s;
 }
-.footer-links a:hover { color: var(--black); text-decoration: underline; }
+
+.footer-links a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
 
 .footer-subscribe h4 {
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 8px;
   font-family: var(--font-main);
+  color: var(--white);
 }
+
 .footer-subscribe p {
   font-size: 14px;
-  color: rgba(0,0,0,0.7);
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 16px;
 }
 
@@ -54,21 +64,29 @@
   flex-direction: column;
   gap: 10px;
 }
+
 .subscribe-form input {
   padding: 12px 16px;
-  border: 1.5px solid rgba(0,0,0,0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius);
   font-size: 15px;
-  background: rgba(255,255,255,0.7);
+  background: transparent;
+  color: var(--white);
   outline: none;
 }
-.subscribe-form input:focus {
-  border-color: var(--black);
-  background: white;
+
+.subscribe-form input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
 }
+
+.subscribe-form input:focus {
+  border-color: var(--white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .subscribe-form button {
   padding: 12px;
-  background: white;
+  background: var(--white);
   color: var(--yellow-dark);
   border: none;
   border-radius: var(--radius);
@@ -77,19 +95,23 @@
   cursor: pointer;
   transition: background 0.2s;
 }
-.subscribe-form button:hover { background: #f9f9f9; }
+
+.subscribe-form button:hover {
+  background: #f9f9f9;
+}
 
 .subscribed-msg {
-  color: #165016;
+  color: var(--black);
   font-weight: 700;
   font-size: 15px;
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(0,0,0,0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
   padding: 20px 24px;
   text-align: center;
 }
+
 .payment-icons {
   display: flex;
   flex-wrap: wrap;
@@ -97,18 +119,19 @@
   gap: 8px;
   margin-bottom: 12px;
 }
+
 .payment-icons span {
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 11px;
   font-weight: 700;
   color: #333;
-  border: 1px solid #ddd;
 }
+
 .footer-bottom > p {
   font-size: 13px;
-  color: rgba(0,0,0,0.65);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 @media (max-width: 768px) {

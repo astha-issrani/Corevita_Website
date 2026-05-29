@@ -1,11 +1,11 @@
 .topbar {
   background: var(--yellow);
-  color: var(--black);
+  color: var(--white);
   text-align: center;
   padding: 10px 16px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
 }
 
@@ -23,6 +23,12 @@
   align-items: center;
   justify-content: space-between;
   height: 64px;
+  gap: 24px;
+}
+
+.navbar-inner .navbar-links {
+  flex: 1;
+  justify-content: center;
 }
 
 .navbar-logo {

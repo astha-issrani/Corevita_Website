@@ -3,7 +3,7 @@ import axios from 'axios';
 import './Contact.css';
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -15,7 +15,12 @@ export default function Contact() {
     try {
       await axios.post(
         `${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/contact`,
-        form
+        {
+          name: form.name,
+          email: form.email,
+          subject: 'Contact form',
+          message: `Phone: ${form.phone}\n\n${form.message}`,
+        }
       );
       setSent(true);
     } catch {
@@ -26,95 +31,69 @@ export default function Contact() {
   };
 
   return (
-    <div className="contact-page container">
-      <div className="contact-header">
-        <h1>Contact Us</h1>
-        <p>We're here to help! Reach out and we'll get back to you within 24 hours.</p>
-      </div>
+    <div className="contact-page">
+      <div className="container contact-wrap">
+        <h1 className="contact-title">Contact form</h1>
 
-      <div className="contact-grid">
-        <div className="contact-info">
-          <div className="contact-info-item">
-            <div className="info-icon">📧</div>
-            <div>
-              <h4>Email</h4>
-              <p>support@corevita.com</p>
-            </div>
+        {sent ? (
+          <div className="contact-success fade-in">
+            <h3>Message sent!</h3>
+            <p>We&apos;ll get back to you within 24 hours.</p>
+            <button
+              type="button"
+              className="contact-send-btn"
+              onClick={() => {
+                setSent(false);
+                setForm({ name: '', email: '', phone: '', message: '' });
+              }}
+            >
+              Send another
+            </button>
           </div>
-          <div className="contact-info-item">
-            <div className="info-icon">⏰</div>
-            <div>
-              <h4>Response Time</h4>
-              <p>Within 24 hours</p>
-            </div>
-          </div>
-          <div className="contact-info-item">
-            <div className="info-icon">📦</div>
-            <div>
-              <h4>Order Issues</h4>
-              <p>Have your order number ready for faster support</p>
-            </div>
-          </div>
-          <div className="contact-info-item">
-            <div className="info-icon">🔄</div>
-            <div>
-              <h4>Returns & Refunds</h4>
-              <p>30-day money back guarantee</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="contact-form-wrap">
-          {sent ? (
-            <div className="contact-success fade-in">
-              <div className="success-icon-sm">✓</div>
-              <h3>Message Sent!</h3>
-              <p>We'll get back to you within 24 hours.</p>
-              <button className="btn-primary" onClick={() => { setSent(false); setForm({ name: '', email: '', subject: '', message: '' }); }}>
-                Send Another
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="contact-form">
-              <h3>Send us a Message</h3>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Name</label>
-                  <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Your name" required />
-                </div>
-                <div className="form-group">
-                  <label>Email</label>
-                  <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" required />
-                </div>
-              </div>
-              <div className="form-group">
-                <label>Subject</label>
-                <select value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} required>
-                  <option value="">Select a topic</option>
-                  <option value="order">Order Status</option>
-                  <option value="return">Return / Refund</option>
-                  <option value="product">Product Question</option>
-                  <option value="subscription">Subscription</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Message</label>
-                <textarea
-                  value={form.message}
-                  onChange={e => setForm({ ...form, message: e.target.value })}
-                  placeholder="How can we help you?"
-                  rows={5}
+        ) : (
+          <form onSubmit={handleSubmit} className="contact-form-simple">
+            <div className="contact-row">
+              <div className="contact-field">
+                <input
+                  value={form.name}
+                  onChange={e => setForm({ ...form, name: e.target.value })}
+                  placeholder="Name"
                   required
                 />
               </div>
-              {error && <p className="form-error">{error}</p>}
-              <button type="submit" className="btn-primary submit-btn" disabled={loading}>
-                {loading ? 'Sending...' : 'Send Message'}
-              </button>
-            </form>
-          )}
-        </div>
+              <div className="contact-field">
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={e => setForm({ ...form, email: e.target.value })}
+                  placeholder="Email"
+                  required
+                />
+              </div>
+            </div>
+            <div className="contact-field">
+              <input
+                type="tel"
+                value={form.phone}
+                onChange={e => setForm({ ...form, phone: e.target.value })}
+                placeholder="Phone number"
+              />
+            </div>
+            <div className="contact-field">
+              <textarea
+                value={form.message}
+                onChange={e => setForm({ ...form, message: e.target.value })}
+                placeholder="Comment"
+                rows={6}
+                required
+              />
+            </div>
+            {error && <p className="contact-error">{error}</p>}
+            <button type="submit" className="contact-send-btn" disabled={loading}>
+              {loading ? 'Sending...' : 'Send'}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
