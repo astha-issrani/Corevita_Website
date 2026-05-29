@@ -44,36 +44,47 @@ export function resolveMediaImage(url, fallback) {
   return resolveBannerImage(url, fallback);
 }
 
-const GTV_SAMPLE = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample';
+/** Local testimonial MP4s in frontend/public/videos (with audio) */
+export const LOCAL_TESTIMONIAL_VIDEOS = [
+  '/videos/16010072_1080_1920_30fps.mp4',
+  '/videos/16007287_1080_1920_60fps.mp4',
+];
 
-/** HTML5 MP4 samples with audio — use browser controls to play unmuted */
+/** Four slots — alternates the two local files */
 export const DEFAULT_TESTIMONIAL_VIDEOS = [
   {
-    url: `${GTV_SAMPLE}/ForBiggerBlazes.mp4`,
+    url: LOCAL_TESTIMONIAL_VIDEOS[0],
     name: 'Sandra M., 62',
     label: 'Energy & Vitality',
   },
   {
-    url: `${GTV_SAMPLE}/ForBiggerEscapes.mp4`,
+    url: LOCAL_TESTIMONIAL_VIDEOS[1],
     name: 'James R., 55',
     label: 'Immune Support',
   },
   {
-    url: `${GTV_SAMPLE}/ForBiggerBlazes.mp4`,
+    url: LOCAL_TESTIMONIAL_VIDEOS[0],
     name: 'Linda K., 49',
     label: 'Mental Clarity',
   },
   {
-    url: `${GTV_SAMPLE}/ForBiggerEscapes.mp4`,
+    url: LOCAL_TESTIMONIAL_VIDEOS[1],
     name: 'Denise W., 58',
     label: 'Sleep & Recovery',
   },
 ];
 
+const BLOCKED_VIDEO_HOSTS = [
+  'mixkit.co',
+  'gtv-videos-bucket',
+  'youtube.com',
+  'youtu.be',
+];
+
 function isUsableVideoUrl(url) {
   if (!url || !String(url).trim()) return false;
   const u = String(url).trim();
-  if (u.includes('mixkit.co')) return false;
+  if (BLOCKED_VIDEO_HOSTS.some((h) => u.includes(h))) return false;
   if (/^[a-zA-Z0-9_-]{11}$/.test(u)) return false;
   return u.startsWith('http') || u.startsWith('/');
 }

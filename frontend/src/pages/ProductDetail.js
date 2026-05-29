@@ -319,7 +319,7 @@ function StoryVideoCard({ src, name, label, fallbackSrc }) {
           src={videoSrc}
           controls
           playsInline
-          preload="auto"
+          preload="metadata"
           onError={() => {
             if (fallbackSrc && videoSrc !== fallbackSrc) setVideoSrc(fallbackSrc);
           }}
