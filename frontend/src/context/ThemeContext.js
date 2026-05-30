@@ -33,12 +33,17 @@ export const FONT_OPTIONS = [
 ];
 
 export const DEFAULT_FONTS = {
-  heading: 'Barlow Condensed',
-  body: 'Barlow',
-  card: 'Barlow',
-  price: 'Barlow Condensed',
-  button: 'Barlow',
-  nav: 'Barlow',
+  heading: 'Poppins',
+  body: 'Poppins',
+  card: 'Poppins',
+  price: 'Poppins',
+  button: 'Poppins',
+  nav: 'Poppins',
+};
+
+export const DEFAULT_FONT_SIZES = {
+  heading: '29',
+  body: '16',
 };
 
 const ThemeContext = createContext();
@@ -71,25 +76,39 @@ function applyFonts(fonts) {
   root.style.setProperty('--font-nav', `'${f.nav}', sans-serif`);
 }
 
+function applyFontSizes(sizes) {
+  const root = document.documentElement;
+  const s = { ...DEFAULT_FONT_SIZES, ...sizes };
+  root.style.setProperty('--font-size-heading', `${s.heading}px`);
+  root.style.setProperty('--font-size-body', `${s.body}px`);
+}
+
 export function ThemeProvider({ children }) {
   const [fonts, setFonts] = useState(DEFAULT_FONTS);
+  const [fontSizes, setFontSizes] = useState(DEFAULT_FONT_SIZES);
   const [loading, setLoading] = useState(true);
 
   // Load saved fonts from backend on mount
   useEffect(() => {
-    axios.get(`${API}/api/settings/fonts`)
-      .then(({ data }) => {
-        if (data.value) {
-          const merged = { ...DEFAULT_FONTS, ...data.value };
-          setFonts(merged);
-          applyFonts(merged);
-        } else {
-          applyFonts(DEFAULT_FONTS);
-        }
+    Promise.all([
+      axios.get(`${API}/api/settings/fonts`),
+      axios.get(`${API}/api/settings/font-sizes`),
+    ])
+      .then(([fontsRes, sizesRes]) => {
+        const mergedFonts = fontsRes.data.value
+          ? { ...DEFAULT_FONTS, ...fontsRes.data.value }
+          : DEFAULT_FONTS;
+        const mergedSizes = sizesRes.data.value
+          ? { ...DEFAULT_FONT_SIZES, ...sizesRes.data.value }
+          : DEFAULT_FONT_SIZES;
+        setFonts(mergedFonts);
+        setFontSizes(mergedSizes);
+        applyFonts(mergedFonts);
+        applyFontSizes(mergedSizes);
       })
       .catch(() => {
-        // Backend unavailable — use defaults
         applyFonts(DEFAULT_FONTS);
+        applyFontSizes(DEFAULT_FONT_SIZES);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -100,9 +119,15 @@ export function ThemeProvider({ children }) {
     applyFonts(merged);
   };
 
+  const updateFontSizes = (newSizes) => {
+    const merged = { ...fontSizes, ...newSizes };
+    setFontSizes(merged);
+    applyFontSizes(merged);
+  };
+
   const saveFonts = async (fontsToSave) => {
     const token = localStorage.getItem('corevita_token');
-    const { data } = 
+    const { data } =
     await axios.put(
   `${API}/api/settings/fonts`,
       { value: fontsToSave },
@@ -111,8 +136,20 @@ export function ThemeProvider({ children }) {
     return data;
   };
 
+  const saveFontSizes = async (sizesToSave) => {
+    const token = localStorage.getItem('corevita_token');
+    const { data } = await axios.put(
+      `${API}/api/settings/font-sizes`,
+      { value: sizesToSave },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return data;
+  };
+
   return (
-    <ThemeContext.Provider value={{ fonts, updateFonts, saveFonts, loading }}>
+    <ThemeContext.Provider value={{
+      fonts, fontSizes, updateFonts, updateFontSizes, saveFonts, saveFontSizes, loading,
+    }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -700,6 +700,34 @@
   border-color: #F5C800;
 }
 
+.font-size-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.font-size-input {
+  width: 88px;
+  padding: 9px 12px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  background: white;
+  transition: border-color 0.2s;
+}
+
+.font-size-input:focus {
+  border-color: #F5C800;
+}
+
+.font-size-unit {
+  font-size: 14px;
+  color: #666;
+  font-weight: 600;
+}
+
 .font-preview {
   font-size: 15px;
   color: #555;

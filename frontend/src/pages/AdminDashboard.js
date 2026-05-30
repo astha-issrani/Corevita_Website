@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useTheme, FONT_OPTIONS, DEFAULT_FONTS } from '../context/ThemeContext';
+import { useTheme, FONT_OPTIONS, DEFAULT_FONTS, DEFAULT_FONT_SIZES } from '../context/ThemeContext';
 import './AdminDashboard.css';
 import AdminReviews from './AdminReviews';
 import AdminContent from './AdminContent';
@@ -48,21 +48,58 @@ function FontSelect({ label, value, onChange, description }) {
   );
 }
 
+function FontSizeField({ label, value, onChange, description, min = 12, max = 72 }) {
+  return (
+    <div className="font-field">
+      <div className="font-field-label">
+        <span>{label}</span><small>{description}</small>
+      </div>
+      <div className="font-size-wrap">
+        <input
+          type="number"
+          className="font-size-input"
+          min={min}
+          max={max}
+          value={value}
+          onChange={e => onChange(e.target.value)}
+        />
+        <span className="font-size-unit">px</span>
+      </div>
+    </div>
+  );
+}
+
 function FontsTab() {
-  const { fonts, updateFonts, saveFonts } = useTheme();
+  const { fonts, fontSizes, updateFonts, updateFontSizes, saveFonts, saveFontSizes } = useTheme();
   const [local, setLocal] = useState(fonts);
+  const [localSizes, setLocalSizes] = useState(fontSizes);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
   useEffect(() => { setLocal(fonts); }, [fonts]);
+  useEffect(() => { setLocalSizes(fontSizes); }, [fontSizes]);
   const handleChange = (key, value) => { const u = { ...local, [key]: value }; setLocal(u); updateFonts(u); };
+  const handleSizeChange = (key, value) => {
+    const u = { ...localSizes, [key]: value };
+    setLocalSizes(u);
+    updateFontSizes(u);
+  };
   const handleSave = async () => {
     setSaving(true); setError('');
-    try { await saveFonts(local); setSaved(true); setTimeout(() => setSaved(false), 2500); }
+    try {
+      await Promise.all([saveFonts(local), saveFontSizes(localSizes)]);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    }
     catch { setError('Failed to save. Make sure you are logged in as admin.'); }
     finally { setSaving(false); }
   };
-  const handleReset = () => { setLocal(DEFAULT_FONTS); updateFonts(DEFAULT_FONTS); };
+  const handleReset = () => {
+    setLocal(DEFAULT_FONTS);
+    setLocalSizes(DEFAULT_FONT_SIZES);
+    updateFonts(DEFAULT_FONTS);
+    updateFontSizes(DEFAULT_FONT_SIZES);
+  };
   const fontFields = [
     { key: 'heading', label: '🔤 Heading Font', description: 'H1, H2, H3, H4 — product titles, section headers' },
     { key: 'body', label: '📝 Body / Content Font', description: 'Paragraphs, descriptions, general text' },
@@ -70,6 +107,10 @@ function FontsTab() {
     { key: 'price', label: '💰 Price Font', description: 'All price displays ($49.99, $44.99 etc.)' },
     { key: 'button', label: '🔘 Button Font', description: 'Add to Cart, Checkout, all CTA buttons' },
     { key: 'nav', label: '🧭 Navigation Font', description: 'Navbar links and logo' },
+  ];
+  const fontSizeFields = [
+    { key: 'heading', label: '📏 Heading Size', description: 'Product titles and section headings', min: 18, max: 72 },
+    { key: 'body', label: '📏 Content Size', description: 'Paragraphs, descriptions, and list text', min: 12, max: 24 },
   ];
   return (
     <>
@@ -88,13 +129,24 @@ function FontsTab() {
           {fontFields.map(({ key, label, description }) => (
             <FontSelect key={key} label={label} description={description} value={local[key] || DEFAULT_FONTS[key]} onChange={(val) => handleChange(key, val)} />
           ))}
+          {fontSizeFields.map(({ key, label, description, min, max }) => (
+            <FontSizeField
+              key={`size-${key}`}
+              label={label}
+              description={description}
+              min={min}
+              max={max}
+              value={localSizes[key] || DEFAULT_FONT_SIZES[key]}
+              onChange={(val) => handleSizeChange(key, val)}
+            />
+          ))}
         </div>
         <div className="font-live-preview">
-          <h3 style={{ fontFamily: 'var(--font-heading)', marginBottom: 12 }}>Live Preview</h3>
+          <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-heading)', marginBottom: 12 }}>Live Preview</h3>
           <div className="preview-card">
-            <div className="preview-product-title" style={{ fontFamily: 'var(--font-heading)' }}>CoreVita Bee Pearl Capsules</div>
+            <div className="preview-product-title" style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-heading)' }}>CoreVita Bee Pearl Capsules</div>
             <div className="preview-price" style={{ fontFamily: 'var(--font-price)' }}><span className="preview-current">$49.99</span><span className="preview-original">$79.99</span></div>
-            <p className="preview-body" style={{ fontFamily: 'var(--font-main)' }}>CoreVita Bee Pearl is designed to <strong>restore natural vitality</strong> — naturally supporting your steady energy, recovery, and mental clarity.</p>
+            <p className="preview-body" style={{ fontFamily: 'var(--font-main)', fontSize: 'var(--font-size-body)' }}>CoreVita Bee Pearl is designed to <strong>restore natural vitality</strong> — naturally supporting your steady energy, recovery, and mental clarity.</p>
             <div className="preview-card-box" style={{ fontFamily: 'var(--font-card)' }}><strong>Buy 1 + Get 1 FREE</strong> — $44.99</div>
             <button className="preview-btn" style={{ fontFamily: 'var(--font-button)' }}>ADD TO CART</button>
             <div className="preview-nav" style={{ fontFamily: 'var(--font-nav)' }}>Shop CoreVita · Contact · Track Your Order</div>

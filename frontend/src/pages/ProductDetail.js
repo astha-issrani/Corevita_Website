@@ -606,14 +606,16 @@ export default function ProductDetail(){
                     <div className="pack-radio"><div className={`radio-dot ${selectedPack?._id===pack._id?'active':''}`}/></div>
                     <div className="pack-label-text">
                       <strong>{pack.label}</strong>
-                      <div className="pack-pills-row">
-                        {Array.from({length:pack.quantity}).map((_,i)=>{const half=pack.quantity/2;const isFree=i>=half;return <span key={i} className={`pack-bottle-pill ${isFree?'free':'paid'}`}>🍯 {isFree?'FREE':`#${i+1}`}</span>;})}
-                      </div>
                       <span className="pack-save">SAVE {pack.savingsPercent}%</span>
                     </div>
-                    <div className="pack-price">${pack.price}</div>
+                    <div className="pack-pricing">
+                      <span className="pack-price">${pack.price}</span>
+                      {pack.originalPrice > 0 && (
+                        <span className="pack-original-price">${pack.originalPrice}</span>
+                      )}
+                    </div>
                   </div>
-                  {pack.freeShipping&&<div className="pack-free-ship">🚚 + FREE Shipping</div>}
+                  {pack.freeShipping&&<div className="pack-free-ship">+ FREE Shipping</div>}
                 </div>
               ))}
             </div>
