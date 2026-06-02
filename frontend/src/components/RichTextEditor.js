@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useState } from 'react';
 import {
-  IconFontFamily, IconFontSize, IconGrowFont, IconShrinkFont, IconChangeCase,
+  IconGrowFont, IconShrinkFont, IconChangeCase,
   IconClearFormat, IconBulletList, IconNumberList, IconMultiList,
   IconDecreaseIndent, IconIncreaseIndent, IconBold, IconItalic, IconUnderline,
   IconStrikethrough, IconSubscript, IconSuperscript, IconTextEffects,
