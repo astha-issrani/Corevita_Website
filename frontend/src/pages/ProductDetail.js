@@ -7,9 +7,11 @@ import { ScrollReveal } from '../utils/useScrollReveal';
 import { renderBoldText } from '../utils/renderBoldText';
 import {
   DEFAULT_GALLERY_IMAGES,
+  DEFAULT_CAPSULES_IMAGE,
   DEFAULT_TESTIMONIAL_VIDEOS,
   IMG,
   resolveBannerImage,
+  resolveMediaImage,
   resolveVideoUrl,
 } from '../constants/media';
 import './ProductDetail.css';
@@ -224,21 +226,20 @@ function formatBannerBullet(text, label) {
   return t;
 }
 
-const INFO_FEATURE_DEFAULTS = {
-  top: 'Concentrated Bee Bread to support vitality and overall wellness',
-  left: 'B Vitamins & Minerals for natural energy and well-being',
-  right: 'Antioxidants for immune support and cellular health',
-  bottom_left: 'Amino Acids to aid muscle recovery and tissue repair',
-  bottom_right: 'Enzymes for better digestion and nutrient absorption',
-};
-
-const INFO_FEATURES = [
-  { key: 'top', label: 'Bee Bread' },
-  { key: 'left', label: 'B Vitamins' },
-  { key: 'right', label: 'Antioxidants' },
-  { key: 'bottom_left', label: 'Amino Acids' },
-  { key: 'bottom_right', label: 'Enzymes' },
-];
+function InfographicImage({ src, alt, fallback }) {
+  const [imgSrc, setImgSrc] = useState(() => resolveMediaImage(src, fallback));
+  useEffect(() => {
+    setImgSrc(resolveMediaImage(src, fallback));
+  }, [src, fallback]);
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      className="multivitamin-infographic-img"
+      onError={() => setImgSrc(fallback)}
+    />
+  );
+}
 
 function StoryVideoCard({ src, name, label, fallbackSrc }) {
   const [videoSrc, setVideoSrc] = useState(src);
@@ -309,13 +310,13 @@ function BelowFoldContent({ c }) {
   ].filter(Boolean);
 
   return (
-    <div className="banner-text banner-text--multivitamin">
+    <div className="multivitamin-text">
       <h2>{cv(c, 'below_fold', 'title2', "Why Your Multivitamin Isn't Enough")}</h2>
       <p>{renderBoldText(cv(c, 'below_fold', 'body2', body2Default))}</p>
       <p>{renderBoldText(cv(c, 'below_fold', 'body3', body3Default))}</p>
       <p>{renderBoldText(cv(c, 'below_fold', 'body4', body4Default))}</p>
       {keyPoints.length > 0 && (
-        <ul className="banner-bullets banner-bullets--key-points">
+        <ul className="multivitamin-key-points">
           {keyPoints.map((pt, i) => (
             <li key={i}>{pt}</li>
           ))}
@@ -337,34 +338,26 @@ function BelowFoldContent({ c }) {
   );
 }
 
-// ── Banner 3: Multivitamin section (text-only banner + feature cards) ─────────
-function MultivitaminBanner({ c }) {
-  const brand = cv(c, 'infographic', 'brand', 'CoreVita');
-  const features = INFO_FEATURES.map(({ key, label }) => ({
-    key,
-    label,
-    text: c('infographic', key, INFO_FEATURE_DEFAULTS[key]),
-  })).filter(f => f.text);
+// ── Multivitamin section: text left, infographic image right ───────────────────
+function MultivitaminSection({ c }) {
+  const imageUrl = cv(c, 'infographic', 'image_url', DEFAULT_CAPSULES_IMAGE);
+  const imageAlt = cv(c, 'infographic', 'image_alt', 'CoreVita Bee Pearl capsules infographic');
 
   return (
-    <section className="banner-section banner-multivitamin-section">
-      <div className="container banner-multivitamin-inner">
-        <ScrollReveal as="div" className="banner-multivitamin-main">
+    <section className="multivitamin-section">
+      <div className="container multivitamin-grid">
+        <ScrollReveal as="div" className="multivitamin-col multivitamin-col--text">
           <BelowFoldContent c={c} />
         </ScrollReveal>
-
-        {features.length > 0 && (
-          <ScrollReveal as="div" className="banner-feature-grid scroll-reveal-delay">
-            {features.map(({ key, label, text }) => (
-              <div key={key} className="banner-feature-card">
-                <span className="banner-feature-label">{label}</span>
-                <p>{text}</p>
-              </div>
-            ))}
-          </ScrollReveal>
-        )}
-
-        {brand && <p className="banner-multivitamin-brand">{brand}</p>}
+        <ScrollReveal as="div" className="multivitamin-col multivitamin-col--visual scroll-reveal-delay">
+          <div className="multivitamin-infographic-wrap">
+            <InfographicImage
+              src={imageUrl}
+              alt={imageAlt}
+              fallback={DEFAULT_CAPSULES_IMAGE}
+            />
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );
@@ -703,7 +696,7 @@ export default function ProductDetail(){
       {/* ── BANNER 2: Nature's Gold Standard (text left, image right) ── */}
       <Banner2 c={c}/>
 
-      <MultivitaminBanner c={c} />
+      <MultivitaminSection c={c} />
 
       {/* ── NUTRIENTS ── */}
       <ScrollReveal className="nutrients-section">

@@ -109,7 +109,7 @@ const PAGES = [
         ]
       },
       {
-        key: 'below_fold', label: 'Multivitamin Banner Section',
+        key: 'below_fold', label: 'Multivitamin Section (left column text)',
         fields: [
           { key: 'title2', label: 'Section Title', type: 'text' },
           { key: 'body2',  label: 'Intro Paragraph', type: 'textarea', rows: 3 },
@@ -132,14 +132,10 @@ const PAGES = [
         ]
       },
       {
-        key: 'infographic', label: 'Multivitamin Feature Cards (below banner text)',
+        key: 'infographic', label: 'Multivitamin Infographic (right column image)',
         fields: [
-          { key: 'top',          label: 'Feature 1 — Bee Bread',         type: 'textarea', rows: 2 },
-          { key: 'left',         label: 'Feature 2 — B Vitamins',        type: 'textarea', rows: 2 },
-          { key: 'right',        label: 'Feature 3 — Antioxidants',       type: 'textarea', rows: 2 },
-          { key: 'bottom_left',  label: 'Feature 4 — Amino Acids',       type: 'textarea', rows: 2 },
-          { key: 'bottom_right', label: 'Feature 5 — Enzymes',           type: 'textarea', rows: 2 },
-          { key: 'brand',        label: 'Brand Name (footer)',           type: 'text' },
+          { key: 'image_url', label: 'Infographic Image (capsules + arrows)', type: 'image' },
+          { key: 'image_alt', label: 'Image Alt Text', type: 'text' },
         ]
       },
       {
