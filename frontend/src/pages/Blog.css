@@ -119,23 +119,27 @@
   background: white;
   font-size: 14px;
   font-weight: 600;
+  color: #111111;
   cursor: pointer;
   transition: all 0.15s;
 }
 
-.blog-page-btn:hover:not(:disabled) {
-  border-color: var(--yellow);
+.blog-page-btn:hover:not(:disabled):not(.active) {
+  border-color: #111111;
   background: #f5f5f5;
 }
 
 .blog-page-btn.active {
-  background: var(--yellow);
-  border-color: var(--yellow);
-  color: #111;
+  background: #111111;
+  border-color: #111111;
+  color: #ffffff;
 }
 
 .blog-page-btn:disabled {
-  opacity: 0.4;
+  opacity: 1;
+  color: #aaaaaa;
+  background: #fafafa;
+  border-color: #e5e5e5;
   cursor: not-allowed;
 }
 

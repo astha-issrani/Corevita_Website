@@ -134,7 +134,7 @@
 .btn-pill {
   display: inline-block;
   background: var(--yellow);
-  color: var(--black);
+  color: var(--on-primary, #ffffff);
   font-weight: 800;
   font-size: 15px;
   letter-spacing: 0.5px;
@@ -148,6 +148,7 @@
 
 .btn-pill:hover {
   background: var(--yellow-dark);
+  color: var(--on-primary, #ffffff);
   transform: translateY(-1px);
 }
 
