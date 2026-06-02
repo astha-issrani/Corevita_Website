@@ -2,14 +2,15 @@
   display: flex;
   height: 100vh;
   overflow: hidden;
-  background: #f0f0f0;
+  background: var(--admin-page-bg);
   font-family: var(--font-main);
+  color: var(--admin-text);
 }
 
 /* Sidebar — light theme */
 .admin-sidebar {
   width: 260px;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--admin-sidebar-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   color: #333;
@@ -30,8 +31,8 @@
 .admin-brand-icon {
   width: 32px;
   height: 32px;
-  background: #111;
-  color: #fff;
+  background: var(--admin-brand-bg);
+  color: var(--admin-brand-text);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -46,7 +47,7 @@
   font-size: 17px;
   font-weight: 800;
   letter-spacing: -0.3px;
-  color: #111;
+  color: var(--admin-text);
   padding: 0;
   border: none;
 }
@@ -116,7 +117,7 @@
   flex-shrink: 0;
   color: #666;
 }
-.admin-nav-item.active .admin-nav-icon { color: #111; }
+.admin-nav-item.active .admin-nav-icon { color: var(--admin-accent); }
 
 .admin-icon { flex-shrink: 0; vertical-align: middle; }
 .admin-empty-icon { color: #ccc; margin-bottom: 8px; }
@@ -160,16 +161,17 @@
   align-items: center;
   gap: 6px;
 }
-.admin-nav-item:hover { background: #f4f5f7; color: #111; }
+.admin-nav-item:hover { background: var(--admin-accent-soft); color: var(--admin-text); }
 .admin-nav-item.active {
-  background: #f0f0f0;
-  color: #111;
+  background: var(--admin-accent-soft);
+  color: var(--admin-text);
   font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--admin-accent);
 }
 
 .nav-badge {
   background: var(--yellow);
-  color: #111;
+  color: var(--on-primary);
   font-size: 11px;
   font-weight: 800;
   padding: 2px 7px;
@@ -191,13 +193,13 @@
 .admin-avatar {
   width: 36px;
   height: 36px;
-  background: #111;
+  background: var(--admin-brand-bg);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  color: #fff;
+  color: var(--admin-brand-text);
   font-size: 14px;
   flex-shrink: 0;
 }
@@ -243,6 +245,7 @@
 
 .refresh-btn {
   background: var(--yellow);
+  color: var(--on-primary);
   border: none;
   padding: 8px 16px;
   border-radius: 8px;
@@ -281,7 +284,7 @@
 .filter-tab.active {
   background: var(--yellow);
   border-color: var(--yellow);
-  color: #111;
+  color: var(--on-primary);
 }
 
 .admin-search {
@@ -326,7 +329,7 @@
   transition: background 0.15s;
 }
 .message-item:hover { background: #fafafa; }
-.message-item.active { background: #fffbeb; border-left: 3px solid var(--yellow); }
+.message-item.active { background: var(--admin-accent-soft); border-left: 3px solid var(--yellow); }
 .message-item.unread { background: #fffef5; }
 .message-item.unread .sender-name { font-weight: 800; }
 
@@ -352,7 +355,7 @@
   justify-content: center;
   font-size: 15px;
   font-weight: 800;
-  color: #111;
+  color: var(--on-primary);
   flex-shrink: 0;
 }
 .sender-name { font-size: 14px; font-weight: 600; margin: 0 0 2px; }
@@ -418,7 +421,7 @@
   justify-content: center;
   font-size: 22px;
   font-weight: 800;
-  color: #111;
+  color: var(--on-primary);
   flex-shrink: 0;
 }
 .detail-sender-info h3 { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
@@ -459,7 +462,7 @@
 }
 .detail-tag {
   background: var(--yellow);
-  color: #111;
+  color: var(--on-primary);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;
@@ -523,7 +526,7 @@
     gap: 12px;
     padding: 12px 16px;
     background: #fff;
-    color: #111;
+    color: var(--admin-text);
     border-bottom: 1px solid #ebebeb;
     position: sticky;
     top: 0;
@@ -550,7 +553,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #111;
+    color: var(--admin-text);
   }
 
   .admin-mobile-logout {
@@ -790,7 +793,7 @@
   display: block;
   font-size: 14px;
   font-weight: 700;
-  color: #111;
+  color: var(--admin-text);
   margin-bottom: 4px;
 }
 .font-field-label small {
@@ -817,7 +820,7 @@
   transition: border-color 0.2s;
 }
 .font-select-wrap select:focus {
-  border-color: #F5C800;
+  border-color: var(--yellow);
 }
 
 .font-size-wrap {
@@ -839,7 +842,7 @@
 }
 
 .font-size-input:focus {
-  border-color: #F5C800;
+  border-color: var(--yellow);
 }
 
 .font-size-unit {
@@ -880,7 +883,7 @@
   color: #333;
   margin-bottom: 16px;
   padding-bottom: 10px;
-  border-bottom: 2px solid #F5C800;
+  border-bottom: 2px solid var(--yellow);
 }
 
 .preview-card {
@@ -898,7 +901,7 @@
   font-size: 22px;
   font-weight: 900;
   line-height: 1.1;
-  color: #111;
+  color: var(--admin-text);
 }
 
 .preview-price {
@@ -924,8 +927,8 @@
 }
 
 .preview-card-box {
-  background: #fffbe6;
-  border: 1.5px solid #F5C800;
+  background: var(--admin-accent-soft);
+  border: 1.5px solid var(--yellow);
   border-radius: 8px;
   padding: 10px 14px;
   font-size: 13px;
@@ -933,7 +936,8 @@
 }
 
 .preview-btn {
-  background: #F5C800;
+  background: var(--yellow);
+  color: var(--on-primary);
   border: none;
   padding: 12px;
   border-radius: 8px;

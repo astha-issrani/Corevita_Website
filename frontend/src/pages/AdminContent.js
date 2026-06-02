@@ -388,7 +388,7 @@ export default function AdminContent() {
             className="ac-save-btn"
             onClick={handleSave}
             disabled={saving}
-            style={{ background: saved ? '#10b981' : '#F5C800', color: saved ? 'white' : '#111' }}
+            style={{ background: saved ? '#10b981' : undefined, color: saved ? 'white' : undefined }}
           >
             {saving ? 'Saving...' : saved ? <><AdminIcon name="check" size={14} /> Saved!</> : 'Save Changes'}
           </button>

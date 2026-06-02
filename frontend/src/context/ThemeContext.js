@@ -106,9 +106,30 @@ function applyFontSizes(sizes) {
   root.style.setProperty('--font-size-body', `${s.body}px`);
 }
 
+function hexToRgb(hex) {
+  if (!hex || typeof hex !== 'string') return null;
+  const h = hex.replace('#', '').trim();
+  const full = h.length === 3 ? h.split('').map((ch) => ch + ch).join('') : h;
+  if (full.length !== 6) return null;
+  const n = parseInt(full, 16);
+  if (Number.isNaN(n)) return null;
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+/** Text color that contrasts with a solid primary/accent background */
+export function getContrastText(hex, light = '#FFFFFF', dark = '#111111') {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return dark;
+  const [r, g, b] = rgb;
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.55 ? dark : light;
+}
+
 export function applyColors(colors) {
   const root = document.documentElement;
   const c = { ...DEFAULT_COLORS, ...colors };
+  const onPrimary = getContrastText(c.primary, c.white, c.black);
+
   root.style.setProperty('--yellow', c.primary);
   root.style.setProperty('--yellow-dark', c.primaryDark);
   root.style.setProperty('--yellow-light', c.primaryLight);
@@ -122,6 +143,20 @@ export function applyColors(colors) {
   root.style.setProperty('--red', c.red);
   root.style.setProperty('--primary', c.primary);
   root.style.setProperty('--primary-dark', c.primaryDark);
+  root.style.setProperty('--on-primary', onPrimary);
+
+  /* Admin panel tokens — stay in sync with storefront theme */
+  root.style.setProperty('--admin-page-bg', c.grayLight);
+  root.style.setProperty('--admin-surface', c.white);
+  root.style.setProperty('--admin-sidebar-bg', c.white);
+  root.style.setProperty('--admin-text', c.black);
+  root.style.setProperty('--admin-text-muted', c.gray);
+  root.style.setProperty('--admin-accent', c.primary);
+  root.style.setProperty('--admin-accent-hover', c.primaryDark);
+  root.style.setProperty('--admin-accent-soft', c.primaryBg);
+  root.style.setProperty('--admin-accent-light', c.primaryLight);
+  root.style.setProperty('--admin-brand-bg', c.primary);
+  root.style.setProperty('--admin-brand-text', onPrimary);
 }
 
 export function ThemeProvider({ children }) {

@@ -16,7 +16,7 @@
   font-size: 28px;
   font-weight: 900;
   letter-spacing: 1px;
-  color: var(--black);
+  color: var(--on-primary);
 }
 
 .footer-links {

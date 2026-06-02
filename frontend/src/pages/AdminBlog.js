@@ -125,7 +125,7 @@ export default function AdminBlog() {
         </div>
         <div className="ab-header-actions">
           {!editing && (
-            <button type="button" className="refresh-btn" style={{ background: '#F5C800', color: '#111' }} onClick={startNew}>
+            <button type="button" className="refresh-btn" onClick={startNew}>
               + New Article
             </button>
           )}
@@ -179,7 +179,7 @@ export default function AdminBlog() {
                 className="ac-save-btn"
                 onClick={handleSave}
                 disabled={saving}
-                style={{ background: saved ? '#10b981' : '#F5C800', color: saved ? '#fff' : '#111' }}
+                style={{ background: saved ? '#10b981' : undefined, color: saved ? '#fff' : undefined }}
               >
                 {saving ? 'Saving…' : saved ? <><AdminIcon name="check" size={14} /> Saved!</> : 'Save Article'}
               </button>

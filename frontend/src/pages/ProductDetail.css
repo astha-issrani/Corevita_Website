@@ -120,19 +120,19 @@
 .pack-selector h3 { font-size: 16px; font-weight: 700; text-align: center; padding: 12px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
 .pack-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 12px; padding-top: 6px; }
 .pack-option { border: 2px solid #E8E8E8; border-radius: 11px; padding: 14px 16px 0; cursor: pointer; position: relative; transition: border-color 0.2s, background 0.2s; display: flex; flex-direction: column; gap: 0; overflow: hidden; }
-.pack-option.selected { border-color: var(--yellow); background: #FFFAEE; }
+.pack-option.selected { border-color: var(--yellow); background: var(--yellow-bg); }
 .pack-option:hover { border-color: var(--yellow-dark); }
 .pack-option-row { display: flex; align-items: center; gap: 12px; width: 100%; padding-bottom: 14px; }
-.pack-badge { position: absolute; top: -13px; right: 12px; background: var(--yellow); color: var(--black); font-size: 11px; font-weight: 800; padding: 3px 12px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.12); white-space: nowrap; }
+.pack-badge { position: absolute; top: -13px; right: 12px; background: var(--yellow); color: var(--on-primary); font-size: 11px; font-weight: 800; padding: 3px 12px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2; box-shadow: 0 2px 6px rgba(0,0,0,0.12); white-space: nowrap; }
 .pack-radio { width: 20px; height: 20px; border: 2px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .radio-dot.active { width: 12px; height: 12px; background: var(--yellow-dark); border-radius: 50%; }
 .pack-label-text { flex: 1; min-width: 0; }
 .pack-label-text strong { font-size: 16px; font-weight: 500; display: block; margin-bottom: 6px; line-height: 1.3; }
-.pack-save { font-size: 12px; background: var(--yellow); padding: 3px 8px; border-radius: 4px; font-weight: 700; display: inline-block; }
+.pack-save { font-size: 12px; background: var(--yellow); color: var(--on-primary); padding: 3px 8px; border-radius: 4px; font-weight: 700; display: inline-block; }
 .pack-pricing { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
 .pack-price { font-size: 16px; font-weight: 500; white-space: nowrap; color: var(--black); }
 .pack-original-price { font-size: 14px; font-weight: 500; text-decoration: line-through; color: #aaa; white-space: nowrap; }
-.pack-free-ship { display: flex; align-items: center; justify-content: center; background: var(--yellow); font-size: 13px; font-weight: 700; padding: 8px 12px; margin: 0 -16px; width: calc(100% + 32px); }
+.pack-free-ship { display: flex; align-items: center; justify-content: center; background: var(--yellow); color: var(--on-primary); font-size: 13px; font-weight: 700; padding: 8px 12px; margin: 0 -16px; width: calc(100% + 32px); }
 
 /* Auto Refill */
 .autorefill-box { border: 2px dashed #ccc; border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; margin-bottom: 20px; transition: border-color 0.2s, background 0.2s; }
@@ -388,11 +388,11 @@
 .nutrients-section { background: white; padding: 80px 0; }
 .nutrients-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
 .nutrient-card { border: 2px solid var(--yellow); border-radius: 14px; overflow: hidden; }
-.nutrient-header { background: var(--yellow); color: #222; font-size: 16px; font-weight: 800; text-align: center; padding: 12px; }
+.nutrient-header { background: var(--yellow); color: var(--on-primary); font-size: 16px; font-weight: 800; text-align: center; padding: 12px; }
 .nutrient-vs-row { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 20px 12px; background: #fffbe6; }
 .nutrient-icon { font-size: 36px; }
 .vs-text { font-size: 18px; font-weight: 900; color: var(--yellow-dark); }
-.nutrient-claim { background: var(--yellow); color: #111; font-size: 11px; font-weight: 900; text-align: center; padding: 8px 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.nutrient-claim { background: var(--yellow); color: var(--on-primary); font-size: 11px; font-weight: 900; text-align: center; padding: 8px 12px; text-transform: uppercase; letter-spacing: 0.5px; }
 .nutrient-benefits { list-style: none; padding: 14px 16px; margin: 0; }
 .nutrient-benefits li { font-size: 13px; text-align: center; padding: 5px 0; color: var(--gray-dark); border-bottom: 1px solid #f0f0f0; }
 .nutrient-benefits li:last-child { border-bottom: none; }

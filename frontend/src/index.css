@@ -12,6 +12,19 @@
   --gray-dark: #444444;
   --green: #22C55E;
   --red: #EF4444;
+  --on-primary: #FFFFFF;
+
+  --admin-page-bg: #F7F7F7;
+  --admin-surface: #FFFFFF;
+  --admin-sidebar-bg: #FFFFFF;
+  --admin-text: #111111;
+  --admin-text-muted: #888888;
+  --admin-accent: #111111;
+  --admin-accent-hover: #000000;
+  --admin-accent-soft: #F5F5F5;
+  --admin-accent-light: #E5E5E5;
+  --admin-brand-bg: #111111;
+  --admin-brand-text: #FFFFFF;
 
   /* Font variables — overridden dynamically by ThemeContext */
   --font-main: 'Inter', sans-serif;
@@ -108,7 +121,7 @@ h1, h2, h3, h4 {
 
 .btn-primary {
   background: var(--yellow);
-  color: var(--black);
+  color: var(--on-primary);
   border: none;
   padding: 16px 32px;
   font-size: 16px;
@@ -149,7 +162,7 @@ h1, h2, h3, h4 {
   letter-spacing: 0.5px;
 }
 .badge-green { background: var(--green); color: white; }
-.badge-yellow { background: var(--yellow); color: var(--black); }
+.badge-yellow { background: var(--yellow); color: var(--on-primary); }
 
 .section { padding: 80px 0; }
 

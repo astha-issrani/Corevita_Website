@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useTheme, COLOR_PRESETS, DEFAULT_COLORS } from '../context/ThemeContext';
+import { useTheme, COLOR_PRESETS, DEFAULT_COLORS, getContrastText } from '../context/ThemeContext';
 import { AdminIcon } from '../components/admin/AdminIcons';
 import './AdminTheme.css';
 
@@ -68,7 +68,11 @@ export default function AdminTheme() {
           <button
             type="button"
             className="refresh-btn"
-            style={{ background: saved ? '#10b981' : 'var(--yellow)', color: saved ? 'white' : 'var(--white)', minWidth: 120 }}
+            style={{
+              background: saved ? '#10b981' : 'var(--yellow)',
+              color: saved ? '#fff' : 'var(--on-primary)',
+              minWidth: 120,
+            }}
             onClick={handleSave}
             disabled={saving}
           >
@@ -133,7 +137,7 @@ export default function AdminTheme() {
             <div className="theme-preview-hero" style={{ background: local.white }}>
               <h2 style={{ color: local.black }}>Restore Natural Vitality</h2>
               <p style={{ color: local.gray || '#888' }}>Premium bee pearl supplements for daily wellness.</p>
-              <button type="button" className="theme-preview-btn" style={{ background: local.primary, color: local.white }}>
+              <button type="button" className="theme-preview-btn" style={{ background: local.primary, color: getContrastText(local.primary, local.white, local.black) }}>
                 SHOP NOW
               </button>
               <div className="theme-preview-card" style={{ background: local.primaryBg, borderColor: local.primaryLight }}>
