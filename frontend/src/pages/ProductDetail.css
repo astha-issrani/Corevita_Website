@@ -961,7 +961,7 @@
 .review-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .review-form-rating label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
 .review-form-field { display: flex; flex-direction: column; gap: 6px; }
-.review-form-field label { font-size: 14px; font-weight: 600; color: #333; }
+.review-form-field > label { font-size: 14px; font-weight: 600; color: #333; }
 .review-form-field input,
 .review-form-field textarea { border: 1.5px solid #ddd; border-radius: 8px; padding: 10px 14px; font-size: 14px; font-family: inherit; transition: border-color 0.2s; resize: vertical; }
 .review-form-field input:focus,
@@ -1158,19 +1158,23 @@
   font-size: 28px;
 }
 .avatar-upload-btn {
-  padding: 8px 16px;
-  background: var(--yellow);
-  color: var(--on-primary, #ffffff);
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  background: #ffffff;
+  color: #111111;
+  border: 2px solid #111111;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 .avatar-upload-btn:hover {
-  background: var(--yellow-dark);
-  color: var(--on-primary, #ffffff);
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
 }
 .avatar-remove-btn {
   background: none;
