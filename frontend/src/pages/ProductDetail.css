@@ -351,6 +351,7 @@
 .sticky-cart-btn:hover { background: var(--pd-accent-dark); }
 /* Light theme for sections below hero */
 .product-page .below-fold-section { background: #fafaf8; }
+.product-page .banner-multivitamin-section { background: #fafaf8; }
 .product-page .banner2-section { background: #ffffff; }
 .product-page .banner-section { background: #fafaf8; }
 .product-page .banner-text h2 { color: #111111; }
@@ -362,8 +363,10 @@
 .product-page .section-title { color: #111111; }
 .product-page .section-subtitle { color: var(--pd-muted); }
 .product-page .below-fold-text h2,
-.product-page .below-fold-text h3 { color: #111111; }
-.product-page .below-fold-text p { color: #444444; }
+.product-page .below-fold-text h3,
+.product-page .banner-text--multivitamin h2 { color: #111111; }
+.product-page .below-fold-text p,
+.product-page .banner-text--multivitamin p { color: #444444; }
 .product-page .review-form-wrapper { background: #ffffff; color: #111111; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
 .product-page .review-card { background: #ffffff; border-color: #eeeeee; }
 .product-page .nutrient-card { background: #ffffff; border-color: var(--pd-accent); }
@@ -388,21 +391,56 @@
 .section-title { font-family: var(--font-heading); font-size: var(--font-size-heading, 29px); font-weight: 600; text-align: center; margin-bottom: 10px; line-height: 1.2; }
 .section-subtitle { text-align: center; color: var(--gray); font-size: var(--font-size-body, 16px); font-weight: 600; margin-bottom: 40px; }
 
-/* ===== BELOW FOLD SECTION ===== */
-.below-fold-section { background: #fafaf8; padding: 80px 0; overflow: visible; }
-.below-fold-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: start;
-  overflow: visible;
+/* ===== MULTIVITAMIN BANNER (text-only) ===== */
+.banner-multivitamin-section {
+  background: #fafaf8;
 }
-.below-fold-col { min-width: 0; }
-.below-fold-col--diagram { overflow: visible; }
-.below-fold-text h2 { font-family: var(--font-heading); font-size: 28px; font-weight: 900; margin-bottom: 16px; }
-.below-fold-text h3 { font-family: var(--font-heading); font-size: 22px; font-weight: 900; margin: 28px 0 12px; }
-.below-fold-text p { font-size: 15px; line-height: 1.75; color: var(--gray-dark); margin-bottom: 12px; }
-.below-fold-bullets { display: flex; flex-direction: column; gap: 22px; margin: 24px 0; }
+
+.banner-multivitamin-inner {
+  max-width: 960px;
+}
+
+.banner-multivitamin-main {
+  margin-bottom: 8px;
+}
+
+.banner-text--multivitamin h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 900;
+  margin-bottom: 20px;
+  line-height: 1.15;
+}
+
+.banner-text--multivitamin p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--gray-dark);
+  margin-bottom: 14px;
+}
+
+.banner-bullets--key-points {
+  margin: 20px 0 8px;
+}
+
+.banner-bullets--key-points li {
+  position: relative;
+  padding-left: 22px;
+  border-bottom: none;
+}
+
+.banner-bullets--key-points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #111111;
+}
+
+.below-fold-bullets { display: flex; flex-direction: column; gap: 22px; margin: 28px 0 0; }
 .bf-bullet-group h4 { font-size: 13px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; color: #333; }
 .bf-bullet-group ul { list-style: none; padding: 0; margin: 0; }
 .bf-bullet-group li {
@@ -421,32 +459,51 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--yellow);
+  background: #111111;
 }
-.bf-tagline { font-size: 15px; font-style: italic; color: #555; border-left: 3px solid var(--yellow); padding-left: 14px; margin-top: 20px; }
 
-.below-fold-key-points {
-  list-style: none;
-  padding: 0;
-  margin: 20px 0 8px;
+.banner-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-top: 48px;
+  padding-top: 40px;
+  border-top: 1px solid #e0e0e0;
 }
-.below-fold-key-points li {
-  position: relative;
-  padding-left: 22px;
-  font-size: 14px;
-  line-height: 1.65;
-  color: var(--gray-dark);
+
+.banner-feature-card {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 18px 14px;
+  text-align: center;
+}
+
+.banner-feature-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #111111;
   margin-bottom: 10px;
 }
-.below-fold-key-points li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 9px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--yellow);
+
+.banner-feature-card p {
+  font-size: 12px;
+  line-height: 1.55;
+  color: #444444;
+  margin: 0;
+}
+
+.banner-multivitamin-brand {
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #111111;
+  margin-top: 32px;
 }
 
 /* Scroll reveal */
@@ -479,120 +536,6 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-/* Infographic diagram with arrows */
-.below-fold-infographic {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 0;
-}
-.infographic-diagram {
-  position: relative;
-  width: 100%;
-  max-width: 580px;
-  min-height: 520px;
-  margin: 0 auto;
-}
-.infographic-arrows-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 3;
-  pointer-events: none;
-}
-.infographic-core {
-  position: absolute;
-  left: 50%;
-  top: 44%;
-  transform: translate(-50%, -50%);
-  width: 32%;
-  height: 32%;
-  min-width: 130px;
-  min-height: 130px;
-  max-width: 185px;
-  max-height: 185px;
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
-  border: 4px solid #fff;
-}
-.infographic-core-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.infographic-core-img--bowl {
-  object-fit: contain;
-  padding: 8%;
-  background: #fff;
-}
-.infographic-callout {
-  position: absolute;
-  z-index: 5;
-  max-width: 118px;
-  padding: 4px 6px;
-  background: #fafaf8;
-  border-radius: 4px;
-}
-.infographic-callout p {
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.45;
-  color: #333;
-  text-align: center;
-  margin: 0;
-}
-.infographic-callout--top {
-  top: 4%;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: 200px;
-}
-.infographic-callout--left {
-  left: 6%;
-  top: 40%;
-  transform: translateY(-50%);
-  max-width: 112px;
-}
-.infographic-callout--left p { text-align: left; }
-.infographic-callout--right {
-  right: 6%;
-  top: 40%;
-  transform: translateY(-50%);
-  max-width: 112px;
-}
-.infographic-callout--right p { text-align: right; }
-.infographic-callout--bottom-left {
-  left: 6%;
-  bottom: 12%;
-  max-width: 122px;
-}
-.infographic-callout--bottom-left p { text-align: left; }
-.infographic-callout--bottom-right {
-  right: 6%;
-  bottom: 12%;
-  max-width: 122px;
-}
-.infographic-callout--bottom-right p { text-align: right; }
-.infographic-brand {
-  position: absolute;
-  bottom: 4%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-heading);
-  font-size: 22px;
-  font-weight: 900;
-  color: #111;
-  z-index: 6;
-  letter-spacing: 0.5px;
 }
 
 /* ===== NUTRIENT SECTION ===== */
@@ -688,15 +631,7 @@
 @media (max-width: 900px) {
   .nutrients-grid { grid-template-columns: repeat(2, 1fr); }
   .reviews-grid { grid-template-columns: repeat(2, 1fr); }
-  .below-fold-grid { grid-template-columns: 1fr; }
-  .below-fold-infographic { padding: 16px 20px 24px; }
-  .infographic-diagram { min-height: 460px; max-width: 100%; padding: 4px 8px; }
-  .infographic-callout { max-width: 100px; padding: 4px; }
-  .infographic-callout--top { max-width: 170px; }
-  .infographic-callout--left { left: 4%; }
-  .infographic-callout--right { right: 4%; }
-  .infographic-callout p { font-size: 10px; }
-  .infographic-core { width: 38%; height: 38%; }
+  .banner-feature-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 1024px) {
   .product-hero-wrapper {
@@ -765,7 +700,8 @@
   .science-section,
   .stories-section,
   .reviews-section,
-  .below-fold-section { padding: 48px 0; }
+  .banner-multivitamin-section { padding: 48px 0; }
+  .banner-feature-grid { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 32px; padding-top: 28px; }
   .pack-free-ship { margin: 0 -16px; width: calc(100% + 32px); }
   .pack-badge { right: 8px; font-size: 10px; }
   .add-to-cart-btn { font-size: 16px; padding: 16px; }
@@ -782,7 +718,8 @@
   .banner-img-wrap { min-height: 240px; }
   .banner-img-wrap--product .banner-img { min-height: 260px; max-height: 320px; }
   .banner-text h2 { font-size: 24px; }
-  .below-fold-text h3 { font-size: 20px; }
+  .banner-feature-grid { grid-template-columns: 1fr; }
+  .banner-multivitamin-brand { font-size: 18px; margin-top: 24px; }
   .science-pct .science-num { font-size: 40px; }
   .thumbnail { width: 64px; height: 64px; }
 }

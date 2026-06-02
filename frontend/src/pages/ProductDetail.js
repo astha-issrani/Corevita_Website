@@ -7,11 +7,9 @@ import { ScrollReveal } from '../utils/useScrollReveal';
 import { renderBoldText } from '../utils/renderBoldText';
 import {
   DEFAULT_GALLERY_IMAGES,
-  DEFAULT_CAPSULES_IMAGE,
   DEFAULT_TESTIMONIAL_VIDEOS,
   IMG,
   resolveBannerImage,
-  resolveMediaImage,
   resolveVideoUrl,
 } from '../constants/media';
 import './ProductDetail.css';
@@ -226,7 +224,7 @@ function formatBannerBullet(text, label) {
   return t;
 }
 
-const INFO_LABEL_DEFAULTS = {
+const INFO_FEATURE_DEFAULTS = {
   top: 'Concentrated Bee Bread to support vitality and overall wellness',
   left: 'B Vitamins & Minerals for natural energy and well-being',
   right: 'Antioxidants for immune support and cellular health',
@@ -234,73 +232,13 @@ const INFO_LABEL_DEFAULTS = {
   bottom_right: 'Enzymes for better digestion and nutrient absorption',
 };
 
-/* Arrows from bowl → labels — inset so arrowheads are not clipped */
-const INFO_CALLOUTS = [
-  { key: 'top', pos: 'top', path: 'M 280 172 L 280 88' },
-  { key: 'left', pos: 'left', path: 'M 212 248 L 148 248' },
-  { key: 'right', pos: 'right', path: 'M 348 248 L 412 248' },
-  { key: 'bottom_left', pos: 'bottom-left', path: 'M 224 292 Q 188 348 152 402' },
-  { key: 'bottom_right', pos: 'bottom-right', path: 'M 336 292 Q 372 348 408 402' },
+const INFO_FEATURES = [
+  { key: 'top', label: 'Bee Bread' },
+  { key: 'left', label: 'B Vitamins' },
+  { key: 'right', label: 'Antioxidants' },
+  { key: 'bottom_left', label: 'Amino Acids' },
+  { key: 'bottom_right', label: 'Enzymes' },
 ];
-
-function InfographicCoreImage({ src, alt, fallback }) {
-  const [imgSrc, setImgSrc] = useState(() => resolveMediaImage(src, fallback));
-  useEffect(() => {
-    setImgSrc(resolveMediaImage(src, fallback));
-  }, [src, fallback]);
-  return (
-    <img
-      src={imgSrc}
-      alt={alt}
-      className="infographic-core-img infographic-core-img--bowl"
-      onError={() => setImgSrc(fallback)}
-    />
-  );
-}
-
-// ── Infographic with visible arrows + editable labels ─────────────────────────
-function Infographic({ c }) {
-  const imageUrl = cv(c, 'infographic', 'image_url', DEFAULT_CAPSULES_IMAGE);
-  const brand = cv(c, 'infographic', 'brand', 'CoreVita');
-
-  return (
-    <div className="infographic-diagram">
-      {INFO_CALLOUTS.map(({ key, pos }) => (
-        <div key={key} className={`infographic-callout infographic-callout--${pos}`}>
-          <p>{c('infographic', key, INFO_LABEL_DEFAULTS[key])}</p>
-        </div>
-      ))}
-
-      <svg className="infographic-arrows-svg" viewBox="-20 -12 600 544" aria-hidden="true" overflow="visible">
-        <defs>
-          <marker id="info-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
-            <path d="M0,0 L10,5 L0,10 z" fill="#111111" />
-          </marker>
-        </defs>
-        {INFO_CALLOUTS.map(({ key, path }) => (
-          <path
-            key={key}
-            d={path}
-            fill="none"
-            stroke="#111111"
-            strokeWidth="4"
-            strokeLinecap="round"
-            markerEnd="url(#info-arrow)"
-          />
-        ))}
-      </svg>
-
-      <div className="infographic-core">
-        <InfographicCoreImage
-          src={imageUrl}
-          alt={c('infographic', 'image_alt', 'CoreVita Bee Pearl capsules')}
-          fallback={DEFAULT_CAPSULES_IMAGE}
-        />
-      </div>
-      <div className="infographic-brand">{brand}</div>
-    </div>
-  );
-}
 
 function StoryVideoCard({ src, name, label, fallbackSrc }) {
   const [videoSrc, setVideoSrc] = useState(src);
@@ -371,13 +309,13 @@ function BelowFoldContent({ c }) {
   ].filter(Boolean);
 
   return (
-    <div className="below-fold-text">
-      <h3>{cv(c, 'below_fold', 'title2', "Why Your Multivitamin Isn't Enough")}</h3>
+    <div className="banner-text banner-text--multivitamin">
+      <h2>{cv(c, 'below_fold', 'title2', "Why Your Multivitamin Isn't Enough")}</h2>
       <p>{renderBoldText(cv(c, 'below_fold', 'body2', body2Default))}</p>
       <p>{renderBoldText(cv(c, 'below_fold', 'body3', body3Default))}</p>
       <p>{renderBoldText(cv(c, 'below_fold', 'body4', body4Default))}</p>
       {keyPoints.length > 0 && (
-        <ul className="below-fold-key-points">
+        <ul className="banner-bullets banner-bullets--key-points">
           {keyPoints.map((pt, i) => (
             <li key={i}>{pt}</li>
           ))}
@@ -396,6 +334,39 @@ function BelowFoldContent({ c }) {
         ))}
       </div>
     </div>
+  );
+}
+
+// ── Banner 3: Multivitamin section (text-only banner + feature cards) ─────────
+function MultivitaminBanner({ c }) {
+  const brand = cv(c, 'infographic', 'brand', 'CoreVita');
+  const features = INFO_FEATURES.map(({ key, label }) => ({
+    key,
+    label,
+    text: c('infographic', key, INFO_FEATURE_DEFAULTS[key]),
+  })).filter(f => f.text);
+
+  return (
+    <section className="banner-section banner-multivitamin-section">
+      <div className="container banner-multivitamin-inner">
+        <ScrollReveal as="div" className="banner-multivitamin-main">
+          <BelowFoldContent c={c} />
+        </ScrollReveal>
+
+        {features.length > 0 && (
+          <ScrollReveal as="div" className="banner-feature-grid scroll-reveal-delay">
+            {features.map(({ key, label, text }) => (
+              <div key={key} className="banner-feature-card">
+                <span className="banner-feature-label">{label}</span>
+                <p>{text}</p>
+              </div>
+            ))}
+          </ScrollReveal>
+        )}
+
+        {brand && <p className="banner-multivitamin-brand">{brand}</p>}
+      </div>
+    </section>
   );
 }
 
@@ -722,19 +693,7 @@ export default function ProductDetail(){
       {/* ── BANNER 2: Nature's Gold Standard (text left, image right) ── */}
       <Banner2 c={c}/>
 
-      {/* ── BELOW FOLD: bullet points + editable infographic ── */}
-      <section className="below-fold-section">
-        <div className="container below-fold-grid">
-          <ScrollReveal as="div" className="below-fold-col below-fold-col--text">
-            <BelowFoldContent c={c} />
-          </ScrollReveal>
-          <ScrollReveal as="div" className="below-fold-col below-fold-col--diagram scroll-reveal-delay">
-            <div className="below-fold-infographic">
-              <Infographic c={c} />
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
+      <MultivitaminBanner c={c} />
 
       {/* ── NUTRIENTS ── */}
       <ScrollReveal className="nutrients-section">

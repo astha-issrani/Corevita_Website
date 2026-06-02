@@ -109,7 +109,7 @@ const PAGES = [
         ]
       },
       {
-        key: 'below_fold', label: 'Multivitamin Section (Left Column)',
+        key: 'below_fold', label: 'Multivitamin Banner Section',
         fields: [
           { key: 'title2', label: 'Section Title', type: 'text' },
           { key: 'body2',  label: 'Intro Paragraph', type: 'textarea', rows: 3 },
@@ -132,17 +132,14 @@ const PAGES = [
         ]
       },
       {
-        key: 'infographic', label: 'Capsules Infographic (Arrows + Labels)',
+        key: 'infographic', label: 'Multivitamin Feature Cards (below banner text)',
         fields: [
-          { key: 'image_url', label: 'Center Image', type: 'image' },
-          { key: 'image_alt',    label: 'Image Alt Text',   type: 'text' },
-          { key: 'center_emoji', label: 'Center Emoji (fallback if no image)', type: 'text' },
-          { key: 'top',          label: 'Top Label',         type: 'textarea', rows: 2 },
-          { key: 'left',         label: 'Left Label',        type: 'textarea', rows: 2 },
-          { key: 'right',        label: 'Right Label',       type: 'textarea', rows: 2 },
-          { key: 'bottom_left',  label: 'Bottom-Left Label', type: 'textarea', rows: 2 },
-          { key: 'bottom_right', label: 'Bottom-Right Label',type: 'textarea', rows: 2 },
-          { key: 'brand',        label: 'Brand Name',        type: 'text' },
+          { key: 'top',          label: 'Feature 1 — Bee Bread',         type: 'textarea', rows: 2 },
+          { key: 'left',         label: 'Feature 2 — B Vitamins',        type: 'textarea', rows: 2 },
+          { key: 'right',        label: 'Feature 3 — Antioxidants',       type: 'textarea', rows: 2 },
+          { key: 'bottom_left',  label: 'Feature 4 — Amino Acids',       type: 'textarea', rows: 2 },
+          { key: 'bottom_right', label: 'Feature 5 — Enzymes',           type: 'textarea', rows: 2 },
+          { key: 'brand',        label: 'Brand Name (footer)',           type: 'text' },
         ]
       },
       {
