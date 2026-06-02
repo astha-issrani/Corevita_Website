@@ -423,26 +423,6 @@ export default function ProductDetail(){
   },[]);
 
   useEffect(()=>{
-    const zone=packScrollRef.current;
-    if(!zone)return;
-    const onWheel=(e)=>{
-      if(window.matchMedia('(max-width: 1024px)').matches)return;
-      const{scrollTop,scrollHeight,clientHeight}=zone;
-      const atBottom=scrollTop+clientHeight>=scrollHeight-2;
-      const atTop=scrollTop<=0;
-      if(e.deltaY>0&&atBottom){
-        e.preventDefault();
-        window.scrollBy({top:e.deltaY,left:0});
-      }else if(e.deltaY<0&&atTop){
-        e.preventDefault();
-        window.scrollBy({top:e.deltaY,left:0});
-      }
-    };
-    zone.addEventListener('wheel',onWheel,{passive:false});
-    return()=>zone.removeEventListener('wheel',onWheel);
-  },[]);
-
-  useEffect(()=>{
     const cta=heroCtaRef.current;
     if(!cta)return;
     const observer=new IntersectionObserver(

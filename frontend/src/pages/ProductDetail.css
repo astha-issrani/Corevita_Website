@@ -54,7 +54,8 @@
   /* Scroll from rating line through last FAQ — height tracks viewport beside gallery */
   max-height: calc(100svh - 96px);
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior-y: auto;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding-right: 6px;
@@ -298,7 +299,7 @@
 .trust-item { font-size: 13px; color: var(--pd-muted); }
 
 /* FAQ */
-.faq-section { margin-top: 8px; }
+.faq-section { margin-top: 8px; padding-bottom: 12px; }
 .faq-item { border-bottom: 1px solid var(--pd-border); }
 .faq-trigger { width: 100%; text-align: left; background: none; border: none; padding: 16px 0; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--pd-text); }
 .faq-arrow { font-size: 11px; transition: transform 0.3s; color: #888; }
