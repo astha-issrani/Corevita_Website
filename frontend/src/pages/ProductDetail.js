@@ -415,6 +415,9 @@ export default function ProductDetail(){
   const mainImgRef=useRef(null);
   const packScrollRef=useRef(null);
   const bannerRowRef=useRef(null);
+  const heroCtaRef=useRef(null);
+  const thumbStripRef=useRef(null);
+  const [showStickyBar,setShowStickyBar]=useState(false);
 
   const [reviews,setReviews]=useState([]);
   const [reviewForm,setReviewForm]=useState({name:'',email:'',title:'',body:'',rating:0});
@@ -467,6 +470,21 @@ export default function ProductDetail(){
     zone.addEventListener('wheel',onWheel,{passive:false});
     return()=>zone.removeEventListener('wheel',onWheel);
   },[]);
+
+  useEffect(()=>{
+    const cta=heroCtaRef.current;
+    if(!cta)return;
+    const observer=new IntersectionObserver(
+      ([entry])=>setShowStickyBar(!entry.isIntersecting),
+      {threshold:0,rootMargin:'0px'}
+    );
+    observer.observe(cta);
+    return()=>observer.disconnect();
+  },[product,selectedPack]);
+
+  const scrollThumbs=(dir)=>{
+    thumbStripRef.current?.scrollBy({left:dir*220,behavior:'smooth'});
+  };
 
   const handleMouseMove=(e)=>{
     const rect=mainImgRef.current.getBoundingClientRect();
@@ -545,28 +563,35 @@ export default function ProductDetail(){
   const displayTitle=c('hero','title','')||product.name;
   const mainImageUrl=hasGallery?galleryUrls[Math.min(activeSlide,galleryUrls.length-1)]:null;
 
+  const stickyPrice=selectedPack?.price??product.price;
+  const stickyOriginal=selectedPack?.originalPrice??product.originalPrice;
+  const stickySave=selectedPack?.savingsPercent??product.savingsPercent;
+
   return(
-    <div className="product-page">
-      {/* Sticky bottom bar */}
-      <div className="sticky-bottom-bar">
+    <div className={`product-page ${showStickyBar?'has-sticky-bar':''}`}>
+      {/* Sticky bottom bar — appears when hero CTA scrolls out of view */}
+      <div className={`sticky-bottom-bar ${showStickyBar?'is-visible':''}`}>
         <div className="sticky-product-info">
           <div className="sticky-img-box">
             {mainImageUrl
               ? <img src={mainImageUrl} alt="" className="sticky-product-photo" />
               : <span>🐝</span>}
           </div>
-          <div>
-            <p>{displayTitle}</p>
-            <span className="sticky-price">${product.price}</span>
-            <span className="sticky-original">${product.originalPrice}</span>
-            <span className="badge badge-green">SAVE {product.savingsPercent}%</span>
+          <div className="sticky-text-block">
+            <p className="sticky-product-name">{displayTitle}</p>
+            <div className="sticky-pricing-row">
+              <span className="sticky-price">${stickyPrice}</span>
+              <span className="sticky-original">${stickyOriginal}</span>
+              <span className="badge badge-green">SAVE {stickySave}%</span>
+            </div>
           </div>
         </div>
-        <button className="btn-primary" onClick={handleAddToCart}>Add to cart</button>
+        <button type="button" className="btn-primary sticky-cart-btn" onClick={handleAddToCart}>Add to cart</button>
       </div>
 
       {/* ── PRODUCT HERO ── */}
       <div className="container product-hero-wrapper">
+        <div className="product-left-col">
         <div className="product-images">
           <div className="zoom-wrapper">
             <div className={`product-main-img zoom-source ${isZooming?'zooming':''}`} ref={mainImgRef}
@@ -602,7 +627,9 @@ export default function ProductDetail(){
               </div>
             )}
           </div>
-          <div className="product-thumbnails">
+          <div className="product-thumbnails-wrap">
+            <button type="button" className="thumb-nav thumb-nav--prev" onClick={()=>scrollThumbs(-1)} aria-label="Previous image">‹</button>
+            <div className="product-thumbnails" ref={thumbStripRef}>
             {hasGallery
               ? galleryUrls.map((url,i)=>(
                 <div key={i} className={`thumbnail ${activeSlide===i?'active':''}`} onClick={()=>setActiveSlide(i)}>
@@ -614,10 +641,18 @@ export default function ProductDetail(){
                   <div className="thumb-inner">{slide.content}</div>
                 </div>
               ))}
+            </div>
+            <button type="button" className="thumb-nav thumb-nav--next" onClick={()=>scrollThumbs(1)} aria-label="Next image">›</button>
           </div>
         </div>
 
+        <div className="product-banner-row" ref={bannerRowRef}>
+          <Banner1 c={c}/>
+        </div>
+        </div>
+
         <div className="product-info">
+          <div className="product-info-head">
           <div className="product-rating"><span className="stars">★★★★★</span><span className="rating-text">{product.rating}/5 Loved by {product.reviewCount}+ herbalists</span></div>
           <h1 className="product-title">{displayTitle}</h1>
           <div className="product-pricing">
@@ -628,8 +663,9 @@ export default function ProductDetail(){
           <p className="product-desc">{renderBoldText(c('hero','desc1','CoreVita Bee Pearl is designed to **restore natural vitality** — the hidden root cause behind faster aging, nutrient depletion, and accelerated weight gain.'))}</p>
           <p className="product-desc">{renderBoldText(c('hero','desc2','Just one daily dose helps restore balance from within — naturally supporting your **steady energy, recovery, and mental clarity**.'))}</p>
           <ul className="benefit-list">{product.benefits.map((b,i)=><li key={i}><span className="check">✓</span> {b}</li>)}</ul>
+          </div>
 
-          <div className="pack-scroll-zone" ref={packScrollRef}>
+          <div className="product-info-scroll" ref={packScrollRef}>
             <div className="pack-selector">
               <h3>Choose Your Pack</h3>
               <div className="pack-list">
@@ -658,27 +694,32 @@ export default function ProductDetail(){
                 <div><strong>Save More with Automatic Refills!</strong><p>Delivered Monthly</p></div>
               </div>
             </div>
-          </div>
 
-          <button className={`btn-primary add-to-cart-btn ${added?'added':''}`} onClick={handleAddToCart}>
-            {added?'✓ Added to Cart!':'ADD TO CART'}
-          </button>
-          <div className="trust-badges"><div className="trust-item">{c('hero','trust','🚚 In Stock — Delivery in 5 to 8 business days')}</div></div>
+            <button ref={heroCtaRef} type="button" className={`btn-primary add-to-cart-btn ${added?'added':''}`} onClick={handleAddToCart}>
+              {added?'✓ Added to Cart!':'ADD TO CART'}
+            </button>
 
-          <div className="faq-section">
-            {faqs.map((faq,i)=>(
-              <div key={i} className="faq-item">
-                <button className="faq-trigger" onClick={()=>setOpenFaq(openFaq===i?null:i)}>
-                  {faq.q}<span className={`faq-arrow ${openFaq===i?'open':''}`}>▼</span>
-                </button>
-                {openFaq===i&&<div className="faq-answer">{faq.a}</div>}
+            <div className="product-trust">
+              <div className="trust-stock"><span className="trust-dot" aria-hidden="true"/> In Stock</div>
+              <div className="trust-delivery">{c('hero','trust','Expected delivery in 5 to 8 business days')}</div>
+              <div className="payment-icons" aria-label="Accepted payment methods">
+                {['Amex','Apple Pay','Discover','G Pay','Klarna','Mastercard','PayPal','Shop Pay','Visa'].map((m)=>(
+                  <span key={m} className="payment-icon">{m}</span>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        <div className="product-banner-row" ref={bannerRowRef}>
-          <Banner1 c={c}/>
+            <div className="faq-section">
+              {faqs.map((faq,i)=>(
+                <div key={i} className="faq-item">
+                  <button type="button" className="faq-trigger" onClick={()=>setOpenFaq(openFaq===i?null:i)}>
+                    {faq.q}<span className={`faq-arrow ${openFaq===i?'open':''}`}>▼</span>
+                  </button>
+                  {openFaq===i&&<div className="faq-answer">{faq.a}</div>}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
