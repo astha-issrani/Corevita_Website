@@ -125,7 +125,7 @@
 
 .blog-page-btn:hover:not(:disabled) {
   border-color: var(--yellow);
-  background: #fffbe6;
+  background: #f5f5f5;
 }
 
 .blog-page-btn.active {
@@ -232,7 +232,7 @@
   max-width: 720px;
   margin: 48px auto 0;
   padding: 28px;
-  background: #fffbe6;
+  background: #f5f5f5;
   border: 2px solid var(--yellow);
   border-radius: 12px;
   text-align: center;
