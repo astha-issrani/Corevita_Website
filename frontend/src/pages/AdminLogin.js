@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AdminLogin.css';
+import { AdminIcon } from '../components/admin/AdminIcons';
 
 export default function AdminLogin() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -69,7 +70,7 @@ export default function AdminLogin() {
         </form>
 
         <div className="admin-hint">
-          <span>🔒 Default: admin@corevita.com / admin123</span>
+          <span><AdminIcon name="lock" size={14} /> Default: admin@corevita.com / admin123</span>
           <br/>
           <small>Change these in <code>backend/.env</code></small>
         </div>

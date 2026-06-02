@@ -5,6 +5,7 @@ import {
   ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid,
   Cell, PieChart, Pie,
 } from 'recharts';
+import { AdminIcon } from '../components/admin/AdminIcons';
 import './AdminOverview.css';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
@@ -136,9 +137,9 @@ export default function AdminOverview({ adminEmail, adminName }) {
           <h1>Welcome back, {displayName}</h1>
         </div>
         <div className="dash-topbar-actions">
-          <button type="button" className="dash-icon-btn" aria-label="Search">🔍</button>
+          <button type="button" className="dash-icon-btn" aria-label="Search"><AdminIcon name="search" size={16} /></button>
           <button type="button" className="dash-icon-btn dash-notif" aria-label="Notifications">
-            🔔
+            <AdminIcon name="bell" size={16} />
             {(s.messagesUnread || 0) > 0 && <span className="dash-notif-dot" />}
           </button>
           <div className="dash-user-chip">
@@ -166,7 +167,7 @@ export default function AdminOverview({ adminEmail, adminName }) {
                 <option value="month">This Month</option>
                 <option value="week">This Week</option>
               </select>
-              <button type="button" className="dash-add-btn" onClick={fetchStats}>↻ Refresh</button>
+              <button type="button" className="dash-add-btn" onClick={fetchStats}><AdminIcon name="refresh" size={14} /> Refresh</button>
             </div>
           </div>
 

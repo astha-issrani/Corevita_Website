@@ -106,7 +106,58 @@
   transition: all 0.15s;
   position: relative;
 }
-.admin-nav-icon { font-size: 16px; }
+.admin-nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  flex-shrink: 0;
+  color: #666;
+}
+.admin-nav-item.active .admin-nav-icon { color: #111; }
+
+.admin-icon { flex-shrink: 0; vertical-align: middle; }
+.admin-empty-icon { color: #ccc; margin-bottom: 8px; }
+
+.admin-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.admin-search-wrap .admin-search-icon-svg {
+  position: absolute;
+  left: 12px;
+  color: #999;
+  pointer-events: none;
+}
+.admin-search-wrap .admin-search {
+  padding-left: 36px;
+}
+
+.admin-sidebar-search .admin-search-icon-svg {
+  color: #aaa;
+  flex-shrink: 0;
+}
+
+.refresh-btn,
+.logout-btn,
+.delete-btn,
+.reply-btn,
+.ac-reset-btn,
+.ac-save-btn,
+.ar-refresh-btn,
+.dash-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detail-actions .reply-btn,
+.detail-actions .delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 .admin-nav-item:hover { background: #f4f5f7; color: #111; }
 .admin-nav-item.active {
   background: #f0f0f0;

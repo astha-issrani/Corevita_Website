@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import RichTextEditor from '../components/RichTextEditor';
+import { AdminIcon } from '../components/admin/AdminIcons';
+import { stripMarkdown } from '../utils/renderRichText';
 import './AdminContent.css';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
@@ -49,19 +52,17 @@ export default function AdminProduct() {
     setSaving(true);
     setError('');
     try {
-      const images = form.imagesText.split('\n').map(s => s.trim()).filter(Boolean);
-      const benefits = form.benefitsText.split('\n').map(s => s.trim()).filter(Boolean);
       const res = await fetch(`${API}/products/${SLUG}`, {
         method: 'PUT',
         headers: hdrs(),
         body: JSON.stringify({
-          name: form.name,
+          name: stripMarkdown(form.name),
           price: parseFloat(form.price) || 0,
           originalPrice: parseFloat(form.originalPrice) || 0,
           savingsPercent: parseInt(form.savingsPercent, 10) || 0,
           stockLeft: parseInt(form.stockLeft, 10) || 0,
-          images,
-          benefits,
+          images: form.imagesText.split('\n').map(s => stripMarkdown(s.trim())).filter(Boolean),
+          benefits: form.benefitsText.split('\n').map(s => stripMarkdown(s.trim())).filter(Boolean),
         }),
       });
       if (!res.ok) {
@@ -91,7 +92,7 @@ export default function AdminProduct() {
           disabled={saving || loading}
           style={{ background: saved ? '#10b981' : '#F5C800', color: saved ? 'white' : '#111' }}
         >
-          {saving ? 'Saving...' : saved ? '✓ Saved!' : 'Save Product'}
+          {saving ? 'Saving...' : saved ? <><AdminIcon name="check" size={14} /> Saved!</> : 'Save Product'}
         </button>
       </div>
 
@@ -105,7 +106,7 @@ export default function AdminProduct() {
             <div className="ac-section-fields">
               <div className="ac-field">
                 <label className="ac-label">Product name</label>
-                <input className="ac-input" value={form.name} onChange={e => set('name', e.target.value)} />
+                <RichTextEditor rows={2} value={form.name} onChange={v => set('name', v)} />
               </div>
               <div className="ac-field ac-price-grid">
                 <div>
@@ -130,27 +131,21 @@ export default function AdminProduct() {
                   Product images
                   <span className="ac-hint"> — one image URL per line (main gallery + sticky bar)</span>
                 </label>
-                <textarea
-                  className="ac-input"
+                <RichTextEditor
                   rows={6}
                   value={form.imagesText}
-                  onChange={e => set('imagesText', e.target.value)}
-                  placeholder="https://example.com/bottle.jpg&#10;https://example.com/benefits.jpg"
+                  onChange={v => set('imagesText', v)}
+                  placeholder="https://example.com/bottle.jpg"
                 />
               </div>
               <div className="ac-field">
                 <label className="ac-label">Benefit bullets (one per line)</label>
-                <textarea
-                  className="ac-input"
-                  rows={5}
-                  value={form.benefitsText}
-                  onChange={e => set('benefitsText', e.target.value)}
-                />
+                <RichTextEditor rows={5} value={form.benefitsText} onChange={v => set('benefitsText', v)} />
               </div>
             </div>
           </div>
           <div className="ac-tip">
-            <strong>💡 Tip</strong>
+            <strong><AdminIcon name="tip" size={14} /> Tip</strong>
             <p>Page Content → Product Hero still overrides the headline and descriptions. Product name here updates the cart, sticky bar, and default title when Page Content title is empty.</p>
           </div>
         </div>

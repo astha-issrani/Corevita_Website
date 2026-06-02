@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { invalidateContent } from '../utils/useContent';
 import RichTextEditor from '../components/RichTextEditor';
+import { AdminIcon } from '../components/admin/AdminIcons';
 import './AdminContent.css';
 
 const BASE = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
@@ -9,7 +10,7 @@ const hdrs = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer
 
 const PAGES = [
   {
-    key: 'home', label: '🏠 Home Page',
+    key: 'home', label: 'Home Page', icon: 'home',
     sections: [
       {
         key: 'hero', label: 'Hero Section',
@@ -63,7 +64,7 @@ const PAGES = [
     ]
   },
   {
-    key: 'product', label: '🛍️ Product Detail Page',
+    key: 'product', label: 'Product Detail Page', icon: 'product',
     sections: [
       {
         key: 'hero', label: 'Product Hero',
@@ -84,7 +85,7 @@ const PAGES = [
         ]
       },
       {
-        key: 'banner1', label: '🖼️ Banner 1 — Why Modern Food (Image Left)',
+        key: 'banner1', label: 'Banner 1 — Why Modern Food (Image Left)',
         fields: [
           { key: 'image_url', label: 'Image URL', type: 'text', hint: 'Paste a full image URL, e.g. https://... Leave blank to hide image.' },
           { key: 'image_alt', label: 'Image Alt Text', type: 'text' },
@@ -93,7 +94,7 @@ const PAGES = [
         ]
       },
       {
-        key: 'banner2', label: '🖼️ Banner 2 — Nature\'s Gold Standard (Image Right)',
+        key: 'banner2', label: 'Banner 2 — Nature\'s Gold Standard (Image Right)',
         fields: [
           { key: 'image_url', label: 'Image URL', type: 'text', hint: 'Paste a full image URL. Leave blank to hide image.' },
           { key: 'image_alt', label: 'Image Alt Text', type: 'text' },
@@ -107,7 +108,7 @@ const PAGES = [
         ]
       },
       {
-        key: 'below_fold', label: '📋 Multivitamin Section (Left Column)',
+        key: 'below_fold', label: 'Multivitamin Section (Left Column)',
         fields: [
           { key: 'title2', label: 'Section Title', type: 'text' },
           { key: 'body2',  label: 'Intro Paragraph', type: 'textarea', rows: 3 },
@@ -130,7 +131,7 @@ const PAGES = [
         ]
       },
       {
-        key: 'infographic', label: '💊 Capsules Infographic (Arrows + Labels)',
+        key: 'infographic', label: 'Capsules Infographic (Arrows + Labels)',
         fields: [
           { key: 'image_url',    label: 'Center Image URL', type: 'text', hint: 'Use /images/capsules-bowl.svg or paste a direct image URL' },
           { key: 'image_alt',    label: 'Image Alt Text',   type: 'text' },
@@ -191,7 +192,7 @@ const PAGES = [
     ]
   },
   {
-    key: 'policy', label: '📄 Policy Pages',
+    key: 'policy', label: 'Policy Pages', icon: 'file',
     sections: [
       {
         key: 'refund', label: 'Refund Policy',
@@ -231,7 +232,7 @@ function SectionEditor({ section, values, onChange }) {
     <div className="ac-section">
       <button className="ac-section-toggle" onClick={() => setOpen(o => !o)}>
         <span>{section.label}</span>
-        <span className="ac-toggle-icon">{open ? '▼' : '▶'}</span>
+        <AdminIcon name={open ? 'chevronDown' : 'chevronRight'} size={16} className="ac-toggle-icon-svg" />
       </button>
       {open && (
         <div className="ac-section-fields">
@@ -241,26 +242,11 @@ function SectionEditor({ section, values, onChange }) {
                 {f.label}
                 {f.hint && <span className="ac-hint"> — {f.hint}</span>}
               </label>
-              {f.type === 'textarea' ? (
-                <RichTextEditor
-                  rows={f.rows || 3}
-                  value={values[f.key] ?? ''}
-                  onChange={(v) => onChange(section.key, f.key, v)}
-                />
-              ) : f.type === 'text' && f.rich ? (
-                <RichTextEditor
-                  rows={2}
-                  value={values[f.key] ?? ''}
-                  onChange={(v) => onChange(section.key, f.key, v)}
-                />
-              ) : (
-                <input
-                  type="text"
-                  className="ac-input"
-                  value={values[f.key] ?? ''}
-                  onChange={e => onChange(section.key, f.key, e.target.value)}
-                />
-              )}
+              <RichTextEditor
+                rows={f.rows || (f.type === 'text' ? 2 : 3)}
+                value={values[f.key] ?? ''}
+                onChange={(v) => onChange(section.key, f.key, v)}
+              />
             </div>
           ))}
         </div>
@@ -363,7 +349,7 @@ export default function AdminContent() {
         </div>
         <div className="ac-header-actions">
           <button className="ac-reset-btn" onClick={handleReset} disabled={resetting}>
-            {resetting ? 'Resetting...' : '↺ Reset to Defaults'}
+            <AdminIcon name="reset" size={14} /> {resetting ? 'Resetting...' : 'Reset to Defaults'}
           </button>
           <button
             className="ac-save-btn"
@@ -371,7 +357,7 @@ export default function AdminContent() {
             disabled={saving}
             style={{ background: saved ? '#10b981' : '#F5C800', color: saved ? 'white' : '#111' }}
           >
-            {saving ? 'Saving...' : saved ? '✓ Saved!' : 'Save Changes'}
+            {saving ? 'Saving...' : saved ? <><AdminIcon name="check" size={14} /> Saved!</> : 'Save Changes'}
           </button>
         </div>
       </div>
@@ -386,12 +372,13 @@ export default function AdminContent() {
               className={`ac-page-tab ${activePage === p.key ? 'active' : ''}`}
               onClick={() => setActivePage(p.key)}
             >
+              {p.icon && <AdminIcon name={p.icon} size={16} />}
               {p.label}
             </button>
           ))}
           <div className="ac-tip">
-            <strong>💡 Tip</strong>
-            <p><strong>Formatting:</strong> Use the toolbar for <strong>bold</strong>, <em>italic</em>, and links — or type **bold**, *italic*, [label](url). Changes go live when you click <em>Save Changes</em>.</p>
+            <strong><AdminIcon name="tip" size={14} /> Tip</strong>
+            <p>Use the formatting toolbar for bold, italic, lists, alignment, and more. Changes go live when you click <em>Save Changes</em>.</p>
           </div>
         </div>
 

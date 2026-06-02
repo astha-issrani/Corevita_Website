@@ -67,6 +67,9 @@
 }
 
 .ac-page-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   text-align: left;
   background: none;
   border: none;
@@ -92,7 +95,14 @@
   color: #6b7280;
   line-height: 1.5;
 }
-.ac-tip strong { display: block; margin-bottom: 4px; color: #374151; font-size: 13px; }
+.ac-tip strong {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  color: #374151;
+  font-size: 13px;
+}
 .ac-tip em { font-style: normal; font-weight: 700; color: #374151; }
 
 /* Right: editor */

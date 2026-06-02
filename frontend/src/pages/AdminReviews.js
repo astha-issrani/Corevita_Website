@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Star } from 'lucide-react';
+import { AdminIcon } from '../components/admin/AdminIcons';
 import './AdminReviews.css';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000').replace(/\/api$/, '');
 
 function StarDisplay({ rating }) {
   return (
-    <span style={{ color: '#E6B800', fontSize: 14 }}>
-      {'★'.repeat(rating)}{'☆'.repeat(5 - rating)}
+    <span className="ar-stars">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star key={i} size={14} fill={i < rating ? '#E6B800' : 'none'} stroke={i < rating ? '#E6B800' : '#ccc'} />
+      ))}
     </span>
   );
 }
@@ -75,7 +79,7 @@ export default function AdminReviews() {
           <h2>Customer Reviews</h2>
           <p>{reviews.length} total · <span className="ar-pending-count">{pending} pending approval</span></p>
         </div>
-        <button className="ar-refresh-btn" onClick={fetchReviews}>↻ Refresh</button>
+        <button className="ar-refresh-btn" onClick={fetchReviews}><AdminIcon name="refresh" size={14} /> Refresh</button>
       </div>
 
       {/* Stats */}
@@ -154,7 +158,7 @@ export default function AdminReviews() {
                   <td data-label="Date"><span className="ar-date">{new Date(r.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span></td>
                   <td data-label="Status">
                     <span className={`ar-status ${r.approved ? 'approved' : 'pending'}`}>
-                      {r.approved ? '✔ Approved' : '⏳ Pending'}
+                      {r.approved ? 'Approved' : 'Pending'}
                     </span>
                   </td>
                   <td data-label="Actions">

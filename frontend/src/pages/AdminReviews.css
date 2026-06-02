@@ -4,8 +4,10 @@
 .ar-header h2 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
 .ar-header p { font-size: 14px; color: #666; }
 .ar-pending-count { color: #f59e0b; font-weight: 700; }
-.ar-refresh-btn { background: #f4f4f4; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; }
+.ar-refresh-btn { background: #f4f4f4; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
 .ar-refresh-btn:hover { background: #e8e8e8; }
+
+.ar-stars { display: inline-flex; align-items: center; gap: 1px; }
 
 .ar-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
 .ar-stat-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; }

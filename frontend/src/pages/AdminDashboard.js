@@ -8,6 +8,7 @@ import AdminContent from './AdminContent';
 import AdminProduct from './AdminProduct';
 import AdminBlog from './AdminBlog';
 import AdminOverview from './AdminOverview';
+import { AdminIcon, NAV_ICONS } from '../components/admin/AdminIcons';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
 function getToken() { return localStorage.getItem('corevita_token'); }
@@ -102,25 +103,27 @@ function FontsTab() {
     updateFontSizes(DEFAULT_FONT_SIZES);
   };
   const fontFields = [
-    { key: 'heading', label: '🔤 Heading Font', description: 'H1, H2, H3, H4 — product titles, section headers' },
-    { key: 'body', label: '📝 Body / Content Font', description: 'Paragraphs, descriptions, general text' },
-    { key: 'card', label: '🃏 Card Font', description: 'Product cards, pack options, info boxes' },
-    { key: 'price', label: '💰 Price Font', description: 'All price displays ($49.99, $44.99 etc.)' },
-    { key: 'button', label: '🔘 Button Font', description: 'Add to Cart, Checkout, all CTA buttons' },
-    { key: 'nav', label: '🧭 Navigation Font', description: 'Navbar links and logo' },
+    { key: 'heading', label: 'Heading Font', description: 'H1, H2, H3, H4 — product titles, section headers' },
+    { key: 'body', label: 'Body / Content Font', description: 'Paragraphs, descriptions, general text' },
+    { key: 'card', label: 'Card Font', description: 'Product cards, pack options, info boxes' },
+    { key: 'price', label: 'Price Font', description: 'All price displays ($49.99, $44.99 etc.)' },
+    { key: 'button', label: 'Button Font', description: 'Add to Cart, Checkout, all CTA buttons' },
+    { key: 'nav', label: 'Navigation Font', description: 'Navbar links and logo' },
   ];
   const fontSizeFields = [
-    { key: 'heading', label: '📏 Heading Size', description: 'Product titles and section headings', min: 18, max: 72 },
-    { key: 'body', label: '📏 Content Size', description: 'Paragraphs, descriptions, and list text', min: 12, max: 24 },
+    { key: 'heading', label: 'Heading Size', description: 'Product titles and section headings', min: 18, max: 72 },
+    { key: 'body', label: 'Content Size', description: 'Paragraphs, descriptions, and list text', min: 12, max: 24 },
   ];
   return (
     <>
       <div className="admin-header">
         <div><h1>Font Settings</h1><p>Changes preview instantly — click Save to apply for all visitors</p></div>
         <div style={{ display: 'flex', gap: 10 }}>
-          <button className="refresh-btn" style={{ background: '#f3f4f6', color: '#333' }} onClick={handleReset}>↺ Reset Defaults</button>
+          <button className="refresh-btn" style={{ background: '#f3f4f6', color: '#333' }} onClick={handleReset}>
+            <AdminIcon name="reset" size={14} /> Reset Defaults
+          </button>
           <button className="refresh-btn" style={{ background: saved ? '#10b981' : '#F5C800', color: saved ? 'white' : '#000', minWidth: 100 }} onClick={handleSave} disabled={saving}>
-            {saving ? 'Saving...' : saved ? '✓ Saved!' : 'Save Fonts'}
+            {saving ? 'Saving...' : saved ? <><AdminIcon name="check" size={14} /> Saved!</> : 'Save Fonts'}
           </button>
         </div>
       </div>
@@ -191,14 +194,14 @@ function MessagesTab() {
   const unreadCount = messages.filter(m => !m.read).length;
   return (
     <>
-      <div className="admin-header"><div><h1>Contact Messages</h1><p>{messages.length} total · {unreadCount} unread</p></div><button className="refresh-btn" onClick={fetchMessages}>↻ Refresh</button></div>
+      <div className="admin-header"><div><h1>Contact Messages</h1><p>{messages.length} total · {unreadCount} unread</p></div><button className="refresh-btn" onClick={fetchMessages}><AdminIcon name="refresh" size={14} /> Refresh</button></div>
       <div className="admin-toolbar">
         <div className="filter-tabs">{['all','unread','read'].map(f=>(<button key={f} className={`filter-tab ${filter===f?'active':''}`} onClick={()=>setFilter(f)}>{f.charAt(0).toUpperCase()+f.slice(1)}{f==='unread'&&unreadCount>0&&` (${unreadCount})`}</button>))}</div>
-        <input className="admin-search" placeholder="🔍 Search messages..." value={search} onChange={e=>setSearch(e.target.value)}/>
+        <div className="admin-search-wrap"><AdminIcon name="search" size={15} className="admin-search-icon-svg" /><input className="admin-search" placeholder="Search messages..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
       </div>
       <div className={`admin-content ${selected ? 'has-detail' : ''}`}>
         <div className="message-list">
-          {loading?<div className="admin-loading">Loading messages...</div>:filtered.length===0?(<div className="admin-empty"><span>📭</span><p>No messages found</p></div>):filtered.map(msg=>(
+          {loading?<div className="admin-loading">Loading messages...</div>:filtered.length===0?(<div className="admin-empty"><AdminIcon name="inbox" size={36} className="admin-empty-icon" /><p>No messages found</p></div>):filtered.map(msg=>(
             <div key={msg._id} className={`message-item ${!msg.read?'unread':''} ${selected?._id===msg._id?'active':''}`} onClick={()=>handleSelect(msg)}>
               <div className="message-item-top">
                 <div className="message-sender"><div className="sender-avatar">{msg.name.charAt(0).toUpperCase()}</div><div><p className="sender-name">{msg.name}</p><p className="sender-email">{msg.email}</p></div></div>
@@ -215,12 +218,12 @@ function MessagesTab() {
               <button type="button" className="admin-mobile-back" onClick={() => setSelected(null)}>← Back to list</button>
               <div className="detail-header">
                 <div className="detail-sender-info"><div className="detail-avatar">{selected.name.charAt(0).toUpperCase()}</div><div><h3>{selected.name}</h3><a href={`mailto:${selected.email}`} className="detail-email">{selected.email}</a></div></div>
-                <div className="detail-actions"><a href={`mailto:${selected.email}?subject=Re: ${SUBJECT_LABELS[selected.subject]||selected.subject}`} className="btn-primary reply-btn">↩ Reply</a><button className="delete-btn" onClick={()=>deleteMessage(selected._id)}>🗑 Delete</button></div>
+                <div className="detail-actions"><a href={`mailto:${selected.email}?subject=Re: ${SUBJECT_LABELS[selected.subject]||selected.subject}`} className="btn-primary reply-btn"><AdminIcon name="reply" size={14} /> Reply</a><button className="delete-btn" onClick={()=>deleteMessage(selected._id)}><AdminIcon name="trash" size={14} /> Delete</button></div>
               </div>
-              <div className="detail-meta"><span className="detail-tag">{SUBJECT_LABELS[selected.subject]||selected.subject}</span><span className="detail-time">{new Date(selected.createdAt).toLocaleString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}</span><span className={`detail-status ${selected.read?'read':'unread'}`}>{selected.read?'✓ Read':'● Unread'}</span></div>
+              <div className="detail-meta"><span className="detail-tag">{SUBJECT_LABELS[selected.subject]||selected.subject}</span><span className="detail-time">{new Date(selected.createdAt).toLocaleString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}</span><span className={`detail-status ${selected.read?'read':'unread'}`}>{selected.read?'Read':'Unread'}</span></div>
               <div className="detail-body"><p>{selected.message}</p></div>
             </div>
-          ):(<div className="detail-empty"><span>📨</span><p>Select a message to read it</p></div>)}
+          ):(<div className="detail-empty"><AdminIcon name="mail" size={40} className="admin-empty-icon" /><p>Select a message to read it</p></div>)}
         </div>
       </div>
     </>
@@ -234,10 +237,10 @@ function OrdersTab() {
   const updateStatus=async(orderId,newStatus)=>{setUpdatingId(orderId);try{const body={orderStatus:newStatus};if(newStatus==='shipped'&&trackingInput)body.trackingNumber=trackingInput;const{data}=await axios.patch(`${API}/orders/admin/${orderId}/status`,body,{headers:authHeaders()});setOrders(prev=>prev.map(o=>o._id===orderId?data:o));if(selected?._id===orderId)setSelected(data);setTrackingInput('');}catch{alert('Failed to update status');}finally{setUpdatingId(null);}};
   const statusKeys=['all',...Object.keys(ORDER_STATUS_LABELS)];
   return(
-    <><div className="admin-header"><div><h1>Orders</h1><p>{orders.length} orders shown</p></div><button className="refresh-btn" onClick={fetchOrders}>↻ Refresh</button></div>
-    <div className="admin-toolbar"><div className="filter-tabs">{statusKeys.map(s=>(<button key={s} className={`filter-tab ${statusFilter===s?'active':''}`} onClick={()=>setStatusFilter(s)}>{s==='all'?'All':ORDER_STATUS_LABELS[s].label}</button>))}</div><input className="admin-search" placeholder="🔍 Search order #, name, email..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
-    <div className={`admin-content ${selected ? 'has-detail' : ''}`}><div className="message-list">{loading?<div className="admin-loading">Loading orders...</div>:orders.length===0?<div className="admin-empty"><span>📦</span><p>No orders found</p></div>:orders.map(order=>{const s=ORDER_STATUS_LABELS[order.orderStatus]||{label:order.orderStatus,color:'#888'};return(<div key={order._id} className={`message-item ${selected?._id===order._id?'active':''}`} onClick={()=>setSelected(order)}><div className="message-item-top"><div className="message-sender"><div className="sender-avatar" style={{background:'#F5C800',color:'#000'}}>{(order.shippingAddress?.firstName||'G').charAt(0).toUpperCase()}</div><div><p className="sender-name">{order.shippingAddress?.firstName} {order.shippingAddress?.lastName}</p><p className="sender-email">{order.guestEmail}</p></div></div><div className="message-meta"><span className="message-date">{new Date(order.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span></div></div><div style={{display:'flex',alignItems:'center',gap:8,marginTop:4}}><p className="message-subject" style={{margin:0}}>#{order.orderNumber}</p><span className="order-status-badge" style={{background:s.color+'22',color:s.color,border:`1px solid ${s.color}44`}}>{s.label}</span></div><p className="message-preview">{order.items?.map(i=>i.name).join(', ')} · ${order.total?.toFixed(2)}</p></div>);})}</div>
-    <div className="message-detail">{selected?(<div className="fade-in order-detail"><button type="button" className="admin-mobile-back" onClick={() => setSelected(null)}>← Back to orders</button><div className="detail-header"><div className="detail-sender-info"><div className="detail-avatar" style={{background:'#F5C800',color:'#000'}}>{(selected.shippingAddress?.firstName||'G').charAt(0).toUpperCase()}</div><div><h3>{selected.shippingAddress?.firstName} {selected.shippingAddress?.lastName}</h3><a href={`mailto:${selected.guestEmail}`} className="detail-email">{selected.guestEmail}</a></div></div><span className="order-status-badge large" style={{background:(ORDER_STATUS_LABELS[selected.orderStatus]?.color||'#888')+'22',color:ORDER_STATUS_LABELS[selected.orderStatus]?.color||'#888',border:`1px solid ${(ORDER_STATUS_LABELS[selected.orderStatus]?.color||'#888')}44`}}>{ORDER_STATUS_LABELS[selected.orderStatus]?.label||selected.orderStatus}</span></div><div className="order-info-grid"><div className="order-info-card"><h4>📋 Order Info</h4><p><strong>Order #</strong> {selected.orderNumber}</p><p><strong>Date</strong> {new Date(selected.createdAt).toLocaleString()}</p><p><strong>Payment</strong> {selected.paymentStatus}</p>{selected.trackingNumber&&<p><strong>Tracking</strong> {selected.trackingNumber}</p>}</div><div className="order-info-card"><h4>🚚 Shipping Address</h4><p>{selected.shippingAddress?.firstName} {selected.shippingAddress?.lastName}</p><p>{selected.shippingAddress?.address}</p><p>{selected.shippingAddress?.city}, {selected.shippingAddress?.state} {selected.shippingAddress?.zipCode}</p><p>{selected.shippingAddress?.country}</p>{selected.shippingAddress?.phone&&<p>📞 {selected.shippingAddress?.phone}</p>}</div></div><div className="order-items-section"><h4>🛍️ Items Ordered</h4>{selected.items?.map((item,i)=>(<div key={i} className="order-item-row"><span className="order-item-name">{item.name}</span><span className="order-item-pack">{item.packLabel}</span><span className="order-item-qty">×{item.quantity}</span><span className="order-item-price">${(item.price*item.quantity).toFixed(2)}</span></div>))}</div><div className="order-totals-section"><div className="order-total-row"><span>Subtotal</span><span>${selected.subtotal?.toFixed(2)}</span></div>{selected.discount>0&&<div className="order-total-row savings"><span>Pack Discount</span><span>-${selected.discount?.toFixed(2)}</span></div>}<div className="order-total-row"><span>Shipping</span><span>{selected.shipping===0?'FREE':`$${selected.shipping?.toFixed(2)}`}</span></div><div className="order-total-row total"><span>Total</span><span>${selected.total?.toFixed(2)}</span></div></div><div className="order-status-update"><h4>✏️ Update Status</h4><div className="status-btn-group">{Object.entries(ORDER_STATUS_LABELS).map(([key,val])=>(<button key={key} className={`status-update-btn ${selected.orderStatus===key?'current':''}`} style={{borderColor:val.color,color:selected.orderStatus===key?'#fff':val.color,background:selected.orderStatus===key?val.color:'transparent'}} onClick={()=>updateStatus(selected._id,key)} disabled={updatingId===selected._id}>{val.label}</button>))}</div><div className="tracking-input-row"><input className="admin-search" style={{flex:1}} placeholder="Tracking number (optional)" value={trackingInput} onChange={e=>setTrackingInput(e.target.value)}/></div></div></div>):<div className="detail-empty"><span>📦</span><p>Select an order to view details</p></div>}</div></div></>
+    <><div className="admin-header"><div><h1>Orders</h1><p>{orders.length} orders shown</p></div><button className="refresh-btn" onClick={fetchOrders}><AdminIcon name="refresh" size={14} /> Refresh</button></div>
+    <div className="admin-toolbar"><div className="filter-tabs">{statusKeys.map(s=>(<button key={s} className={`filter-tab ${statusFilter===s?'active':''}`} onClick={()=>setStatusFilter(s)}>{s==='all'?'All':ORDER_STATUS_LABELS[s].label}</button>))}</div><div className="admin-search-wrap"><AdminIcon name="search" size={15} className="admin-search-icon-svg" /><input className="admin-search" placeholder="Search order #, name, email..." value={search} onChange={e=>setSearch(e.target.value)}/></div></div>
+    <div className={`admin-content ${selected ? 'has-detail' : ''}`}><div className="message-list">{loading?<div className="admin-loading">Loading orders...</div>:orders.length===0?<div className="admin-empty"><AdminIcon name="orders" size={36} className="admin-empty-icon" /><p>No orders found</p></div>:orders.map(order=>{const s=ORDER_STATUS_LABELS[order.orderStatus]||{label:order.orderStatus,color:'#888'};return(<div key={order._id} className={`message-item ${selected?._id===order._id?'active':''}`} onClick={()=>setSelected(order)}><div className="message-item-top"><div className="message-sender"><div className="sender-avatar" style={{background:'#F5C800',color:'#000'}}>{(order.shippingAddress?.firstName||'G').charAt(0).toUpperCase()}</div><div><p className="sender-name">{order.shippingAddress?.firstName} {order.shippingAddress?.lastName}</p><p className="sender-email">{order.guestEmail}</p></div></div><div className="message-meta"><span className="message-date">{new Date(order.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span></div></div><div style={{display:'flex',alignItems:'center',gap:8,marginTop:4}}><p className="message-subject" style={{margin:0}}>#{order.orderNumber}</p><span className="order-status-badge" style={{background:s.color+'22',color:s.color,border:`1px solid ${s.color}44`}}>{s.label}</span></div><p className="message-preview">{order.items?.map(i=>i.name).join(', ')} · ${order.total?.toFixed(2)}</p></div>);})}</div>
+    <div className="message-detail">{selected?(<div className="fade-in order-detail"><button type="button" className="admin-mobile-back" onClick={() => setSelected(null)}>← Back to orders</button><div className="detail-header"><div className="detail-sender-info"><div className="detail-avatar" style={{background:'#F5C800',color:'#000'}}>{(selected.shippingAddress?.firstName||'G').charAt(0).toUpperCase()}</div><div><h3>{selected.shippingAddress?.firstName} {selected.shippingAddress?.lastName}</h3><a href={`mailto:${selected.guestEmail}`} className="detail-email">{selected.guestEmail}</a></div></div><span className="order-status-badge large" style={{background:(ORDER_STATUS_LABELS[selected.orderStatus]?.color||'#888')+'22',color:ORDER_STATUS_LABELS[selected.orderStatus]?.color||'#888',border:`1px solid ${(ORDER_STATUS_LABELS[selected.orderStatus]?.color||'#888')}44`}}>{ORDER_STATUS_LABELS[selected.orderStatus]?.label||selected.orderStatus}</span></div><div className="order-info-grid"><div className="order-info-card"><h4>Order Info</h4><p><strong>Order #</strong> {selected.orderNumber}</p><p><strong>Date</strong> {new Date(selected.createdAt).toLocaleString()}</p><p><strong>Payment</strong> {selected.paymentStatus}</p>{selected.trackingNumber&&<p><strong>Tracking</strong> {selected.trackingNumber}</p>}</div><div className="order-info-card"><h4>Shipping Address</h4><p>{selected.shippingAddress?.firstName} {selected.shippingAddress?.lastName}</p><p>{selected.shippingAddress?.address}</p><p>{selected.shippingAddress?.city}, {selected.shippingAddress?.state} {selected.shippingAddress?.zipCode}</p><p>{selected.shippingAddress?.country}</p>{selected.shippingAddress?.phone&&<p>{selected.shippingAddress?.phone}</p>}</div></div><div className="order-items-section"><h4>Items Ordered</h4>{selected.items?.map((item,i)=>(<div key={i} className="order-item-row"><span className="order-item-name">{item.name}</span><span className="order-item-pack">{item.packLabel}</span><span className="order-item-qty">×{item.quantity}</span><span className="order-item-price">${(item.price*item.quantity).toFixed(2)}</span></div>))}</div><div className="order-totals-section"><div className="order-total-row"><span>Subtotal</span><span>${selected.subtotal?.toFixed(2)}</span></div>{selected.discount>0&&<div className="order-total-row savings"><span>Pack Discount</span><span>-${selected.discount?.toFixed(2)}</span></div>}<div className="order-total-row"><span>Shipping</span><span>{selected.shipping===0?'FREE':`$${selected.shipping?.toFixed(2)}`}</span></div><div className="order-total-row total"><span>Total</span><span>${selected.total?.toFixed(2)}</span></div></div><div className="order-status-update"><h4>Update Status</h4><div className="status-btn-group">{Object.entries(ORDER_STATUS_LABELS).map(([key,val])=>(<button key={key} className={`status-update-btn ${selected.orderStatus===key?'current':''}`} style={{borderColor:val.color,color:selected.orderStatus===key?'#fff':val.color,background:selected.orderStatus===key?val.color:'transparent'}} onClick={()=>updateStatus(selected._id,key)} disabled={updatingId===selected._id}>{val.label}</button>))}</div><div className="tracking-input-row"><input className="admin-search" style={{flex:1}} placeholder="Tracking number (optional)" value={trackingInput} onChange={e=>setTrackingInput(e.target.value)}/></div></div></div>):<div className="detail-empty"><AdminIcon name="orders" size={40} className="admin-empty-icon" /><p>Select an order to view details</p></div>}</div></div></>
   );
 }
 
@@ -249,9 +252,9 @@ function CouponsTab() {
   const toggleCoupon=async(id)=>{try{const{data}=await axios.patch(`${API}/coupons/${id}/toggle`,{},{headers:authHeaders()});setCoupons(prev=>prev.map(c=>c._id===id?data:c));}catch{}};
   const deleteCoupon=async(id)=>{if(!window.confirm('Delete this coupon?'))return;try{await axios.delete(`${API}/coupons/${id}`,{headers:authHeaders()});setCoupons(prev=>prev.filter(c=>c._id!==id));}catch{}};
   return(
-    <><div className="admin-header"><div><h1>Coupon Codes</h1><p>{coupons.length} coupons · {coupons.filter(c=>c.isActive).length} active</p></div><button className="refresh-btn" style={{background:'#F5C800',color:'#000',fontWeight:700}} onClick={()=>setShowForm(s=>!s)}>{showForm?'✕ Cancel':'+ New Coupon'}</button></div>
+    <><div className="admin-header"><div><h1>Coupon Codes</h1><p>{coupons.length} coupons · {coupons.filter(c=>c.isActive).length} active</p></div><button className="refresh-btn" style={{background:'#F5C800',color:'#000',fontWeight:700}} onClick={()=>setShowForm(s=>!s)}>{showForm?<><AdminIcon name="close" size={14} /> Cancel</>:<>+ New Coupon</>}</button></div>
     {showForm&&(<div className="coupon-form-card fade-in"><h3>Create New Coupon</h3><div className="coupon-form-grid"><div className="form-group"><label>Code *</label><input placeholder="e.g. SAVE20" value={form.code} onChange={e=>setForm({...form,code:e.target.value.toUpperCase()})}/></div><div className="form-group"><label>Discount Type</label><select value={form.discountType} onChange={e=>setForm({...form,discountType:e.target.value})}><option value="percentage">Percentage (%)</option><option value="fixed">Fixed Amount ($)</option></select></div><div className="form-group"><label>Discount Value *</label><input type="number" min="0" value={form.discountValue} onChange={e=>setForm({...form,discountValue:e.target.value})}/></div><div className="form-group"><label>Min Order Amount ($)</label><input type="number" min="0" placeholder="0 = no minimum" value={form.minOrderAmount} onChange={e=>setForm({...form,minOrderAmount:e.target.value})}/></div><div className="form-group"><label>Max Uses</label><input type="number" min="1" placeholder="Leave blank for unlimited" value={form.maxUses} onChange={e=>setForm({...form,maxUses:e.target.value})}/></div><div className="form-group"><label>Expiry Date</label><input type="date" value={form.expiresAt} onChange={e=>setForm({...form,expiresAt:e.target.value})}/></div></div>{formError&&<p className="coupon-error">{formError}</p>}<button className="btn-primary" onClick={handleCreate} disabled={saving}>{saving?'Creating...':'Create Coupon'}</button></div>)}
-    {loading?<div className="admin-loading">Loading coupons...</div>:coupons.length===0?<div className="admin-empty"><span>🏷️</span><p>No coupons yet. Create one!</p></div>:(<div className="coupons-table-wrap"><table className="coupons-table"><thead><tr><th>Code</th><th>Discount</th><th>Min Order</th><th>Uses</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead><tbody>{coupons.map(c=>(<tr key={c._id} className={!c.isActive?'coupon-inactive':''}><td><strong className="coupon-code-cell">{c.code}</strong></td><td>{c.discountType==='percentage'?`${c.discountValue}% off`:`$${c.discountValue.toFixed(2)} off`}</td><td>{c.minOrderAmount>0?`$${c.minOrderAmount.toFixed(2)}`:'—'}</td><td>{c.usedCount}{c.maxUses?` / ${c.maxUses}`:''}</td><td>{c.expiresAt?new Date(c.expiresAt).toLocaleDateString():'—'}</td><td><span className={`coupon-status-badge ${c.isActive?'active':'inactive'}`}>{c.isActive?'Active':'Inactive'}</span></td><td><div className="coupon-actions"><button className="coupon-toggle-btn" onClick={()=>toggleCoupon(c._id)}>{c.isActive?'Disable':'Enable'}</button><button className="coupon-delete-btn" onClick={()=>deleteCoupon(c._id)}>🗑</button></div></td></tr>))}</tbody></table></div>)}</>
+    {loading?<div className="admin-loading">Loading coupons...</div>:coupons.length===0?<div className="admin-empty"><AdminIcon name="coupons" size={36} className="admin-empty-icon" /><p>No coupons yet. Create one!</p></div>:(<div className="coupons-table-wrap"><table className="coupons-table"><thead><tr><th>Code</th><th>Discount</th><th>Min Order</th><th>Uses</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead><tbody>{coupons.map(c=>(<tr key={c._id} className={!c.isActive?'coupon-inactive':''}><td><strong className="coupon-code-cell">{c.code}</strong></td><td>{c.discountType==='percentage'?`${c.discountValue}% off`:`$${c.discountValue.toFixed(2)} off`}</td><td>{c.minOrderAmount>0?`$${c.minOrderAmount.toFixed(2)}`:'—'}</td><td>{c.usedCount}{c.maxUses?` / ${c.maxUses}`:''}</td><td>{c.expiresAt?new Date(c.expiresAt).toLocaleDateString():'—'}</td><td><span className={`coupon-status-badge ${c.isActive?'active':'inactive'}`}>{c.isActive?'Active':'Inactive'}</span></td><td><div className="coupon-actions"><button className="coupon-toggle-btn" onClick={()=>toggleCoupon(c._id)}>{c.isActive?'Disable':'Enable'}</button><button className="coupon-delete-btn" onClick={()=>deleteCoupon(c._id)} aria-label="Delete"><AdminIcon name="trash" size={15} /></button></div></td></tr>))}</tbody></table></div>)}</>
   );
 }
 
@@ -283,15 +286,15 @@ export default function AdminDashboard() {
   };
 
   const navItems = [
-    { key: 'dashboard', icon: '📊', label: 'Dashboard' },
-    { key: 'orders',   icon: '📦', label: 'Orders' },
-    { key: 'messages', icon: '✉️', label: 'Messages' },
-    { key: 'coupons',  icon: '🏷️', label: 'Coupons' },
-    { key: 'fonts',    icon: '🔤', label: 'Fonts' },
-    { key: 'reviews',  icon: '⭐', label: 'Reviews' },
-    { key: 'content',  icon: '✏️', label: 'Page Content' },
-    { key: 'product',  icon: '🛍️', label: 'Product' },
-    { key: 'blog',     icon: '📰', label: 'Blog' },
+    { key: 'dashboard', label: 'Dashboard' },
+    { key: 'orders',   label: 'Orders' },
+    { key: 'messages', label: 'Messages' },
+    { key: 'coupons',  label: 'Coupons' },
+    { key: 'fonts',    label: 'Fonts' },
+    { key: 'reviews',  label: 'Reviews' },
+    { key: 'content',  label: 'Page Content' },
+    { key: 'product',  label: 'Product' },
+    { key: 'blog',     label: 'Blog' },
   ];
 
   const activeLabel = navItems.find((n) => n.key === activeTab)?.label || 'Admin';
@@ -308,7 +311,7 @@ export default function AdminDashboard() {
           onClick={() => setMobileNavOpen((o) => !o)}
           aria-label={mobileNavOpen ? 'Close menu' : 'Open menu'}
         >
-          {mobileNavOpen ? '✕' : '☰'}
+          {mobileNavOpen ? <AdminIcon name="close" size={20} /> : <AdminIcon name="menu" size={20} />}
         </button>
         <span className="admin-mobile-title">{activeLabel}</span>
         <button type="button" className="admin-mobile-logout" onClick={handleLogout}>Sign out</button>
@@ -326,7 +329,7 @@ export default function AdminDashboard() {
           <span className="admin-sidebar-logo">CoreVita</span>
         </div>
         <div className="admin-sidebar-search">
-          <span className="admin-search-icon">🔍</span>
+          <AdminIcon name="search" size={15} className="admin-search-icon-svg" />
           <input
             type="text"
             placeholder="Search..."
@@ -336,9 +339,9 @@ export default function AdminDashboard() {
         </div>
         <nav className="admin-nav">
           <p className="admin-nav-section">Main Menu</p>
-          {filteredNav.map(({ key, icon, label }) => (
+          {filteredNav.map(({ key, label }) => (
             <div key={key} className={`admin-nav-item ${activeTab === key ? 'active' : ''}`} onClick={() => selectTab(key)}>
-              <span className="admin-nav-icon">{icon}</span> {label}
+              <span className="admin-nav-icon"><AdminIcon name={NAV_ICONS[key]} size={17} /></span> {label}
             </div>
           ))}
         </nav>
@@ -347,7 +350,7 @@ export default function AdminDashboard() {
             <div className="admin-avatar">A</div>
             <div><p>{admin.email}</p><small>Administrator</small></div>
           </div>
-          <button className="logout-btn" onClick={handleLogout}>Sign Out</button>
+          <button className="logout-btn" onClick={handleLogout}><AdminIcon name="logout" size={14} /> Sign Out</button>
         </div>
       </aside>
       <main className="admin-main">

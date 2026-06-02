@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import RichTextEditor from '../components/RichTextEditor';
+import { AdminIcon } from '../components/admin/AdminIcons';
+import { stripMarkdown } from '../utils/renderRichText';
 import './AdminBlog.css';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
@@ -77,7 +79,14 @@ export default function AdminBlog() {
       const res = await fetch(url, {
         method: isNew ? 'POST' : 'PUT',
         headers: hdrs(),
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          title: stripMarkdown(form.title),
+          slug: stripMarkdown(form.slug),
+          author: stripMarkdown(form.author),
+          excerpt: stripMarkdown(form.excerpt),
+          coverImage: stripMarkdown(form.coverImage),
+        }),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -119,7 +128,7 @@ export default function AdminBlog() {
               + New Article
             </button>
           )}
-          <button type="button" className="refresh-btn" onClick={load}>↻ Refresh</button>
+          <button type="button" className="refresh-btn" onClick={load}><AdminIcon name="refresh" size={14} /> Refresh</button>
         </div>
       </div>
 
@@ -131,23 +140,23 @@ export default function AdminBlog() {
           <div className="ab-form">
             <div className="ac-field">
               <label className="ac-label">Title *</label>
-              <input className="ac-input" value={form.title} onChange={(e) => set('title', e.target.value)} />
+              <RichTextEditor rows={2} value={form.title} onChange={(v) => set('title', v)} />
             </div>
             <div className="ac-field">
               <label className="ac-label">URL slug <span className="ac-hint">(auto from title if empty)</span></label>
-              <input className="ac-input" value={form.slug} onChange={(e) => set('slug', e.target.value)} placeholder="my-article-title" />
+              <RichTextEditor rows={1} value={form.slug} onChange={(v) => set('slug', v)} placeholder="my-article-title" />
             </div>
             <div className="ac-field">
               <label className="ac-label">Cover image URL</label>
-              <input className="ac-input" value={form.coverImage} onChange={(e) => set('coverImage', e.target.value)} />
+              <RichTextEditor rows={2} value={form.coverImage} onChange={(v) => set('coverImage', v)} />
             </div>
             <div className="ac-field">
               <label className="ac-label">Author</label>
-              <input className="ac-input" value={form.author} onChange={(e) => set('author', e.target.value)} />
+              <RichTextEditor rows={1} value={form.author} onChange={(v) => set('author', v)} />
             </div>
             <div className="ac-field">
               <label className="ac-label">Short excerpt (listing page)</label>
-              <textarea className="ac-input" rows={2} value={form.excerpt} onChange={(e) => set('excerpt', e.target.value)} />
+              <RichTextEditor rows={3} value={form.excerpt} onChange={(v) => set('excerpt', v)} />
             </div>
             <div className="ac-field">
               <label className="ac-label">Article body</label>
@@ -166,7 +175,7 @@ export default function AdminBlog() {
                 disabled={saving}
                 style={{ background: saved ? '#10b981' : '#F5C800', color: saved ? '#fff' : '#111' }}
               >
-                {saving ? 'Saving…' : saved ? '✓ Saved!' : 'Save Article'}
+                {saving ? 'Saving…' : saved ? <><AdminIcon name="check" size={14} /> Saved!</> : 'Save Article'}
               </button>
             </div>
           </div>
