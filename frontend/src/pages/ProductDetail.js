@@ -413,6 +413,8 @@ export default function ProductDetail(){
   const [isZooming,setIsZooming]=useState(false);
   const [zoomPos,setZoomPos]=useState({x:50,y:50});
   const mainImgRef=useRef(null);
+  const packScrollRef=useRef(null);
+  const bannerRowRef=useRef(null);
 
   const [reviews,setReviews]=useState([]);
   const [reviewForm,setReviewForm]=useState({name:'',email:'',title:'',body:'',rating:0});
@@ -434,6 +436,37 @@ export default function ProductDetail(){
     getProduct(slug||'bee-pearl').then(({data})=>{setProduct(data);setSelectedPack(data.packs?.[0]||MOCK_PRODUCT.packs[0]);}).catch(()=>{});
     fetchReviews();
   },[slug,fetchReviews]);
+
+  useEffect(()=>{
+    const row=bannerRowRef.current;
+    if(!row)return;
+    const syncBannerOutset=()=>{
+      row.style.setProperty('--banner-outset',`${row.getBoundingClientRect().left}px`);
+    };
+    syncBannerOutset();
+    window.addEventListener('resize',syncBannerOutset);
+    return()=>window.removeEventListener('resize',syncBannerOutset);
+  },[]);
+
+  useEffect(()=>{
+    const zone=packScrollRef.current;
+    if(!zone)return;
+    const onWheel=(e)=>{
+      if(window.matchMedia('(max-width: 1024px)').matches)return;
+      const{scrollTop,scrollHeight,clientHeight}=zone;
+      const atBottom=scrollTop+clientHeight>=scrollHeight-2;
+      const atTop=scrollTop<=0;
+      if(e.deltaY>0&&atBottom){
+        e.preventDefault();
+        window.scrollBy({top:e.deltaY,left:0});
+      }else if(e.deltaY<0&&atTop){
+        e.preventDefault();
+        window.scrollBy({top:e.deltaY,left:0});
+      }
+    };
+    zone.addEventListener('wheel',onWheel,{passive:false});
+    return()=>zone.removeEventListener('wheel',onWheel);
+  },[]);
 
   const handleMouseMove=(e)=>{
     const rect=mainImgRef.current.getBoundingClientRect();
@@ -533,7 +566,7 @@ export default function ProductDetail(){
       </div>
 
       {/* ── PRODUCT HERO ── */}
-      <div className="container product-layout">
+      <div className="container product-hero-wrapper">
         <div className="product-images">
           <div className="zoom-wrapper">
             <div className={`product-main-img zoom-source ${isZooming?'zooming':''}`} ref={mainImgRef}
@@ -596,32 +629,34 @@ export default function ProductDetail(){
           <p className="product-desc">{renderBoldText(c('hero','desc2','Just one daily dose helps restore balance from within — naturally supporting your **steady energy, recovery, and mental clarity**.'))}</p>
           <ul className="benefit-list">{product.benefits.map((b,i)=><li key={i}><span className="check">✓</span> {b}</li>)}</ul>
 
-          <div className="pack-selector">
-            <h3>Choose Your Pack</h3>
-            <div className="pack-list">
-              {product.packs.map(pack=>(
-                <div key={pack._id} className={`pack-option ${selectedPack?._id===pack._id?'selected':''}`} onClick={()=>setSelectedPack(pack)}>
-                  {pack.badge&&<span className="pack-badge">{pack.badge}</span>}
-                  <div className="pack-option-row">
-                    <div className="pack-radio"><div className={`radio-dot ${selectedPack?._id===pack._id?'active':''}`}/></div>
-                    <div className="pack-label-text">
-                      <strong>{pack.label}</strong>
-                      <span className="pack-save">SAVE {pack.savingsPercent}%</span>
+          <div className="pack-scroll-zone" ref={packScrollRef}>
+            <div className="pack-selector">
+              <h3>Choose Your Pack</h3>
+              <div className="pack-list">
+                {product.packs.map(pack=>(
+                  <div key={pack._id} className={`pack-option ${selectedPack?._id===pack._id?'selected':''}`} onClick={()=>setSelectedPack(pack)}>
+                    {pack.badge&&<span className="pack-badge">{pack.badge}</span>}
+                    <div className="pack-option-row">
+                      <div className="pack-radio"><div className={`radio-dot ${selectedPack?._id===pack._id?'active':''}`}/></div>
+                      <div className="pack-label-text">
+                        <strong>{pack.label}</strong>
+                        <span className="pack-save">SAVE {pack.savingsPercent}%</span>
+                      </div>
+                      <div className="pack-pricing">
+                        <span className="pack-price">${pack.price}</span>
+                        {pack.originalPrice > 0 && (
+                          <span className="pack-original-price">${pack.originalPrice}</span>
+                        )}
+                      </div>
                     </div>
-                    <div className="pack-pricing">
-                      <span className="pack-price">${pack.price}</span>
-                      {pack.originalPrice > 0 && (
-                        <span className="pack-original-price">${pack.originalPrice}</span>
-                      )}
-                    </div>
+                    {pack.freeShipping&&<div className="pack-free-ship">+ FREE Shipping</div>}
                   </div>
-                  {pack.freeShipping&&<div className="pack-free-ship">+ FREE Shipping</div>}
-                </div>
-              ))}
-            </div>
-            <div className={`autorefill-box ${autoRefill?'checked':''}`} onClick={()=>setAutoRefill(!autoRefill)}>
-              <div className="autorefill-check">{autoRefill&&<span>✓</span>}</div>
-              <div><strong>Save More with Automatic Refills!</strong><p>Delivered Monthly</p></div>
+                ))}
+              </div>
+              <div className={`autorefill-box ${autoRefill?'checked':''}`} onClick={()=>setAutoRefill(!autoRefill)}>
+                <div className="autorefill-check">{autoRefill&&<span>✓</span>}</div>
+                <div><strong>Save More with Automatic Refills!</strong><p>Delivered Monthly</p></div>
+              </div>
             </div>
           </div>
 
@@ -641,10 +676,11 @@ export default function ProductDetail(){
             ))}
           </div>
         </div>
-      </div>
 
-      {/* ── BANNER 1: Why Modern Food (image left, text right) ── */}
-      <Banner1 c={c}/>
+        <div className="product-banner-row" ref={bannerRowRef}>
+          <Banner1 c={c}/>
+        </div>
+      </div>
 
       {/* ── BANNER 2: Nature's Gold Standard (text left, image right) ── */}
       <Banner2 c={c}/>

@@ -1,13 +1,67 @@
 /* ===== BASE PRODUCT PAGE ===== */
 .product-page { padding-bottom: 80px; }
 
-.product-layout {
+.product-layout,
+.product-hero-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 64px;
   padding-top: 40px;
-  padding-bottom: 40px;
+  padding-bottom: 0;
   align-items: start;
+}
+
+.product-images {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.product-info {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  position: sticky;
+  top: 20px;
+  align-self: start;
+  max-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  z-index: 1;
+  background: var(--white);
+}
+
+.product-banner-row {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+  overflow: visible;
+}
+
+.product-banner-row .banner-section {
+  width: 100vw;
+  max-width: 100vw;
+  transform: translateX(calc(-1 * var(--banner-outset, 0px)));
+  padding-top: 32px;
+  padding-bottom: 72px;
+}
+
+.pack-scroll-zone {
+  flex: 1 1 auto;
+  min-height: 140px;
+  max-height: min(320px, 42vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-bottom: 4px;
+}
+
+.pack-scroll-zone::-webkit-scrollbar {
+  display: none;
+}
+
+.pack-scroll-zone .autorefill-box {
+  margin-bottom: 12px;
 }
 
 .product-main-img {
@@ -433,8 +487,53 @@
   .infographic-callout p { font-size: 10px; }
   .infographic-core { width: 38%; height: 38%; }
 }
+@media (max-width: 1024px) {
+  .product-hero-wrapper {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding-bottom: 24px;
+  }
+
+  .product-images {
+    grid-column: 1;
+    grid-row: auto;
+    order: 1;
+  }
+
+  .product-banner-row {
+    grid-column: 1;
+    grid-row: auto;
+    order: 2;
+  }
+
+  .product-info {
+    grid-column: 1;
+    grid-row: auto;
+    order: 3;
+    position: static;
+    max-height: none;
+    overflow: visible;
+    background: transparent;
+  }
+
+  .pack-scroll-zone {
+    max-height: none;
+    overflow: visible;
+    min-height: 0;
+  }
+
+  .product-banner-row .banner-section {
+    width: 100%;
+    max-width: 100%;
+    transform: none;
+    padding-top: 0;
+    padding-bottom: 48px;
+  }
+}
+
 @media (max-width: 768px) {
-  .product-layout { grid-template-columns: 1fr; gap: 32px; padding-top: 24px; padding-bottom: 24px; }
+  .product-layout,
+  .product-hero-wrapper { grid-template-columns: 1fr; gap: 32px; padding-top: 24px; padding-bottom: 24px; }
   .product-title { font-size: clamp(26px, 7vw, 34px); }
   .sticky-bottom-bar { display: flex; flex-wrap: wrap; }
   .product-page { padding-bottom: 100px; }
