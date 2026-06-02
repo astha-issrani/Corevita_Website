@@ -60,6 +60,17 @@ const NUTRIENTS = [
 
 const ZOOM_SCALE = 2.5;
 
+function TruckIcon({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <rect x="1" y="3" width="15" height="13" rx="1" />
+      <path d="M16 8h4l3 3v5h-7V8z" />
+      <circle cx="5.5" cy="18.5" r="2.5" />
+      <circle cx="18.5" cy="18.5" r="2.5" />
+    </svg>
+  );
+}
+
 function StarRating({value,onChange,readOnly=false,size=20}){
   const [hover,setHover]=useState(0);
   return(
@@ -696,7 +707,7 @@ export default function ProductDetail(){
                     </div>
                     {pack.freeShipping&&(
                       <div className="pack-free-ship">
-                        🚚 + FREE Shipping
+                        + FREE Shipping
                       </div>
                     )}
                   </div>
@@ -725,7 +736,7 @@ export default function ProductDetail(){
             <div className="product-trust">
               <div className="trust-stock"><span className="trust-dot" aria-hidden="true"/> In Stock</div>
               <div className="trust-delivery">
-                <span className="trust-truck" aria-hidden="true">🚚</span>
+                <span className="trust-truck" aria-hidden="true"><TruckIcon size={16} /></span>
                 {c('hero','trust','Expected delivery in 5 to 8 business days')}
               </div>
               <div className="payment-icons" aria-label="Accepted payment methods">

@@ -65,6 +65,62 @@
   padding-bottom: 0;
 }
 
+/* Desktop: scroll product details beside sticky gallery (rating → last FAQ) */
+@media (min-width: 1025px) {
+  .product-hero-wrapper {
+    align-items: start;
+  }
+
+  .product-images {
+    position: sticky;
+    top: 72px;
+    align-self: start;
+  }
+
+  .product-thumbnails-wrap {
+    margin-top: 0;
+  }
+
+  .product-info {
+    align-self: start;
+    min-height: 0;
+  }
+
+  .product-info-scroll {
+    max-height: calc(100svh - 96px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-right: 10px;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #111111 #ececec;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .product-info-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .product-info-scroll::-webkit-scrollbar-track {
+    background: #ececec;
+    border-radius: 999px;
+  }
+
+  .product-info-scroll::-webkit-scrollbar-thumb {
+    background: #111111;
+    border-radius: 999px;
+  }
+
+  .product-info-scroll::-webkit-scrollbar-thumb:hover {
+    background: #333333;
+  }
+
+  .product-info-scroll .faq-section {
+    margin-top: 8px;
+    padding-bottom: 0;
+  }
+}
+
 .product-info-scroll .autorefill-box,
 .pack-scroll-zone .autorefill-box {
   margin-bottom: 16px;
@@ -523,9 +579,12 @@
 }
 
 .trust-truck {
-  font-size: 16px;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  color: #444444;
+  line-height: 0;
 }
 
 .payment-icons {
