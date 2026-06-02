@@ -415,7 +415,6 @@ export default function ProductDetail(){
   const mainImgRef=useRef(null);
   const packScrollRef=useRef(null);
   const bannerRowRef=useRef(null);
-  const imageColRef=useRef(null);
   const heroCtaRef=useRef(null);
   const thumbStripRef=useRef(null);
   const [showStickyBar,setShowStickyBar]=useState(false);
@@ -564,28 +563,6 @@ export default function ProductDetail(){
   const displayTitle=c('hero','title','')||product.name;
   const mainImageUrl=hasGallery?galleryUrls[Math.min(activeSlide,galleryUrls.length-1)]:null;
 
-  useEffect(()=>{
-    const images=imageColRef.current;
-    const scroll=packScrollRef.current;
-    if(!images||!scroll)return;
-    const syncScrollHeight=()=>{
-      if(window.matchMedia('(max-width: 1024px)').matches){
-        scroll.style.maxHeight='';
-        return;
-      }
-      const h=images.getBoundingClientRect().height;
-      scroll.style.maxHeight=`${Math.max(h,320)}px`;
-    };
-    syncScrollHeight();
-    const ro=new ResizeObserver(syncScrollHeight);
-    ro.observe(images);
-    window.addEventListener('resize',syncScrollHeight);
-    return()=>{
-      ro.disconnect();
-      window.removeEventListener('resize',syncScrollHeight);
-    };
-  },[activeSlide,galleryUrls.length]);
-
   const stickyPrice=selectedPack?.price??product.price;
   const stickyOriginal=selectedPack?.originalPrice??product.originalPrice;
   const stickySave=selectedPack?.savingsPercent??product.savingsPercent;
@@ -614,7 +591,7 @@ export default function ProductDetail(){
 
       {/* ── PRODUCT HERO ── */}
       <div className="container product-hero-wrapper">
-        <div className="product-images" ref={imageColRef}>
+        <div className="product-images">
           <div className="zoom-wrapper">
             <div className={`product-main-img zoom-source ${isZooming?'zooming':''}`} ref={mainImgRef}
               onMouseEnter={()=>setIsZooming(true)} onMouseLeave={()=>setIsZooming(false)} onMouseMove={handleMouseMove}>
@@ -726,7 +703,7 @@ export default function ProductDetail(){
 
             <div className="faq-section">
               {faqs.map((faq,i)=>(
-                <div key={i} className="faq-item">
+                <div key={i} className={`faq-item ${i===faqs.length-1?'faq-item--scroll-end':''}`}>
                   <button type="button" className="faq-trigger" onClick={()=>setOpenFaq(openFaq===i?null:i)}>
                     {faq.q}<span className={`faq-arrow ${openFaq===i?'open':''}`}>▼</span>
                   </button>
