@@ -230,9 +230,9 @@
 .pack-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 22px;
   margin-bottom: 16px;
-  padding-top: 8px;
+  padding-top: 10px;
 }
 
 .pack-option {
@@ -245,7 +245,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  overflow: hidden;
+  overflow: visible;
   background: #ffffff;
 }
 
@@ -264,6 +264,14 @@
   padding-bottom: 0;
 }
 
+.pack-option:has(.pack-badge) {
+  padding-top: 22px;
+}
+
+.pack-option.selected:has(.pack-badge) {
+  padding-top: 21px;
+}
+
 .pack-option-row {
   display: flex;
   align-items: center;
@@ -278,18 +286,21 @@
 
 .pack-badge {
   position: absolute;
-  top: -12px;
+  top: 0;
   right: 14px;
+  transform: translateY(-50%);
   background: #111111;
   color: #ffffff;
   font-size: 10px;
   font-weight: 800;
-  padding: 4px 14px;
+  padding: 5px 14px;
   border-radius: 999px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  z-index: 2;
+  z-index: 3;
   white-space: nowrap;
+  line-height: 1.2;
+  box-shadow: 0 0 0 2px #ffffff;
 }
 
 .pack-radio {
@@ -379,11 +390,13 @@
   margin: 0 -16px;
   width: calc(100% + 32px);
   letter-spacing: 0.02em;
+  border-radius: 0 0 10px 10px;
 }
 
 .pack-option.selected.pack-option--ships-free .pack-free-ship {
   margin: 0 -15px;
   width: calc(100% + 30px);
+  border-radius: 0 0 9px 9px;
 }
 
 /* Auto Refill */
