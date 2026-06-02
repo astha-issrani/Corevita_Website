@@ -45,8 +45,8 @@ function BottleSVG() {
 
 export default function CartDrawer() {
   const {
-    cartItems, cartGroups, isCartOpen, setIsCartOpen,
-    removeGroup, updateQuantity,
+    cartItems, isCartOpen, setIsCartOpen,
+    removeBottle, updateQuantity,
     cartTotal, cartSavings, cartFinalTotal,
     coupon, applyCoupon, removeCoupon,
   } = useCart();
@@ -80,15 +80,11 @@ export default function CartDrawer() {
 
   const handleRemoveCoupon = () => { removeCoupon(); setCouponError(''); setCouponInput(''); };
 
-  const groupIds = Object.keys(cartGroups).filter((groupId) => {
-    const bottles = cartGroups[groupId];
-    const packSize = Number(bottles[0]?.packSize || 1);
-    return packSize > 0 && bottles.length >= packSize && bottles.length % packSize === 0;
+  const sortedItems = [...cartItems].sort((a, b) => {
+    if (a.groupId !== b.groupId) return String(a.groupId).localeCompare(String(b.groupId));
+    return (a.bottleIndex || 0) - (b.bottleIndex || 0);
   });
-  const totalItems = groupIds.reduce((sum, groupId) => {
-    const bottles = cartGroups[groupId];
-    return sum + bottles.length / Number(bottles[0]?.packSize || 1);
-  }, 0);
+  const totalItems = sortedItems.length;
   const totalSavings = cartSavings + (coupon?.discountAmount || 0);
 
   return (
@@ -101,7 +97,7 @@ export default function CartDrawer() {
           <button type="button" className="cart-close" onClick={() => setIsCartOpen(false)} aria-label="Close cart">✕</button>
         </div>
 
-        {groupIds.length > 0 && (
+        {sortedItems.length > 0 && (
           <div className="cart-shipping-section">
             {hasFreeShipping ? (
               <p className="cart-shipping-msg">Congrats! You get FREE shipping!</p>
@@ -123,7 +119,7 @@ export default function CartDrawer() {
         )}
 
         <div className="cart-items">
-          {groupIds.length === 0 ? (
+          {sortedItems.length === 0 ? (
             <div className="cart-empty">
               <p>Your cart is empty</p>
               <Link to="/products/bee-pearl" onClick={() => setIsCartOpen(false)} className="cart-shop-btn">
@@ -131,49 +127,58 @@ export default function CartDrawer() {
               </Link>
             </div>
           ) : (
-            groupIds.map(groupId => {
-              const bottles = cartGroups[groupId];
-              const sample = bottles[0];
-              const packCount = bottles.length / sample.packSize;
-              const packTotal = cartItems
-                .filter(i => i.groupId === groupId)
-                .reduce((s, i) => s + i.price, 0);
-              const packOriginal = cartItems
-                .filter(i => i.groupId === groupId)
-                .reduce((s, i) => s + i.originalPrice, 0);
-              const packSave = Math.max(0, packOriginal - packTotal);
+            sortedItems.map((bottle) => {
+              const lineSave = Math.max(0, bottle.originalPrice - bottle.price);
 
               return (
-                <div key={groupId} className="cart-line">
+                <div key={bottle.packId} className="cart-line">
                   <div className="cart-line-thumb">
                     <BottleSVG />
                   </div>
 
                   <div className="cart-line-body">
-                    <strong className="cart-line-title">{sample.name}</strong>
+                    <strong className="cart-line-title">{bottle.name}</strong>
                     <span className="cart-line-sub">
-                      {sample.autoRefill ? 'Save More with Automatic Refills' : sample.packLabel}
+                      {bottle.autoRefill ? 'Save More with Automatic Refills' : bottle.packLabel}
+                      {bottle.isFree ? ' · FREE' : ''}
                     </span>
 
                     <div className="cart-line-actions">
                       <div className="cart-qty-box">
-                        <button type="button" onClick={() => updateQuantity(groupId, -1)} aria-label="Decrease quantity">−</button>
-                        <span>{packCount}</span>
-                        <button type="button" onClick={() => updateQuantity(groupId, 1)} aria-label="Increase quantity">+</button>
+                        <button
+                          type="button"
+                          onClick={() => removeBottle(bottle.packId)}
+                          aria-label="Remove bottle"
+                        >
+                          −
+                        </button>
+                        <span>1</span>
+                        <button
+                          type="button"
+                          onClick={() => updateQuantity(bottle.groupId, 1)}
+                          aria-label="Add another pack"
+                        >
+                          +
+                        </button>
                       </div>
-                      <button type="button" className="cart-remove-btn" onClick={() => removeGroup(groupId)} aria-label="Remove item">
+                      <button
+                        type="button"
+                        className="cart-remove-btn"
+                        onClick={() => removeBottle(bottle.packId)}
+                        aria-label="Remove bottle"
+                      >
                         <TrashIcon />
                       </button>
                     </div>
                   </div>
 
                   <div className="cart-line-pricing">
-                    {packOriginal > packTotal && (
-                      <span className="cart-price-was">${packOriginal.toFixed(2)}</span>
+                    {bottle.originalPrice > bottle.price && (
+                      <span className="cart-price-was">${bottle.originalPrice.toFixed(2)}</span>
                     )}
-                    <span className="cart-price-now">${packTotal.toFixed(2)}</span>
-                    {packSave > 0 && (
-                      <span className="cart-price-save">(You save ${packSave.toFixed(2)})</span>
+                    <span className="cart-price-now">${bottle.price.toFixed(2)}</span>
+                    {lineSave > 0 && (
+                      <span className="cart-price-save">(You save ${lineSave.toFixed(2)})</span>
                     )}
                   </div>
                 </div>
@@ -182,7 +187,7 @@ export default function CartDrawer() {
           )}
         </div>
 
-        {groupIds.length > 0 && (
+        {sortedItems.length > 0 && (
           <div className="cart-footer">
             <div className="coupon-section">
               {coupon ? (

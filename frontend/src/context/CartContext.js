@@ -2,29 +2,10 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
-/** Drop corrupted / partial pack rows so the cart is empty unless fully added packs exist */
+/** Drop malformed rows only — partial packs are allowed when removing individual bottles */
 function sanitizeCartItems(items) {
   if (!Array.isArray(items) || items.length === 0) return [];
-
-  const byGroup = items.reduce((acc, item) => {
-    if (!item?.groupId || !item?.packId) return acc;
-    if (!acc[item.groupId]) acc[item.groupId] = [];
-    acc[item.groupId].push(item);
-    return acc;
-  }, {});
-
-  const valid = [];
-  Object.values(byGroup).forEach((group) => {
-    const packSize = Number(group[0]?.packSize || group[0]?.quantity || 1);
-    if (!Number.isFinite(packSize) || packSize < 1) return;
-
-    const completePacks = Math.floor(group.length / packSize);
-    if (completePacks < 1) return;
-
-    valid.push(...group.slice(0, completePacks * packSize));
-  });
-
-  return valid;
+  return items.filter((item) => item?.groupId && item?.packId);
 }
 
 function loadCartFromStorage() {
@@ -126,6 +107,10 @@ export function CartProvider({ children }) {
     });
   };
 
+  const removeBottle = (packId) => {
+    setCartItems((prev) => prev.filter((i) => i.packId !== packId));
+  };
+
   // Remove entire pack group
   const removeGroup = (groupId) => {
     setCartItems(prev => prev.filter(i => i.groupId !== groupId));
@@ -196,10 +181,12 @@ export function CartProvider({ children }) {
     return sum + group.length / packSize;
   }, 0);
 
+  const cartBottleCount = cartItems.length;
+
   return (
     <CartContext.Provider value={{
-      cartItems, cartGroups, addToCart, removeFromCart, removeGroup, updateQuantity, clearCart,
-      cartCount: cartPackCount, cartPackCount, cartTotal, cartSavings, cartFinalTotal,
+      cartItems, cartGroups, addToCart, removeFromCart, removeBottle, removeGroup, updateQuantity, clearCart,
+      cartCount: cartBottleCount, cartBottleCount, cartPackCount, cartTotal, cartSavings, cartFinalTotal,
       coupon, applyCoupon, removeCoupon,
       isCartOpen, setIsCartOpen,
     }}>
