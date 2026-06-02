@@ -40,7 +40,7 @@ const DEFAULTS = [
   { page:'product', section:'hero', field:'title',  value:'CoreVita Bee Pearl Capsules' },
   { page:'product', section:'hero', field:'desc1',  value:'CoreVita Bee Pearl is designed to **restore natural vitality** — the hidden root cause behind faster aging, nutrient depletion, and accelerated weight gain.' },
   { page:'product', section:'hero', field:'desc2',  value:'Just one daily dose helps restore balance from within — naturally supporting your **steady energy, recovery, and mental clarity**.' },
-  { page:'product', section:'hero', field:'trust',  value:'🚚 In Stock — Delivery in 5 to 8 business days' },
+  { page:'product', section:'hero', field:'trust',  value:'Expected delivery in 5 to 8 business days' },
 
   // ── BANNER 1: Why Modern Food Isn't Enough (image LEFT, text RIGHT) ──
   { page:'product', section:'banner1', field:'image_url', value:'/images/banner-modern-food.svg' },

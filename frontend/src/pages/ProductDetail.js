@@ -60,6 +60,16 @@ const NUTRIENTS = [
 
 const ZOOM_SCALE = 2.5;
 
+/** Strip truck emojis / duplicate "In Stock" from admin trust line (shown separately above) */
+function formatTrustDelivery(text, fallback) {
+  const raw = String(text ?? '').trim() || fallback;
+  return raw
+    .replace(/[\u{1F69A}\u{1F69B}\u{1F690}\u{1F6FB}🚚🚛🚐🛻]/gu, '')
+    .replace(/^In Stock\s*[—–-]\s*/i, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function TruckIcon({ size = 16 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -817,7 +827,7 @@ export default function ProductDetail(){
               <div className="trust-stock"><span className="trust-dot" aria-hidden="true"/> In Stock</div>
               <div className="trust-delivery">
                 <span className="trust-truck" aria-hidden="true"><TruckIcon size={16} /></span>
-                {c('hero','trust','Expected delivery in 5 to 8 business days')}
+                {formatTrustDelivery(c('hero','trust',''), 'Expected delivery in 5 to 8 business days')}
               </div>
               <div className="payment-icons" aria-label="Accepted payment methods">
                 {['Amex','Apple Pay','Discover','G Pay','Klarna','Mastercard','PayPal','Shop Pay','Visa'].map((m)=>(
