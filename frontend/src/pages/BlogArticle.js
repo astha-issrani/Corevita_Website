@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { renderRichText } from '../utils/renderRichText';
+import { resolveUploadUrl } from '../utils/uploadUrl';
 import './Blog.css';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
@@ -64,7 +65,7 @@ export default function BlogArticle() {
 
       {post.coverImage && (
         <div className="blog-article-cover">
-          <img src={post.coverImage} alt="" />
+          <img src={resolveUploadUrl(post.coverImage)} alt="" />
         </div>
       )}
 

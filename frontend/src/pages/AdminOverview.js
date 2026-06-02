@@ -11,7 +11,7 @@ import './AdminOverview.css';
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
 const authHeaders = () => ({ Authorization: `Bearer ${localStorage.getItem('corevita_token')}` });
 
-const CHART_COLORS = ['#3b82f6', '#f97316', '#eab308', '#10b981', '#8b5cf6', '#ec4899'];
+const CHART_COLORS = ['#111111', '#444444', '#666666', '#888888', '#aaaaaa', '#cccccc'];
 
 function ChangeBadge({ value }) {
   if (value === 0 || value == null) return <span className="dash-change neutral">—</span>;
@@ -23,7 +23,7 @@ function ChangeBadge({ value }) {
   );
 }
 
-function MetricCard({ title, value, change, chart, chartType = 'area', color = '#f97316' }) {
+function MetricCard({ title, value, change, chart, chartType = 'area', color = '#444444' }) {
   const renderChart = () => {
     if (!chart || chart.length === 0) return null;
     const dataKey = chart[0].revenue != null ? 'revenue' : chart[0].value != null ? 'value' : 'count';
@@ -178,7 +178,7 @@ export default function AdminOverview({ adminEmail, adminName }) {
               change={s.revenueChange}
               chart={s.revenueChart}
               chartType="area"
-              color="#f97316"
+              color="#111111"
             />
             <MetricCard
               title="Total Orders"
@@ -193,7 +193,7 @@ export default function AdminOverview({ adminEmail, adminName }) {
               change={null}
               chart={s.dailyRevenue?.slice(-14)}
               chartType="line"
-              color="#3b82f6"
+              color="#444444"
             />
             <MetricCard
               title="Active Coupons"
@@ -201,7 +201,7 @@ export default function AdminOverview({ adminEmail, adminName }) {
               change={null}
               chart={s.dailyRevenue?.slice(-10)?.map((d, i) => ({ value: (s.activeCoupons || 0) + (i % 3) }))}
               chartType="line"
-              color="#eab308"
+              color="#666666"
             />
           </div>
 
@@ -211,15 +211,15 @@ export default function AdminOverview({ adminEmail, adminName }) {
                 <AreaChart data={s.revenueChart || []} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.3} />
-                      <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.02} />
+                      <stop offset="0%" stopColor="#111111" stopOpacity={0.3} />
+                      <stop offset="100%" stopColor="#111111" stopOpacity={0.02} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
                   <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v >= 1000 ? (v / 1000).toFixed(0) + 'k' : v}`} />
                   <Tooltip formatter={(v) => [formatCurrency(v), 'Revenue']} contentStyle={{ borderRadius: 8, border: '1px solid #eee', fontSize: 12 }} />
-                  <Area type="monotone" dataKey="revenue" stroke="#3b82f6" fill="url(#revenueGrad)" strokeWidth={2} />
+                  <Area type="monotone" dataKey="revenue" stroke="#111111" fill="url(#revenueGrad)" strokeWidth={2} />
                 </AreaChart>
               </ResponsiveContainer>
             </WideChartCard>
@@ -247,7 +247,7 @@ export default function AdminOverview({ adminEmail, adminName }) {
                   <XAxis dataKey="day" tick={{ fontSize: 10, fill: '#999' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} />
                   <Tooltip formatter={(v) => [formatCurrencyDec(v), 'Revenue']} contentStyle={{ borderRadius: 8, border: '1px solid #eee', fontSize: 12 }} />
-                  <Line type="monotone" dataKey="value" stroke="#f97316" strokeWidth={2} dot={false} activeDot={{ r: 4 }} />
+                  <Line type="monotone" dataKey="value" stroke="#444444" strokeWidth={2} dot={false} activeDot={{ r: 4 }} />
                 </LineChart>
               </ResponsiveContainer>
             </WideChartCard>
@@ -259,7 +259,7 @@ export default function AdminOverview({ adminEmail, adminName }) {
                   <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} />
                   <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #eee', fontSize: 12 }} />
-                  <Bar dataKey="orders" fill="#eab308" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="orders" fill="#666666" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </WideChartCard>
@@ -348,8 +348,8 @@ export default function AdminOverview({ adminEmail, adminName }) {
                     dataKey="value"
                     stroke="none"
                   >
-                    <Cell fill="#10b981" />
-                    <Cell fill="#f97316" />
+                    <Cell fill="#888888" />
+                    <Cell fill="#444444" />
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
@@ -365,7 +365,7 @@ export default function AdminOverview({ adminEmail, adminName }) {
                   <XAxis type="number" tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} />
                   <YAxis type="category" dataKey="subject" tick={{ fontSize: 11, fill: '#666' }} axisLine={false} tickLine={false} width={100} />
                   <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #eee', fontSize: 12 }} />
-                  <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="count" fill="#111111" radius={[0, 4, 4, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </WideChartCard>
@@ -378,8 +378,8 @@ export default function AdminOverview({ adminEmail, adminName }) {
                   <YAxis yAxisId="left" tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} />
                   <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} />
                   <Tooltip contentStyle={{ borderRadius: 8, border: '1px solid #eee', fontSize: 12 }} />
-                  <Bar yAxisId="left" dataKey="revenue" fill="#3b82f6" radius={[4, 4, 0, 0]} name="Revenue" />
-                  <Bar yAxisId="right" dataKey="orders" fill="#f97316" radius={[4, 4, 0, 0]} name="Orders" />
+                  <Bar yAxisId="left" dataKey="revenue" fill="#111111" radius={[4, 4, 0, 0]} name="Revenue" />
+                  <Bar yAxisId="right" dataKey="orders" fill="#444444" radius={[4, 4, 0, 0]} name="Orders" />
                 </BarChart>
               </ResponsiveContainer>
             </WideChartCard>
@@ -389,15 +389,15 @@ export default function AdminOverview({ adminEmail, adminName }) {
                 <AreaChart data={s.dailyRevenue?.slice(-14) || []} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="monthGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.3} />
-                      <stop offset="100%" stopColor="#10b981" stopOpacity={0.02} />
+                      <stop offset="0%" stopColor="#888888" stopOpacity={0.3} />
+                      <stop offset="100%" stopColor="#888888" stopOpacity={0.02} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
                   <XAxis dataKey="day" tick={{ fontSize: 10, fill: '#999' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 11, fill: '#999' }} axisLine={false} tickLine={false} />
                   <Tooltip formatter={(v) => [formatCurrencyDec(v), 'Revenue']} contentStyle={{ borderRadius: 8, border: '1px solid #eee', fontSize: 12 }} />
-                  <Area type="monotone" dataKey="value" stroke="#10b981" fill="url(#monthGrad)" strokeWidth={2} />
+                  <Area type="monotone" dataKey="value" stroke="#888888" fill="url(#monthGrad)" strokeWidth={2} />
                 </AreaChart>
               </ResponsiveContainer>
             </WideChartCard>

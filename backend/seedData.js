@@ -10,6 +10,20 @@ const BRAND_FONTS = {
   nav: 'Geist',
 };
 
+const DEFAULT_THEME_COLORS = {
+  primary: '#111111',
+  primaryDark: '#000000',
+  primaryLight: '#E5E5E5',
+  primaryBg: '#F5F5F5',
+  black: '#111111',
+  white: '#FFFFFF',
+  grayLight: '#F7F7F7',
+  gray: '#888888',
+  grayDark: '#444444',
+  green: '#22C55E',
+  red: '#EF4444',
+};
+
 const DEFAULT_PRODUCT_IMAGES = [
   '/images/bee-pearl-bottle.svg',
   '/images/gallery-capsules.svg',
@@ -32,6 +46,18 @@ module.exports = async function seedData() {
         { upsert: true }
       );
       console.log('Updated brand fonts to Geist + Inter');
+    }
+
+    const existingColors = await Settings.findOne({ key: 'colors' });
+    const isYellowDefault = !existingColors?.value
+      || existingColors.value.primary === '#F5C800';
+    if (isYellowDefault) {
+      await Settings.findOneAndUpdate(
+        { key: 'colors' },
+        { key: 'colors', value: DEFAULT_THEME_COLORS },
+        { upsert: true }
+      );
+      console.log('Updated theme colors to Black & White default');
     }
 
     await seedBlog();

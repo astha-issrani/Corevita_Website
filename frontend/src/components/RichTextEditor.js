@@ -113,7 +113,7 @@ export default function RichTextEditor({ value, onChange, rows = 4, placeholder 
       const indented = lines
         .map((line) => {
           if (delta > 0) return `  ${line}`;
-          return line.replace(/^  /, '');
+          return line.replace(/^ {2}/, '');
         })
         .join('\n');
       const next = value.substring(0, start) + indented + value.substring(end);

@@ -8,6 +8,7 @@ import AdminContent from './AdminContent';
 import AdminProduct from './AdminProduct';
 import AdminBlog from './AdminBlog';
 import AdminOverview from './AdminOverview';
+import AdminTheme from './AdminTheme';
 import { AdminIcon, NAV_ICONS } from '../components/admin/AdminIcons';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
@@ -291,6 +292,7 @@ export default function AdminDashboard() {
     { key: 'messages', label: 'Messages' },
     { key: 'coupons',  label: 'Coupons' },
     { key: 'fonts',    label: 'Fonts' },
+    { key: 'theme',    label: 'Theme' },
     { key: 'reviews',  label: 'Reviews' },
     { key: 'content',  label: 'Page Content' },
     { key: 'product',  label: 'Product' },
@@ -359,6 +361,7 @@ export default function AdminDashboard() {
         {activeTab === 'messages' && <MessagesTab />}
         {activeTab === 'coupons'  && <CouponsTab />}
         {activeTab === 'fonts'    && <FontsTab />}
+        {activeTab === 'theme'    && <AdminTheme />}
         {activeTab === 'reviews'  && <AdminReviews />}
         {activeTab === 'content'  && <AdminContent />}
         {activeTab === 'product'  && <AdminProduct />}

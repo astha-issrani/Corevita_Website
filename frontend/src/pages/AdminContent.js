@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { invalidateContent } from '../utils/useContent';
 import RichTextEditor from '../components/RichTextEditor';
+import ImageUpload from '../components/admin/ImageUpload';
 import { AdminIcon } from '../components/admin/AdminIcons';
 import './AdminContent.css';
 
@@ -87,7 +88,7 @@ const PAGES = [
       {
         key: 'banner1', label: 'Banner 1 — Why Modern Food (Image Left)',
         fields: [
-          { key: 'image_url', label: 'Image URL', type: 'text', hint: 'Paste a full image URL, e.g. https://... Leave blank to hide image.' },
+          { key: 'image_url', label: 'Banner Image', type: 'image' },
           { key: 'image_alt', label: 'Image Alt Text', type: 'text' },
           { key: 'title',     label: 'Section Title', type: 'text' },
           { key: 'body',      label: 'Body Text (use blank lines to separate paragraphs)', type: 'textarea', rows: 8 },
@@ -96,7 +97,7 @@ const PAGES = [
       {
         key: 'banner2', label: 'Banner 2 — Nature\'s Gold Standard (Image Right)',
         fields: [
-          { key: 'image_url', label: 'Image URL', type: 'text', hint: 'Paste a full image URL. Leave blank to hide image.' },
+          { key: 'image_url', label: 'Banner Image', type: 'image' },
           { key: 'image_alt', label: 'Image Alt Text', type: 'text' },
           { key: 'title',     label: 'Section Title',  type: 'text' },
           { key: 'intro',     label: 'Intro Paragraph', type: 'textarea', rows: 3 },
@@ -133,7 +134,7 @@ const PAGES = [
       {
         key: 'infographic', label: 'Capsules Infographic (Arrows + Labels)',
         fields: [
-          { key: 'image_url',    label: 'Center Image URL', type: 'text', hint: 'Use /images/capsules-bowl.svg or paste a direct image URL' },
+          { key: 'image_url', label: 'Center Image', type: 'image' },
           { key: 'image_alt',    label: 'Image Alt Text',   type: 'text' },
           { key: 'center_emoji', label: 'Center Emoji (fallback if no image)', type: 'text' },
           { key: 'top',          label: 'Top Label',         type: 'textarea', rows: 2 },
@@ -171,16 +172,16 @@ const PAGES = [
         key: 'videos', label: 'Video Testimonials',
         fields: [
           { key: 'title',        label: 'Section Title', type: 'text' },
-          { key: 'video1_url',   label: 'Video 1 URL (MP4)', type: 'text', hint: 'Local path e.g. /videos/16010072_1080_1920_30fps.mp4 or full https URL' },
+          { key: 'video1_url',   label: 'Video 1', type: 'video' },
           { key: 'video1_name',  label: 'Video 1 Name', type: 'text' },
           { key: 'video1_label', label: 'Video 1 Label', type: 'text' },
-          { key: 'video2_url',   label: 'Video 2 URL (MP4)', type: 'text' },
+          { key: 'video2_url',   label: 'Video 2', type: 'video' },
           { key: 'video2_name',  label: 'Video 2 Name', type: 'text' },
           { key: 'video2_label', label: 'Video 2 Label', type: 'text' },
-          { key: 'video3_url',   label: 'Video 3 URL (MP4)', type: 'text' },
+          { key: 'video3_url',   label: 'Video 3', type: 'video' },
           { key: 'video3_name',  label: 'Video 3 Name', type: 'text' },
           { key: 'video3_label', label: 'Video 3 Label', type: 'text' },
-          { key: 'video4_url',   label: 'Video 4 URL (MP4)', type: 'text' },
+          { key: 'video4_url',   label: 'Video 4', type: 'video' },
           { key: 'video4_name',  label: 'Video 4 Name', type: 'text' },
           { key: 'video4_label', label: 'Video 4 Label', type: 'text' },
         ]
@@ -226,6 +227,38 @@ const PAGES = [
   },
 ];
 
+function FieldEditor({ field, value, onChange }) {
+  if (field.type === 'image') {
+    return (
+      <ImageUpload
+        value={value ?? ''}
+        onChange={onChange}
+        accept="image/*"
+        label="Upload image"
+        hint="PNG, JPG, WebP or SVG — max 8MB"
+      />
+    );
+  }
+  if (field.type === 'video') {
+    return (
+      <ImageUpload
+        value={value ?? ''}
+        onChange={onChange}
+        accept="video/*"
+        label="Upload video"
+        hint="MP4 or WebM — max 80MB"
+      />
+    );
+  }
+  return (
+    <RichTextEditor
+      rows={field.rows || (field.type === 'text' ? 2 : 3)}
+      value={value ?? ''}
+      onChange={onChange}
+    />
+  );
+}
+
 function SectionEditor({ section, values, onChange }) {
   const [open, setOpen] = useState(true);
   return (
@@ -242,8 +275,8 @@ function SectionEditor({ section, values, onChange }) {
                 {f.label}
                 {f.hint && <span className="ac-hint"> — {f.hint}</span>}
               </label>
-              <RichTextEditor
-                rows={f.rows || (f.type === 'text' ? 2 : 3)}
+              <FieldEditor
+                field={f}
                 value={values[f.key] ?? ''}
                 onChange={(v) => onChange(section.key, f.key, v)}
               />

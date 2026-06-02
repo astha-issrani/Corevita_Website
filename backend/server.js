@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -23,6 +24,8 @@ app.use('/api/content', require('./routes/content'));
 app.use('/api/blog', require('./routes/blog'));
 app.use('/api/products', require('./routes/reviews'));
 app.use('/api/admin', require('./routes/adminStats'));
+app.use('/api/uploads', require('./routes/uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import RichTextEditor from '../components/RichTextEditor';
+import ImageUpload from '../components/admin/ImageUpload';
 import { AdminIcon } from '../components/admin/AdminIcons';
 import { stripMarkdown } from '../utils/renderRichText';
 import './AdminContent.css';
@@ -129,13 +130,14 @@ export default function AdminProduct() {
               <div className="ac-field">
                 <label className="ac-label">
                   Product images
-                  <span className="ac-hint"> — one image URL per line (main gallery + sticky bar)</span>
+                  <span className="ac-hint"> — upload or add one image per line</span>
                 </label>
-                <RichTextEditor
-                  rows={6}
+                <ImageUpload
+                  multiple
                   value={form.imagesText}
                   onChange={v => set('imagesText', v)}
-                  placeholder="https://example.com/bottle.jpg"
+                  label="Upload product images"
+                  hint="Add multiple images for the gallery"
                 />
               </div>
               <div className="ac-field">

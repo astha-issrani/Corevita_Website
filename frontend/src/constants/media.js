@@ -31,11 +31,15 @@ const BLOCKED_IMAGE_HOSTS = [
   'picsum.photos',
 ];
 
-/** Prefer local assets; ignore broken remote URLs from old DB seeds */
+/** Prefer local assets; resolve uploaded files from API */
 export function resolveBannerImage(url, fallback) {
   if (!url || !String(url).trim()) return fallback;
   const u = String(url).trim();
   if (u.startsWith('/images/')) return u;
+  if (u.startsWith('/uploads/')) {
+    const origin = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '');
+    return `${origin}${u}`;
+  }
   if (BLOCKED_IMAGE_HOSTS.some((h) => u.includes(h))) return fallback;
   return u;
 }
@@ -96,6 +100,13 @@ export function resolveVideoUrl(c, index) {
   const urlField = c('videos', `video${n}_url`, '');
   const legacy = c('videos', `video${n}_id`, '');
   const candidate = urlField || legacy;
-  if (isUsableVideoUrl(candidate)) return candidate.trim();
+  if (isUsableVideoUrl(candidate)) {
+    const trimmed = candidate.trim();
+    if (trimmed.startsWith('/uploads/')) {
+      const origin = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '');
+      return `${origin}${trimmed}`;
+    }
+    return trimmed;
+  }
   return defaults?.url || '';
 }

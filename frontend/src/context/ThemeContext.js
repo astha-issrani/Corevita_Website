@@ -3,9 +3,7 @@ import axios from 'axios';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000').replace(/\/api$/, '');
 
-// Available Google Fonts grouped by style
 export const FONT_OPTIONS = [
-  // Sans-serif (clean, modern)
   { label: 'Geist (Heading)', value: 'Geist', category: 'sans-serif' },
   { label: 'Inter (Body)', value: 'Inter', category: 'sans-serif' },
   { label: 'Barlow', value: 'Barlow', category: 'sans-serif' },
@@ -17,18 +15,15 @@ export const FONT_OPTIONS = [
   { label: 'Rubik', value: 'Rubik', category: 'sans-serif' },
   { label: 'DM Sans', value: 'DM Sans', category: 'sans-serif' },
   { label: 'Outfit', value: 'Outfit', category: 'sans-serif' },
-  // Condensed / Display
-  { label: 'Barlow Condensed (Default Heading)', value: 'Barlow Condensed', category: 'condensed' },
+  { label: 'Barlow Condensed', value: 'Barlow Condensed', category: 'condensed' },
   { label: 'Oswald', value: 'Oswald', category: 'condensed' },
   { label: 'Bebas Neue', value: 'Bebas Neue', category: 'condensed' },
   { label: 'Anton', value: 'Anton', category: 'condensed' },
   { label: 'Black Han Sans', value: 'Black Han Sans', category: 'condensed' },
-  // Serif
   { label: 'Playfair Display', value: 'Playfair Display', category: 'serif' },
   { label: 'Merriweather', value: 'Merriweather', category: 'serif' },
   { label: 'Lora', value: 'Lora', category: 'serif' },
   { label: 'Georgia', value: 'Georgia', category: 'serif' },
-  // Mono
   { label: 'JetBrains Mono', value: 'JetBrains Mono', category: 'mono' },
   { label: 'Space Mono', value: 'Space Mono', category: 'mono' },
 ];
@@ -47,11 +42,42 @@ export const DEFAULT_FONT_SIZES = {
   body: '16',
 };
 
+/** Black & white default theme */
+export const DEFAULT_COLORS = {
+  primary: '#111111',
+  primaryDark: '#000000',
+  primaryLight: '#E5E5E5',
+  primaryBg: '#F5F5F5',
+  black: '#111111',
+  white: '#FFFFFF',
+  grayLight: '#F7F7F7',
+  gray: '#888888',
+  grayDark: '#444444',
+  green: '#22C55E',
+  red: '#EF4444',
+};
+
+export const COLOR_PRESETS = {
+  'Black & White': DEFAULT_COLORS,
+  'CoreVita Yellow': {
+    primary: '#F5C800',
+    primaryDark: '#E6B800',
+    primaryLight: '#FFF8CC',
+    primaryBg: '#FFFBEB',
+    black: '#111111',
+    white: '#FFFFFF',
+    grayLight: '#F7F7F7',
+    gray: '#888888',
+    grayDark: '#444444',
+    green: '#22C55E',
+    red: '#EF4444',
+  },
+};
+
 const ThemeContext = createContext();
 
-// Inject a Google Font <link> into <head> if not already loaded
 function loadGoogleFont(fontName) {
-  if (!fontName || fontName === 'Georgia') return; // system font
+  if (!fontName || fontName === 'Georgia') return;
   const id = `gfont-${fontName.replace(/\s+/g, '-')}`;
   if (document.getElementById(id)) return;
   const link = document.createElement('link');
@@ -61,14 +87,10 @@ function loadGoogleFont(fontName) {
   document.head.appendChild(link);
 }
 
-// Apply fonts to CSS variables on :root
 function applyFonts(fonts) {
   const root = document.documentElement;
   const f = { ...DEFAULT_FONTS, ...fonts };
-
-  // Load all needed Google Fonts
   Object.values(f).forEach(loadGoogleFont);
-
   root.style.setProperty('--font-heading', `'${f.heading}', sans-serif`);
   root.style.setProperty('--font-main', `'${f.body}', sans-serif`);
   root.style.setProperty('--font-card', `'${f.card}', sans-serif`);
@@ -84,32 +106,57 @@ function applyFontSizes(sizes) {
   root.style.setProperty('--font-size-body', `${s.body}px`);
 }
 
+export function applyColors(colors) {
+  const root = document.documentElement;
+  const c = { ...DEFAULT_COLORS, ...colors };
+  root.style.setProperty('--yellow', c.primary);
+  root.style.setProperty('--yellow-dark', c.primaryDark);
+  root.style.setProperty('--yellow-light', c.primaryLight);
+  root.style.setProperty('--yellow-bg', c.primaryBg);
+  root.style.setProperty('--black', c.black);
+  root.style.setProperty('--white', c.white);
+  root.style.setProperty('--gray-light', c.grayLight);
+  root.style.setProperty('--gray', c.gray);
+  root.style.setProperty('--gray-dark', c.grayDark);
+  root.style.setProperty('--green', c.green);
+  root.style.setProperty('--red', c.red);
+  root.style.setProperty('--primary', c.primary);
+  root.style.setProperty('--primary-dark', c.primaryDark);
+}
+
 export function ThemeProvider({ children }) {
   const [fonts, setFonts] = useState(DEFAULT_FONTS);
   const [fontSizes, setFontSizes] = useState(DEFAULT_FONT_SIZES);
+  const [colors, setColors] = useState(DEFAULT_COLORS);
   const [loading, setLoading] = useState(true);
 
-  // Load saved fonts from backend on mount
   useEffect(() => {
     Promise.all([
       axios.get(`${API}/api/settings/fonts`),
       axios.get(`${API}/api/settings/font-sizes`),
+      axios.get(`${API}/api/settings/colors`),
     ])
-      .then(([fontsRes, sizesRes]) => {
+      .then(([fontsRes, sizesRes, colorsRes]) => {
         const mergedFonts = fontsRes.data.value
           ? { ...DEFAULT_FONTS, ...fontsRes.data.value }
           : DEFAULT_FONTS;
         const mergedSizes = sizesRes.data.value
           ? { ...DEFAULT_FONT_SIZES, ...sizesRes.data.value }
           : DEFAULT_FONT_SIZES;
+        const mergedColors = colorsRes.data.value
+          ? { ...DEFAULT_COLORS, ...colorsRes.data.value }
+          : DEFAULT_COLORS;
         setFonts(mergedFonts);
         setFontSizes(mergedSizes);
+        setColors(mergedColors);
         applyFonts(mergedFonts);
         applyFontSizes(mergedSizes);
+        applyColors(mergedColors);
       })
       .catch(() => {
         applyFonts(DEFAULT_FONTS);
         applyFontSizes(DEFAULT_FONT_SIZES);
+        applyColors(DEFAULT_COLORS);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -126,11 +173,16 @@ export function ThemeProvider({ children }) {
     applyFontSizes(merged);
   };
 
+  const updateColors = (newColors) => {
+    const merged = { ...colors, ...newColors };
+    setColors(merged);
+    applyColors(merged);
+  };
+
   const saveFonts = async (fontsToSave) => {
     const token = localStorage.getItem('corevita_token');
-    const { data } =
-    await axios.put(
-  `${API}/api/settings/fonts`,
+    const { data } = await axios.put(
+      `${API}/api/settings/fonts`,
       { value: fontsToSave },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -147,9 +199,22 @@ export function ThemeProvider({ children }) {
     return data;
   };
 
+  const saveColors = async (colorsToSave) => {
+    const token = localStorage.getItem('corevita_token');
+    const { data } = await axios.put(
+      `${API}/api/settings/colors`,
+      { value: colorsToSave },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    return data;
+  };
+
   return (
     <ThemeContext.Provider value={{
-      fonts, fontSizes, updateFonts, updateFontSizes, saveFonts, saveFontSizes, loading,
+      fonts, fontSizes, colors,
+      updateFonts, updateFontSizes, updateColors,
+      saveFonts, saveFontSizes, saveColors,
+      loading,
     }}>
       {children}
     </ThemeContext.Provider>

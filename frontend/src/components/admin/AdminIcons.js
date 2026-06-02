@@ -31,6 +31,7 @@ import {
   ChevronRight,
   Bell,
   LogOut,
+  Palette,
 } from 'lucide-react';
 
 const ICON_SIZE = 18;
@@ -70,6 +71,7 @@ export function AdminIcon({ name, size = ICON_SIZE, strokeWidth = ICON_STROKE, c
     chevronRight: ChevronRight,
     bell: Bell,
     logout: LogOut,
+    palette: Palette,
   };
   const Icon = map[name];
   if (!Icon) return null;
@@ -82,6 +84,7 @@ export const NAV_ICONS = {
   messages: 'messages',
   coupons: 'coupons',
   fonts: 'fonts',
+  theme: 'palette',
   reviews: 'reviews',
   content: 'content',
   product: 'product',

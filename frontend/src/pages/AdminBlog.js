@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import RichTextEditor from '../components/RichTextEditor';
+import ImageUpload from '../components/admin/ImageUpload';
 import { AdminIcon } from '../components/admin/AdminIcons';
 import { stripMarkdown } from '../utils/renderRichText';
 import './AdminBlog.css';
@@ -147,8 +148,13 @@ export default function AdminBlog() {
               <RichTextEditor rows={1} value={form.slug} onChange={(v) => set('slug', v)} placeholder="my-article-title" />
             </div>
             <div className="ac-field">
-              <label className="ac-label">Cover image URL</label>
-              <RichTextEditor rows={2} value={form.coverImage} onChange={(v) => set('coverImage', v)} />
+              <label className="ac-label">Cover image</label>
+              <ImageUpload
+                value={form.coverImage}
+                onChange={(v) => set('coverImage', v)}
+                label="Upload cover image"
+                hint="Shown on blog listing and article header"
+              />
             </div>
             <div className="ac-field">
               <label className="ac-label">Author</label>

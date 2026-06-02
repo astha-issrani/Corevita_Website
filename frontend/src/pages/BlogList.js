@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { resolveUploadUrl } from '../utils/uploadUrl';
 import './Blog.css';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
@@ -55,7 +56,7 @@ export default function BlogList() {
                   <article key={post._id} className="blog-card">
                     <Link to={`/blog/${post.slug}`} className="blog-card-img-wrap">
                       <img
-                        src={post.coverImage || '/images/banner-modern-food.svg'}
+                        src={resolveUploadUrl(post.coverImage) || '/images/banner-modern-food.svg'}
                         alt=""
                         className="blog-card-img"
                       />
