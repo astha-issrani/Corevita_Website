@@ -415,6 +415,7 @@ export default function ProductDetail(){
   const mainImgRef=useRef(null);
   const packScrollRef=useRef(null);
   const bannerRowRef=useRef(null);
+  const imageColRef=useRef(null);
   const heroCtaRef=useRef(null);
   const thumbStripRef=useRef(null);
   const [showStickyBar,setShowStickyBar]=useState(false);
@@ -538,7 +539,7 @@ export default function ProductDetail(){
   const faqs=[1,2,3,4].map(n=>({
     q:c('faq',`q${n}`,['How does it work?','What Bee Pearl Helps With','When Will I See Results?','Who Can Use It?'][n-1]),
     a:c('faq',`a${n}`,''),
-  })).filter(f=>f.q&&f.a);
+  })).filter(f=>f.q);
 
   const scienceStats=[1,2,3,4].map(n=>({
     pct:c('science',`stat${n}_pct`,['47','33','62','89'][n-1]),
@@ -562,6 +563,28 @@ export default function ProductDetail(){
   const hasGallery=galleryUrls.length>0;
   const displayTitle=c('hero','title','')||product.name;
   const mainImageUrl=hasGallery?galleryUrls[Math.min(activeSlide,galleryUrls.length-1)]:null;
+
+  useEffect(()=>{
+    const images=imageColRef.current;
+    const scroll=packScrollRef.current;
+    if(!images||!scroll)return;
+    const syncScrollHeight=()=>{
+      if(window.matchMedia('(max-width: 1024px)').matches){
+        scroll.style.maxHeight='';
+        return;
+      }
+      const h=images.getBoundingClientRect().height;
+      scroll.style.maxHeight=`${Math.max(h,320)}px`;
+    };
+    syncScrollHeight();
+    const ro=new ResizeObserver(syncScrollHeight);
+    ro.observe(images);
+    window.addEventListener('resize',syncScrollHeight);
+    return()=>{
+      ro.disconnect();
+      window.removeEventListener('resize',syncScrollHeight);
+    };
+  },[activeSlide,galleryUrls.length]);
 
   const stickyPrice=selectedPack?.price??product.price;
   const stickyOriginal=selectedPack?.originalPrice??product.originalPrice;
@@ -591,8 +614,7 @@ export default function ProductDetail(){
 
       {/* ── PRODUCT HERO ── */}
       <div className="container product-hero-wrapper">
-        <div className="product-left-col">
-        <div className="product-images">
+        <div className="product-images" ref={imageColRef}>
           <div className="zoom-wrapper">
             <div className={`product-main-img zoom-source ${isZooming?'zooming':''}`} ref={mainImgRef}
               onMouseEnter={()=>setIsZooming(true)} onMouseLeave={()=>setIsZooming(false)} onMouseMove={handleMouseMove}>
@@ -646,13 +668,8 @@ export default function ProductDetail(){
           </div>
         </div>
 
-        <div className="product-banner-row" ref={bannerRowRef}>
-          <Banner1 c={c}/>
-        </div>
-        </div>
-
         <div className="product-info">
-          <div className="product-info-head">
+          <div className="product-info-scroll" ref={packScrollRef}>
           <div className="product-rating"><span className="stars">★★★★★</span><span className="rating-text">{product.rating}/5 Loved by {product.reviewCount}+ herbalists</span></div>
           <h1 className="product-title">{displayTitle}</h1>
           <div className="product-pricing">
@@ -663,9 +680,7 @@ export default function ProductDetail(){
           <p className="product-desc">{renderBoldText(c('hero','desc1','CoreVita Bee Pearl is designed to **restore natural vitality** — the hidden root cause behind faster aging, nutrient depletion, and accelerated weight gain.'))}</p>
           <p className="product-desc">{renderBoldText(c('hero','desc2','Just one daily dose helps restore balance from within — naturally supporting your **steady energy, recovery, and mental clarity**.'))}</p>
           <ul className="benefit-list">{product.benefits.map((b,i)=><li key={i}><span className="check">✓</span> {b}</li>)}</ul>
-          </div>
 
-          <div className="product-info-scroll" ref={packScrollRef}>
             <div className="pack-selector">
               <h3>Choose Your Pack</h3>
               <div className="pack-list">
@@ -715,11 +730,15 @@ export default function ProductDetail(){
                   <button type="button" className="faq-trigger" onClick={()=>setOpenFaq(openFaq===i?null:i)}>
                     {faq.q}<span className={`faq-arrow ${openFaq===i?'open':''}`}>▼</span>
                   </button>
-                  {openFaq===i&&<div className="faq-answer">{faq.a}</div>}
+                  {openFaq===i&&faq.a&&<div className="faq-answer">{faq.a}</div>}
                 </div>
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="product-banner-row" ref={bannerRowRef}>
+          <Banner1 c={c}/>
         </div>
       </div>
 
