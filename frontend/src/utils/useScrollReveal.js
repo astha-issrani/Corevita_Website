@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-/** Fade/slide sections in when they enter the viewport */
+/** Fade/slide sections in when they enter the viewport (for components that need visible state) */
 export function useScrollReveal(threshold = 0.12) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -8,6 +8,12 @@ export function useScrollReveal(threshold = 0.12) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setVisible(true);
+      return undefined;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -15,7 +21,7 @@ export function useScrollReveal(threshold = 0.12) {
           observer.disconnect();
         }
       },
-      { threshold, rootMargin: '0px 0px -48px 0px' }
+      { threshold, rootMargin: '0px 0px -5% 0px' }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -24,10 +30,11 @@ export function useScrollReveal(threshold = 0.12) {
   return [ref, visible];
 }
 
-export function ScrollReveal({ children, className = '', as: Tag = 'section' }) {
-  const [ref, visible] = useScrollReveal();
+/** Wrapper that adds scroll-reveal classes — visibility handled by GlobalMotion */
+export function ScrollReveal({ children, className = '', as: Tag = 'section', delay = '' }) {
+  const delayClass = delay ? `scroll-reveal-delay-${delay}` : '';
   return (
-    <Tag ref={ref} className={`scroll-reveal ${visible ? 'is-visible' : ''} ${className}`.trim()}>
+    <Tag className={`scroll-reveal ${delayClass} ${className}`.trim()}>
       {children}
     </Tag>
   );

@@ -88,7 +88,7 @@ export default function Checkout() {
   }
 
   return (
-    <div className="checkout-page container">
+    <div className="checkout-page container scroll-reveal">
       <div className="checkout-grid">
         {/* Left: Form */}
         <div className="checkout-form-wrap">

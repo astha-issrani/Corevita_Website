@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
+import GlobalMotion from './components/GlobalMotion';
 import Home from './pages/Home';
 
 import ProductDetail from './pages/ProductDetail';
@@ -26,7 +27,8 @@ function Layout({ children }) {
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {!isAdmin && <Navbar />}
       {!isAdmin && <CartDrawer />}
-      <main style={{ flex: 1 }}>{children}</main>
+      {!isAdmin && <GlobalMotion />}
+      <main key={pathname} className="page-main" style={{ flex: 1 }}>{children}</main>
       {!isAdmin && <Footer />}
     </div>
   );

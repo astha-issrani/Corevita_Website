@@ -142,7 +142,8 @@
   padding: 18px 36px;
   border-radius: 999px;
   border: none;
-  transition: background 0.2s, transform 0.15s;
+  transition: background var(--duration-normal, 0.45s) var(--ease-out, ease),
+    transform var(--duration-normal, 0.45s) var(--ease-out, ease);
   text-decoration: none;
 }
 

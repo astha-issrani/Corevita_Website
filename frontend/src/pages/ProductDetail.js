@@ -590,10 +590,10 @@ export default function ProductDetail(){
                   key={activeSlide}
                   src={mainImageUrl}
                   alt={displayTitle}
-                  className="product-photo slide-fade"
+                  className="product-photo gallery-crossfade"
                 />
               ) : (
-                <div className="product-img-placeholder slide-fade" key={activeSlide}>
+                <div className="product-img-placeholder gallery-crossfade" key={activeSlide}>
                   {PRODUCT_SLIDES[activeSlide].content}
                 </div>
               )}
@@ -759,7 +759,7 @@ export default function ProductDetail(){
       <MultivitaminSection c={c} />
 
       {/* ── NUTRIENTS ── */}
-      <ScrollReveal className="nutrients-section">
+      <ScrollReveal className="nutrients-section scroll-reveal">
         <div className="container">
           <h2 className="section-title">{c('nutrients','title','CoreVita Bee Pearl: The Ultimate Nutrient-Rich Superfood for Energy and Vitality')}</h2>
           <p className="section-subtitle">{c('nutrients','subtitle',"Here's why we chose Bee Pearl for its powerful energy-boosting nutrients:")}</p>
@@ -778,7 +778,7 @@ export default function ProductDetail(){
       </ScrollReveal>
 
       {/* ── SCIENCE ── */}
-      <ScrollReveal className="science-section">
+      <ScrollReveal className="science-section scroll-reveal scroll-reveal-delay">
         <div className="container">
           <h2 className="section-title">{c('science','title','The Science Supporting CoreVita')}</h2>
           <p className="section-subtitle">{c('science','subtitle','Results from clinical studies on Bee Bread & Propolis:')}</p>
@@ -790,7 +790,7 @@ export default function ProductDetail(){
       </ScrollReveal>
 
       {/* ── VIDEOS ── */}
-      <div className="stories-section">
+      <div className="stories-section scroll-reveal">
         <div className="container">
           <h2 className="section-title">{c('videos','title','Real Stories, Real Results: How CoreVita Is Changing Lives')}</h2>
           <div className="stories-grid">
@@ -802,7 +802,7 @@ export default function ProductDetail(){
       </div>
 
       {/* ── REVIEWS ── */}
-      <div className="reviews-section">
+      <div className="reviews-section scroll-reveal scroll-reveal-delay">
         <div className="container">
           <h2 className="section-title">{c('reviews','title','400+ People Are Already Thriving With The Healing Power Of Bee Pearl')}</h2>
           <div className="rating-summary">

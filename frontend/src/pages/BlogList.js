@@ -36,14 +36,14 @@ export default function BlogList() {
 
   return (
     <div className="blog-page">
-      <header className="blog-hero">
+      <header className="blog-hero scroll-reveal">
         <div className="container">
           <h1>CoreVita Blog</h1>
           <p>Wellness insights on bee bread, natural energy, and living well in a nutrient-depleted world.</p>
         </div>
       </header>
 
-      <section className="blog-list-section">
+      <section className="blog-list-section scroll-reveal scroll-reveal-delay">
         <div className="container">
           {loading ? (
             <p className="blog-loading">Loading articles…</p>
@@ -51,9 +51,9 @@ export default function BlogList() {
             <p className="blog-empty">No articles yet. Check back soon.</p>
           ) : (
             <>
-              <div className="blog-grid">
+              <div className="blog-grid reveal-stagger scroll-reveal">
                 {data.posts.map((post) => (
-                  <article key={post._id} className="blog-card">
+                  <article key={post._id} className="blog-card motion-card">
                     <Link to={`/blog/${post.slug}`} className="blog-card-img-wrap">
                       <img
                         src={resolveUploadUrl(post.coverImage) || '/images/banner-modern-food.svg'}

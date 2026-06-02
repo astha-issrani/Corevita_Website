@@ -13,7 +13,7 @@ function PolicyPage({ section, defaultTitle, defaultBody }) {
   const title = c(section, 'title', defaultTitle);
   const body  = c(section, 'body',  defaultBody);
   return (
-    <div className="policy-page container">
+    <div className="policy-page container scroll-reveal">
       <h1>{title}</h1>
       <RichBody text={body} />
     </div>

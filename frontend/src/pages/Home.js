@@ -41,7 +41,7 @@ export default function Home() {
       {/* Hero — headline + bottle */}
       <section className="hero-section">
         <div className="container hero-inner">
-          <div className="hero-text">
+          <div className="hero-text motion-hero-in">
             <div className="hero-stars">
               <span className="hero-stars-icons">★★★★★</span>
               <span className="hero-stars-text">
@@ -72,14 +72,14 @@ export default function Home() {
             </h1>
             <p className="hero-tagline">{c('hero', 'subtitle', 'CoreVita restores what your body has been missing.')}</p>
           </div>
-          <div className="hero-product">
-            <img src={BOTTLE_IMG} alt="CoreVita Bee Pearl supplement bottle" className="hero-bottle-img" />
+          <div className="hero-product motion-hero-in-delay">
+            <img src={BOTTLE_IMG} alt="CoreVita Bee Pearl supplement bottle" className="hero-bottle-img motion-float" />
           </div>
         </div>
       </section>
 
       {/* Pitch — undernourished + CTA */}
-      <section className="hero-pitch-section">
+      <section className="hero-pitch-section scroll-reveal">
         <div className="container hero-pitch-inner">
           <h2 className="pitch-headline">
             YOU&apos;RE <span className="pitch-accent">UNDERNOURISHED<span className="hero-yellow-underline" /></span>.
@@ -95,15 +95,15 @@ export default function Home() {
       </section>
 
       {/* Results */}
-      <section className="results-section">
+      <section className="results-section scroll-reveal">
         <div className="container results-layout">
-          <div className="results-intro">
+          <div className="results-intro scroll-reveal scroll-reveal-left">
             <h2>{c('results', 'title', 'REAL RESULTS IN 30 DAYS')}</h2>
             <p>{c('results', 'subtitle', 'We asked our customers how they felt after 4 weeks of daily CoreVita use.')}</p>
           </div>
-          <div className="results-stats">
+          <div className="results-stats scroll-reveal scroll-reveal-right scroll-reveal-delay">
             <h3>{c('results', 'heading', 'Here is what they said:')}</h3>
-            <ul className="results-list">
+            <ul className="results-list reveal-stagger scroll-reveal">
               {stats.map((s, i) => (
                 <li key={i} className="result-row">
                   <div className="result-circle" aria-hidden="true">
@@ -122,12 +122,12 @@ export default function Home() {
       </section>
 
       {/* Stories */}
-      <section className="stories-section">
+      <section className="stories-section scroll-reveal">
         <div className="container">
-          <h2 className="stories-title">{c('stories', 'title', 'Real Stories, Real Results: How CoreVita Is Changing Lives')}</h2>
-          <div className="testimonials-grid">
+          <h2 className="stories-title scroll-reveal">{c('stories', 'title', 'Real Stories, Real Results: How CoreVita Is Changing Lives')}</h2>
+          <div className="testimonials-grid reveal-stagger scroll-reveal">
             {testimonials.map((t, i) => (
-              <div key={i} className="testimonial-card">
+              <div key={i} className="testimonial-card motion-card">
                 {t.avatarUrl ? (
                   <img src={t.avatarUrl} alt={t.name} className="testimonial-avatar-img" />
                 ) : (
@@ -143,7 +143,7 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="cta-banner">
+      <section className="cta-banner scroll-reveal scroll-reveal-scale">
         <div className="container cta-inner">
           <div>
             <h2>{c('cta_banner', 'title', 'Ready to Feel Like Yourself Again?')}</h2>

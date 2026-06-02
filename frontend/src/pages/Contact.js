@@ -31,8 +31,8 @@ export default function Contact() {
   };
 
   return (
-    <div className="contact-page">
-      <div className="container contact-wrap">
+    <div className="contact-page scroll-reveal">
+      <div className="container contact-wrap scroll-reveal scroll-reveal-delay">
         <h1 className="contact-title">Contact form</h1>
 
         {sent ? (

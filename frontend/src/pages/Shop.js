@@ -35,7 +35,7 @@ export default function Shop() {
 
   return (
     <div className="shop-page">
-      <div className="shop-hero">
+      <div className="shop-hero scroll-reveal">
         <div className="container">
           <h1>Shop CoreVita</h1>
           <p>Nature's most bioavailable supplements, crafted for modern wellness</p>
@@ -43,9 +43,9 @@ export default function Shop() {
       </div>
 
       <div className="container shop-products">
-        <div className="products-grid">
+        <div className="products-grid reveal-stagger scroll-reveal scroll-reveal-delay">
           {products.map(product => (
-            <div key={product.id} className="product-card">
+            <div key={product.id} className="product-card motion-card">
               <Link to={`/products/${product.slug}`} className="product-card-img-link">
                 <div className="product-card-img">
                   <div className="card-bottle">

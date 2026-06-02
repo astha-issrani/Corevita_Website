@@ -53,7 +53,7 @@ export default function BlogArticle() {
 
   return (
     <article className="blog-article-page">
-      <header className="blog-article-hero">
+      <header className="blog-article-hero scroll-reveal">
         <div className="container">
           <Link to="/blog" className="blog-back">← All articles</Link>
           <h1 className="blog-article-title">{post.title}</h1>
@@ -64,12 +64,12 @@ export default function BlogArticle() {
       </header>
 
       {post.coverImage && (
-        <div className="blog-article-cover">
+        <div className="blog-article-cover scroll-reveal scroll-reveal-scale">
           <img src={resolveUploadUrl(post.coverImage)} alt="" />
         </div>
       )}
 
-      <div className="blog-article-content">
+      <div className="blog-article-content scroll-reveal scroll-reveal-delay">
         {renderRichText(post.body, { className: 'blog-article-rich' })}
       </div>
 
