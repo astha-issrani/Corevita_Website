@@ -109,4 +109,18 @@
   .contact-row {
     grid-template-columns: 1fr;
   }
+
+  .contact-send-btn {
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-page {
+    padding: 32px 0 48px;
+  }
+
+  .contact-title {
+    font-size: clamp(28px, 8vw, 36px);
+  }
 }

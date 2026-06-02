@@ -165,4 +165,9 @@
 @media (max-width: 768px) {
   .theme-colors-grid { grid-template-columns: 1fr; }
   .theme-panel { padding: 16px; }
+  .theme-presets { flex-direction: column; }
+  .theme-preset-card { width: 100%; min-width: 0; }
+  .theme-preview-nav { flex-wrap: wrap; gap: 8px; padding: 12px 14px; }
+  .theme-preview-hero { padding: 24px 16px; }
+  .theme-preview-hero h2 { font-size: 20px; }
 }

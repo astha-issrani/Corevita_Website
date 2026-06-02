@@ -114,12 +114,13 @@
   .topbar {
     font-size: 10px;
     letter-spacing: 1px;
-    padding: 8px 12px;
+    padding: calc(8px + var(--safe-top, 0px)) 12px 8px;
     line-height: 1.35;
   }
 
   .navbar {
     position: sticky;
+    top: 0;
   }
 
   .navbar-inner {

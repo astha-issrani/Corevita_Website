@@ -178,6 +178,25 @@
 
   .track-btn {
     width: 100%;
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .track-page h1 {
+    font-size: clamp(24px, 7vw, 30px);
+  }
+
+  .track-card {
+    padding: 20px 14px;
+  }
+
+  .track-step {
+    min-width: 64px;
+  }
+
+  .track-step span {
+    font-size: 11px;
   }
 }
 

@@ -99,8 +99,8 @@
 @media (max-width: 480px) {
   .admin-login-page {
     padding: 16px;
+    padding-top: calc(32px + var(--safe-top, 0px));
     align-items: flex-start;
-    padding-top: 32px;
   }
 
   .admin-login-card {

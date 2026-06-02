@@ -480,4 +480,26 @@
   .dash-section-header { flex-direction: column; }
   .dash-section-actions { width: 100%; }
   .dash-range-select { flex: 1; }
+
+  .dash-block-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .dash-topbar {
+    padding: 14px;
+  }
+
+  .dash-scroll {
+    padding: 12px;
+  }
+
+  .dash-block-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .dash-metric-card {
+    padding: 14px;
+  }
 }

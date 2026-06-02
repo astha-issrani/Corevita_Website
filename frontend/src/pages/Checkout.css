@@ -170,7 +170,11 @@
 
 @media (max-width: 768px) {
   .checkout-page {
-    padding: 24px 0 40px;
+    padding: 24px 0 calc(40px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .checkout-empty {
+    padding: 48px 16px;
   }
 
   .checkout-logo {
@@ -205,5 +209,20 @@
   .place-order-btn {
     font-size: 15px;
     padding: 14px;
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-steps {
+    font-size: 11px;
+  }
+
+  .checkout-section h3 {
+    font-size: 16px;
+  }
+
+  .order-summary h3 {
+    font-size: 16px;
   }
 }

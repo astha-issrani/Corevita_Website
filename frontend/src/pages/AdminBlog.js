@@ -206,15 +206,15 @@ export default function AdminBlog() {
               <tbody>
                 {posts.map((p) => (
                   <tr key={p._id}>
-                    <td><strong>{p.title}</strong></td>
-                    <td><code className="ab-slug">/blog/{p.slug}</code></td>
-                    <td>
+                    <td data-label="Title"><strong>{p.title}</strong></td>
+                    <td data-label="Slug"><code className="ab-slug">/blog/{p.slug}</code></td>
+                    <td data-label="Status">
                       <span className={`ab-status ${p.published ? 'on' : 'off'}`}>
                         {p.published ? 'Published' : 'Draft'}
                       </span>
                     </td>
-                    <td>{new Date(p.updatedAt).toLocaleDateString()}</td>
-                    <td>
+                    <td data-label="Updated">{new Date(p.updatedAt).toLocaleDateString()}</td>
+                    <td data-label="Actions">
                       <div className="ab-row-actions">
                         <a href={`/blog/${p.slug}`} target="_blank" rel="noopener noreferrer" className="ab-link-btn">View</a>
                         <button type="button" className="ab-edit-btn" onClick={() => startEdit(p)}>Edit</button>

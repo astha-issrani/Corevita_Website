@@ -359,8 +359,12 @@
   .cart-shipping-section,
   .cart-line,
   .cart-footer {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: max(16px, var(--safe-left, 0px));
+    padding-right: max(16px, var(--safe-right, 0px));
+  }
+
+  .cart-footer {
+    padding-bottom: max(20px, calc(16px + var(--safe-bottom, 0px)));
   }
 
   .cart-line {

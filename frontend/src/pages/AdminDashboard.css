@@ -736,6 +736,10 @@
   .coupon-form-card {
     margin: 0 16px 20px;
   }
+
+  .coupon-tab-content {
+    padding: 16px;
+  }
 }
 
 @media (max-width: 480px) {
