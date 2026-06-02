@@ -2,13 +2,50 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
-export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem('corevita_cart');
-      return saved ? JSON.parse(saved) : [];
-    } catch { return []; }
+/** Drop corrupted / partial pack rows so the cart is empty unless fully added packs exist */
+function sanitizeCartItems(items) {
+  if (!Array.isArray(items) || items.length === 0) return [];
+
+  const byGroup = items.reduce((acc, item) => {
+    if (!item?.groupId || !item?.packId) return acc;
+    if (!acc[item.groupId]) acc[item.groupId] = [];
+    acc[item.groupId].push(item);
+    return acc;
+  }, {});
+
+  const valid = [];
+  Object.values(byGroup).forEach((group) => {
+    const packSize = Number(group[0]?.packSize || group[0]?.quantity || 1);
+    if (!Number.isFinite(packSize) || packSize < 1) return;
+
+    const completePacks = Math.floor(group.length / packSize);
+    if (completePacks < 1) return;
+
+    valid.push(...group.slice(0, completePacks * packSize));
   });
+
+  return valid;
+}
+
+function loadCartFromStorage() {
+  try {
+    const saved = localStorage.getItem('corevita_cart');
+    if (!saved) return [];
+    return sanitizeCartItems(JSON.parse(saved));
+  } catch {
+    return [];
+  }
+}
+
+export function CartProvider({ children }) {
+  const [cartItems, setCartItemsRaw] = useState(loadCartFromStorage);
+
+  const setCartItems = (updater) => {
+    setCartItemsRaw((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      return sanitizeCartItems(next);
+    });
+  };
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [coupon, setCoupon] = useState(null);
@@ -81,7 +118,12 @@ export function CartProvider({ children }) {
   };
 
   const removeFromCart = (packId) => {
-    setCartItems(prev => prev.filter(i => i.packId !== packId));
+    setCartItems((prev) => {
+      const target = prev.find((i) => i.packId === packId);
+      if (!target?.groupId) return prev.filter((i) => i.packId !== packId);
+      // Always remove the whole pack group — never leave orphan bottle rows
+      return prev.filter((i) => i.groupId !== target.groupId);
+    });
   };
 
   // Remove entire pack group
@@ -138,21 +180,26 @@ export function CartProvider({ children }) {
   // Totals — only count paid bottles for price
   const cartTotal = cartItems.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const cartSavings = cartItems.reduce((sum, i) => sum + Math.max(0, (i.originalPrice - i.price) * i.quantity), 0);
-  const cartCount = cartItems.length; // total bottle rows
   const couponDiscount = coupon ? coupon.discountAmount : 0;
   const cartFinalTotal = Math.max(0, cartTotal - couponDiscount);
 
-  // Unique groups for display grouping
+  // Unique groups for display grouping (complete packs only)
   const cartGroups = cartItems.reduce((acc, item) => {
     if (!acc[item.groupId]) acc[item.groupId] = [];
     acc[item.groupId].push(item);
     return acc;
   }, {});
 
+  const cartPackCount = Object.values(cartGroups).reduce((sum, group) => {
+    const packSize = Number(group[0]?.packSize || 1);
+    if (group.length % packSize !== 0) return sum;
+    return sum + group.length / packSize;
+  }, 0);
+
   return (
     <CartContext.Provider value={{
       cartItems, cartGroups, addToCart, removeFromCart, removeGroup, updateQuantity, clearCart,
-      cartCount, cartTotal, cartSavings, cartFinalTotal,
+      cartCount: cartPackCount, cartPackCount, cartTotal, cartSavings, cartFinalTotal,
       coupon, applyCoupon, removeCoupon,
       isCartOpen, setIsCartOpen,
     }}>

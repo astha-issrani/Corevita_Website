@@ -80,8 +80,15 @@ export default function CartDrawer() {
 
   const handleRemoveCoupon = () => { removeCoupon(); setCouponError(''); setCouponInput(''); };
 
-  const groupIds = Object.keys(cartGroups);
-  const totalItems = cartItems.length;
+  const groupIds = Object.keys(cartGroups).filter((groupId) => {
+    const bottles = cartGroups[groupId];
+    const packSize = Number(bottles[0]?.packSize || 1);
+    return packSize > 0 && bottles.length >= packSize && bottles.length % packSize === 0;
+  });
+  const totalItems = groupIds.reduce((sum, groupId) => {
+    const bottles = cartGroups[groupId];
+    return sum + bottles.length / Number(bottles[0]?.packSize || 1);
+  }, 0);
   const totalSavings = cartSavings + (coupon?.discountAmount || 0);
 
   return (
