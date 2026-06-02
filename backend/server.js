@@ -22,6 +22,7 @@ app.use('/api/settings', require('./routes/settings'));
 app.use('/api/content', require('./routes/content'));
 app.use('/api/blog', require('./routes/blog'));
 app.use('/api/products', require('./routes/reviews'));
+app.use('/api/admin', require('./routes/adminStats'));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 

@@ -63,7 +63,7 @@ export default function AdminLogin() {
             />
           </div>
           {error && <p className="admin-error">{error}</p>}
-          <button type="submit" className="btn-primary admin-login-btn" disabled={loading}>
+          <button type="submit" className="admin-login-btn" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign In →'}
           </button>
         </form>

@@ -1,6 +1,6 @@
 .admin-login-page {
   min-height: 100vh;
-  background: #111;
+  background: #f4f5f7;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +13,8 @@
   padding: 48px 40px;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid #ebebeb;
   text-align: center;
 }
 
@@ -30,11 +31,12 @@
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 6px;
+  color: #111;
 }
 
 .admin-login-sub {
   font-size: 14px;
-  color: var(--gray);
+  color: #888;
   margin-bottom: 32px;
 }
 
@@ -62,16 +64,24 @@
   border: none;
   border-radius: 8px;
   margin-top: 4px;
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
 }
+.admin-login-btn:hover { background: #333; }
+.admin-login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .admin-hint {
   margin-top: 24px;
   font-size: 12px;
-  color: #aaa;
+  color: #888;
   background: #f9f9f9;
   padding: 12px;
   border-radius: 8px;
   line-height: 1.8;
+  border: 1px solid #f0f0f0;
 }
 .admin-hint code {
   background: #eee;

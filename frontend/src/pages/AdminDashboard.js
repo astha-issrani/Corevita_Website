@@ -7,6 +7,7 @@ import AdminReviews from './AdminReviews';
 import AdminContent from './AdminContent';
 import AdminProduct from './AdminProduct';
 import AdminBlog from './AdminBlog';
+import AdminOverview from './AdminOverview';
 
 const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api$/, '') + '/api';
 function getToken() { return localStorage.getItem('corevita_token'); }
@@ -256,7 +257,8 @@ function CouponsTab() {
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('orders');
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [sidebarSearch, setSidebarSearch] = useState('');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const admin = JSON.parse(localStorage.getItem('corevita_admin') || '{}');
 
@@ -281,6 +283,7 @@ export default function AdminDashboard() {
   };
 
   const navItems = [
+    { key: 'dashboard', icon: '📊', label: 'Dashboard' },
     { key: 'orders',   icon: '📦', label: 'Orders' },
     { key: 'messages', icon: '✉️', label: 'Messages' },
     { key: 'coupons',  icon: '🏷️', label: 'Coupons' },
@@ -292,6 +295,9 @@ export default function AdminDashboard() {
   ];
 
   const activeLabel = navItems.find((n) => n.key === activeTab)?.label || 'Admin';
+  const filteredNav = navItems.filter((n) =>
+    !sidebarSearch || n.label.toLowerCase().includes(sidebarSearch.toLowerCase())
+  );
 
   return (
     <div className={`admin-page ${mobileNavOpen ? 'admin-nav-open' : ''}`}>
@@ -315,11 +321,24 @@ export default function AdminDashboard() {
       />
 
       <aside className={`admin-sidebar ${mobileNavOpen ? 'open' : ''}`}>
-        <div className="admin-sidebar-logo">COREVITA</div>
+        <div className="admin-sidebar-brand">
+          <div className="admin-brand-icon">C</div>
+          <span className="admin-sidebar-logo">CoreVita</span>
+        </div>
+        <div className="admin-sidebar-search">
+          <span className="admin-search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={sidebarSearch}
+            onChange={(e) => setSidebarSearch(e.target.value)}
+          />
+        </div>
         <nav className="admin-nav">
-          {navItems.map(({ key, icon, label }) => (
+          <p className="admin-nav-section">Main Menu</p>
+          {filteredNav.map(({ key, icon, label }) => (
             <div key={key} className={`admin-nav-item ${activeTab === key ? 'active' : ''}`} onClick={() => selectTab(key)}>
-              <span>{icon}</span> {label}
+              <span className="admin-nav-icon">{icon}</span> {label}
             </div>
           ))}
         </nav>
@@ -332,6 +351,7 @@ export default function AdminDashboard() {
         </div>
       </aside>
       <main className="admin-main">
+        {activeTab === 'dashboard' && <AdminOverview adminEmail={admin.email} />}
         {activeTab === 'orders'   && <OrdersTab />}
         {activeTab === 'messages' && <MessagesTab />}
         {activeTab === 'coupons'  && <CouponsTab />}
