@@ -377,10 +377,10 @@ export default function ProductDetail(){
   const [isZooming,setIsZooming]=useState(false);
   const [zoomPos,setZoomPos]=useState({x:50,y:50});
   const mainImgRef=useRef(null);
-  const packScrollRef=useRef(null);
   const bannerRowRef=useRef(null);
   const heroCtaRef=useRef(null);
   const thumbStripRef=useRef(null);
+  const touchStartX=useRef(null);
   const [showStickyBar,setShowStickyBar]=useState(false);
 
   const [reviews,setReviews]=useState([]);
@@ -425,10 +425,6 @@ export default function ProductDetail(){
     observer.observe(cta);
     return()=>observer.disconnect();
   },[product,selectedPack]);
-
-  const scrollThumbs=(dir)=>{
-    thumbStripRef.current?.scrollBy({left:dir*220,behavior:'smooth'});
-  };
 
   const handleMouseMove=(e)=>{
     const rect=mainImgRef.current.getBoundingClientRect();
@@ -504,6 +500,42 @@ export default function ProductDetail(){
     return urls.length>0?urls:DEFAULT_GALLERY_IMAGES;
   },[product.images]);
   const hasGallery=galleryUrls.length>0;
+  const slideCount=hasGallery?galleryUrls.length:PRODUCT_SLIDES.length;
+
+  const goToSlide=useCallback((index)=>{
+    const count=hasGallery?galleryUrls.length:PRODUCT_SLIDES.length;
+    if(count<=0)return;
+    const next=((index%count)+count)%count;
+    setActiveSlide(next);
+    requestAnimationFrame(()=>{
+      const strip=thumbStripRef.current;
+      const thumb=strip?.children[next];
+      thumb?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+    });
+  },[hasGallery,galleryUrls.length]);
+
+  const scrollThumbs=(dir)=>{
+    goToSlide(activeSlide+dir);
+  };
+
+  const handleGalleryTouchStart=(e)=>{
+    touchStartX.current=e.touches[0]?.clientX??null;
+  };
+
+  const handleGalleryTouchEnd=(e)=>{
+    if(touchStartX.current==null||slideCount<=1)return;
+    const endX=e.changedTouches[0]?.clientX;
+    if(endX==null)return;
+    const diff=endX-touchStartX.current;
+    if(Math.abs(diff)>48){
+      goToSlide(activeSlide+(diff<0?1:-1));
+    }
+    touchStartX.current=null;
+  };
+
+  useEffect(()=>{
+    setActiveSlide(i=>Math.min(i,Math.max(slideCount-1,0)));
+  },[slideCount]);
   const displayTitle=c('hero','title','')||product.name;
   const mainImageUrl=hasGallery?galleryUrls[Math.min(activeSlide,galleryUrls.length-1)]:null;
 
@@ -537,8 +569,21 @@ export default function ProductDetail(){
       <div className="container product-hero-wrapper">
         <div className="product-images">
           <div className="zoom-wrapper">
-            <div className={`product-main-img zoom-source ${isZooming?'zooming':''}`} ref={mainImgRef}
-              onMouseEnter={()=>setIsZooming(true)} onMouseLeave={()=>setIsZooming(false)} onMouseMove={handleMouseMove}>
+            <div
+              className={`product-main-img zoom-source ${isZooming?'zooming':''}`}
+              ref={mainImgRef}
+              onMouseEnter={()=>setIsZooming(true)}
+              onMouseLeave={()=>setIsZooming(false)}
+              onMouseMove={handleMouseMove}
+              onTouchStart={handleGalleryTouchStart}
+              onTouchEnd={handleGalleryTouchEnd}
+            >
+              {slideCount>1&&(
+                <>
+                  <button type="button" className="gallery-nav gallery-nav--prev" onClick={()=>goToSlide(activeSlide-1)} aria-label="Previous image">‹</button>
+                  <button type="button" className="gallery-nav gallery-nav--next" onClick={()=>goToSlide(activeSlide+1)} aria-label="Next image">›</button>
+                </>
+              )}
               {isZooming&&<div className="zoom-lens" style={{left:`${zoomPos.x}%`,top:`${zoomPos.y}%`}}/>}
               {hasGallery ? (
                 <img
@@ -570,6 +615,21 @@ export default function ProductDetail(){
               </div>
             )}
           </div>
+          {slideCount>1&&(
+            <div className="gallery-dots" role="tablist" aria-label="Product images">
+              {Array.from({length:slideCount},(_,i)=>(
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeSlide===i}
+                  aria-label={`Image ${i+1} of ${slideCount}`}
+                  className={`gallery-dot ${activeSlide===i?'active':''}`}
+                  onClick={()=>goToSlide(i)}
+                />
+              ))}
+            </div>
+          )}
           <div className="product-thumbnails-wrap">
             <button type="button" className="thumb-nav thumb-nav--prev" onClick={()=>scrollThumbs(-1)} aria-label="Previous image">‹</button>
             <div className="product-thumbnails" ref={thumbStripRef}>
@@ -590,7 +650,7 @@ export default function ProductDetail(){
         </div>
 
         <div className="product-info">
-          <div className="product-info-scroll" ref={packScrollRef}>
+          <div className="product-info-scroll">
           <div className="product-rating"><span className="stars">★★★★★</span><span className="rating-text">{product.rating}/5 Loved by {product.reviewCount}+ herbalists</span></div>
           <h1 className="product-title">{displayTitle}</h1>
           <div className="product-pricing">
@@ -677,7 +737,7 @@ export default function ProductDetail(){
 
             <div className="faq-section">
               {faqs.map((faq,i)=>(
-                <div key={i} className={`faq-item ${i===faqs.length-1?'faq-item--scroll-end':''}`}>
+                <div key={i} className="faq-item">
                   <button type="button" className="faq-trigger" onClick={()=>setOpenFaq(openFaq===i?null:i)}>
                     {faq.q}<span className={`faq-arrow ${openFaq===i?'open':''}`}>▼</span>
                   </button>
