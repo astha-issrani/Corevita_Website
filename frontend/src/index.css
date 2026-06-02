@@ -12,12 +12,12 @@
   --red: #EF4444;
 
   /* Font variables — overridden dynamically by ThemeContext */
-  --font-main: 'Poppins', sans-serif;
-  --font-heading: 'Poppins', sans-serif;
-  --font-card: 'Poppins', sans-serif;
-  --font-price: 'Poppins', sans-serif;
-  --font-button: 'Poppins', sans-serif;
-  --font-nav: 'Poppins', sans-serif;
+  --font-main: 'Inter', sans-serif;
+  --font-heading: 'Geist', sans-serif;
+  --font-card: 'Inter', sans-serif;
+  --font-price: 'Geist', sans-serif;
+  --font-button: 'Inter', sans-serif;
+  --font-nav: 'Geist', sans-serif;
   --font-size-heading: 29px;
   --font-size-body: 16px;
 
@@ -54,8 +54,9 @@ input, textarea, select {
 /* ── Headings use --font-heading ── */
 h1, h2, h3, h4 {
   font-family: var(--font-heading);
-  line-height: 1.1;
-  letter-spacing: -0.5px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 400;
 }
 
 /* ── Prices use --font-price ── */

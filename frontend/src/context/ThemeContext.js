@@ -6,8 +6,9 @@ const API = (process.env.REACT_APP_API_URL || 'http://localhost:5000').replace(/
 // Available Google Fonts grouped by style
 export const FONT_OPTIONS = [
   // Sans-serif (clean, modern)
-  { label: 'Barlow (Default)', value: 'Barlow', category: 'sans-serif' },
-  { label: 'Inter', value: 'Inter', category: 'sans-serif' },
+  { label: 'Geist (Heading)', value: 'Geist', category: 'sans-serif' },
+  { label: 'Inter (Body)', value: 'Inter', category: 'sans-serif' },
+  { label: 'Barlow', value: 'Barlow', category: 'sans-serif' },
   { label: 'Poppins', value: 'Poppins', category: 'sans-serif' },
   { label: 'Nunito', value: 'Nunito', category: 'sans-serif' },
   { label: 'Lato', value: 'Lato', category: 'sans-serif' },
@@ -33,12 +34,12 @@ export const FONT_OPTIONS = [
 ];
 
 export const DEFAULT_FONTS = {
-  heading: 'Poppins',
-  body: 'Poppins',
-  card: 'Poppins',
-  price: 'Poppins',
-  button: 'Poppins',
-  nav: 'Poppins',
+  heading: 'Geist',
+  body: 'Inter',
+  card: 'Inter',
+  price: 'Geist',
+  button: 'Inter',
+  nav: 'Geist',
 };
 
 export const DEFAULT_FONT_SIZES = {
@@ -56,7 +57,7 @@ function loadGoogleFont(fontName) {
   const link = document.createElement('link');
   link.id = id;
   link.rel = 'stylesheet';
-  link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontName)}:wght@400;500;600;700;800;900&display=swap`;
+  link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontName)}:wght@200;300;400;500;600;700&display=swap`;
   document.head.appendChild(link);
 }
 

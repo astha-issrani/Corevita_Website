@@ -1,4 +1,14 @@
 const Product = require('./models/Product');
+const Settings = require('./models/Settings');
+
+const BRAND_FONTS = {
+  heading: 'Geist',
+  body: 'Inter',
+  card: 'Inter',
+  price: 'Geist',
+  button: 'Inter',
+  nav: 'Geist',
+};
 
 const DEFAULT_PRODUCT_IMAGES = [
   '/images/bee-pearl-bottle.svg',
@@ -12,6 +22,18 @@ const seedBlog = require('./seedBlog');
 
 module.exports = async function seedData() {
   try {
+    const existingFonts = await Settings.findOne({ key: 'fonts' });
+    const isOldDefault = !existingFonts?.value
+      || Object.values(existingFonts.value).every((v) => v === 'Poppins');
+    if (isOldDefault) {
+      await Settings.findOneAndUpdate(
+        { key: 'fonts' },
+        { key: 'fonts', value: BRAND_FONTS },
+        { upsert: true }
+      );
+      console.log('Updated brand fonts to Geist + Inter');
+    }
+
     await seedBlog();
     const existing = await Product.findOne({ slug: 'bee-pearl' });
     if (existing) {
