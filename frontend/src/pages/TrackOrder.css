@@ -106,7 +106,7 @@
 }
 .track-step.complete .track-dot {
   background: var(--yellow);
-  color: var(--black);
+  color: var(--on-primary, #ffffff);
 }
 .track-line {
   flex: 1;
