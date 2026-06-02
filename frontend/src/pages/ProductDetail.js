@@ -537,7 +537,7 @@ export default function ProductDetail(){
             </div>
           </div>
         </div>
-        <button type="button" className="btn-primary sticky-cart-btn" onClick={handleAddToCart}>Add to cart</button>
+        <button type="button" className="sticky-cart-btn" onClick={handleAddToCart}>Add to cart</button>
       </div>
 
       {/* ── PRODUCT HERO ── */}
@@ -610,41 +610,71 @@ export default function ProductDetail(){
           <ul className="benefit-list">{product.benefits.map((b,i)=><li key={i}><span className="check">✓</span> {b}</li>)}</ul>
 
             <div className="pack-selector">
-              <h3>Choose Your Pack</h3>
+              <h3 className="pack-selector-title">
+                <span className="pack-selector-line" aria-hidden="true" />
+                Choose Your Pack
+                <span className="pack-selector-line" aria-hidden="true" />
+              </h3>
               <div className="pack-list">
                 {product.packs.map(pack=>(
-                  <div key={pack._id} className={`pack-option ${selectedPack?._id===pack._id?'selected':''}`} onClick={()=>setSelectedPack(pack)}>
+                  <div
+                    key={pack._id}
+                    role="button"
+                    tabIndex={0}
+                    className={`pack-option ${selectedPack?._id===pack._id?'selected':''} ${pack.freeShipping?'pack-option--ships-free':''}`}
+                    onClick={()=>setSelectedPack(pack)}
+                    onKeyDown={(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); setSelectedPack(pack); }}}
+                  >
                     {pack.badge&&<span className="pack-badge">{pack.badge}</span>}
                     <div className="pack-option-row">
-                      <div className="pack-radio"><div className={`radio-dot ${selectedPack?._id===pack._id?'active':''}`}/></div>
+                      <div className="pack-radio" aria-hidden="true">
+                        <div className={`radio-dot ${selectedPack?._id===pack._id?'active':''}`}/>
+                      </div>
                       <div className="pack-label-text">
                         <strong>{pack.label}</strong>
                         <span className="pack-save">SAVE {pack.savingsPercent}%</span>
                       </div>
                       <div className="pack-pricing">
-                        <span className="pack-price">${pack.price}</span>
+                        <span className="pack-price">${Number(pack.price).toFixed(2)}</span>
                         {pack.originalPrice > 0 && (
-                          <span className="pack-original-price">${pack.originalPrice}</span>
+                          <span className="pack-original-price">${Number(pack.originalPrice).toFixed(2)}</span>
                         )}
                       </div>
                     </div>
-                    {pack.freeShipping&&<div className="pack-free-ship">+ FREE Shipping</div>}
+                    {pack.freeShipping&&(
+                      <div className="pack-free-ship">
+                        🚚 + FREE Shipping
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
-              <div className={`autorefill-box ${autoRefill?'checked':''}`} onClick={()=>setAutoRefill(!autoRefill)}>
-                <div className="autorefill-check">{autoRefill&&<span>✓</span>}</div>
-                <div><strong>Save More with Automatic Refills!</strong><p>Delivered Monthly</p></div>
+              <div
+                role="checkbox"
+                aria-checked={autoRefill}
+                tabIndex={0}
+                className={`autorefill-box ${autoRefill?'checked':''}`}
+                onClick={()=>setAutoRefill(!autoRefill)}
+                onKeyDown={(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); setAutoRefill(v=>!v); }}}
+              >
+                <div className="autorefill-check" aria-hidden="true">{autoRefill&&<span>✓</span>}</div>
+                <div>
+                  <strong>Save More with Automatic Refills!</strong>
+                  <p>Delivered Monthly</p>
+                </div>
               </div>
             </div>
 
-            <button ref={heroCtaRef} type="button" className={`btn-primary add-to-cart-btn ${added?'added':''}`} onClick={handleAddToCart}>
+            <button ref={heroCtaRef} type="button" className={`add-to-cart-btn ${added?'added':''}`} onClick={handleAddToCart}>
               {added?'✓ Added to Cart!':'ADD TO CART'}
             </button>
 
             <div className="product-trust">
               <div className="trust-stock"><span className="trust-dot" aria-hidden="true"/> In Stock</div>
-              <div className="trust-delivery">{c('hero','trust','Expected delivery in 5 to 8 business days')}</div>
+              <div className="trust-delivery">
+                <span className="trust-truck" aria-hidden="true">🚚</span>
+                {c('hero','trust','Expected delivery in 5 to 8 business days')}
+              </div>
               <div className="payment-icons" aria-label="Accepted payment methods">
                 {['Amex','Apple Pay','Discover','G Pay','Klarna','Mastercard','PayPal','Shop Pay','Visa'].map((m)=>(
                   <span key={m} className="payment-icon">{m}</span>
