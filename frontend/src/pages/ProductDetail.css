@@ -28,17 +28,16 @@
   gap: 40px 56px;
   padding-top: 32px;
   padding-bottom: 0;
-  align-items: stretch;
+  align-items: start;
 }
 
-/* Left: gallery column stretches to match product info height */
 .product-images {
   grid-column: 1;
   grid-row: 1;
   width: 100%;
   min-width: 0;
   position: static;
-  align-self: stretch;
+  align-self: start;
   display: flex;
   flex-direction: column;
 }
@@ -46,18 +45,17 @@
 .product-info {
   grid-column: 2;
   grid-row: 1;
-  align-self: stretch;
+  align-self: start;
   min-width: 0;
-  min-height: 0;
   display: flex;
   flex-direction: column;
 }
 
 .product-info-scroll,
 .pack-scroll-zone {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  flex: 0 1 auto;
   max-height: none;
   overflow: visible;
   overscroll-behavior-y: auto;
@@ -65,59 +63,22 @@
   padding-bottom: 0;
 }
 
-/* Desktop: scroll product details beside sticky gallery (rating → last FAQ) */
+/* Desktop: scroll details beside gallery — hidden scrollbar, height synced via JS */
 @media (min-width: 1025px) {
-  .product-hero-wrapper {
-    align-items: start;
-  }
-
-  .product-images {
-    position: sticky;
-    top: 72px;
-    align-self: start;
-  }
-
-  .product-thumbnails-wrap {
-    margin-top: 0;
-  }
-
-  .product-info {
-    align-self: start;
-    min-height: 0;
-  }
-
   .product-info-scroll {
-    max-height: calc(100svh - 96px);
     overflow-x: hidden;
     overflow-y: auto;
-    padding-right: 10px;
-    padding-bottom: 4px;
-    scrollbar-width: thin;
-    scrollbar-color: #111111 #ececec;
+    padding-right: 4px;
+    padding-bottom: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     -webkit-overflow-scrolling: touch;
   }
 
   .product-info-scroll::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .product-info-scroll::-webkit-scrollbar-track {
-    background: #ececec;
-    border-radius: 999px;
-  }
-
-  .product-info-scroll::-webkit-scrollbar-thumb {
-    background: #111111;
-    border-radius: 999px;
-  }
-
-  .product-info-scroll::-webkit-scrollbar-thumb:hover {
-    background: #333333;
-  }
-
-  .product-info-scroll .faq-section {
-    margin-top: 8px;
-    padding-bottom: 0;
+    display: none;
+    width: 0;
+    height: 0;
   }
 }
 
@@ -167,7 +128,16 @@
   justify-content: center;
   margin-bottom: 0;
   border: 1px solid var(--pd-border);
-  touch-action: pan-y pinch-zoom;
+  touch-action: pan-x pan-y;
+  user-select: none;
+}
+
+.product-main-img.has-gallery-swipe {
+  cursor: grab;
+}
+
+.product-main-img.has-gallery-swipe:active {
+  cursor: grabbing;
 }
 .product-img-placeholder {
   width: 100%;
@@ -182,7 +152,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: auto;
+  margin-top: 0;
   flex-shrink: 0;
   padding-top: 16px;
 }
@@ -610,7 +580,7 @@
 .trust-item { font-size: 13px; color: var(--pd-muted); }
 
 /* FAQ */
-.faq-section { margin-top: auto; padding-top: 8px; padding-bottom: 0; }
+.faq-section { margin-top: 8px; padding-top: 0; padding-bottom: 0; }
 .faq-item:last-child { border-bottom: none; }
 .faq-item { border-bottom: 1px solid var(--pd-border); }
 .faq-trigger { width: 100%; text-align: left; background: none; border: none; padding: 16px 0; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--pd-text); }

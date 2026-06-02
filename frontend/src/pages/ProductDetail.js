@@ -388,10 +388,13 @@ export default function ProductDetail(){
   const [isZooming,setIsZooming]=useState(false);
   const [zoomPos,setZoomPos]=useState({x:50,y:50});
   const mainImgRef=useRef(null);
+  const productImagesRef=useRef(null);
+  const productInfoScrollRef=useRef(null);
   const bannerRowRef=useRef(null);
   const heroCtaRef=useRef(null);
   const thumbStripRef=useRef(null);
-  const touchStartX=useRef(null);
+  const touchStart=useRef({ x: null, y: null });
+  const pointerStart=useRef({ x: null, y: null });
   const [showStickyBar,setShowStickyBar]=useState(false);
 
   const [reviews,setReviews]=useState([]);
@@ -530,23 +533,98 @@ export default function ProductDetail(){
   };
 
   const handleGalleryTouchStart=(e)=>{
-    touchStartX.current=e.touches[0]?.clientX??null;
+    const t=e.touches[0];
+    if(!t)return;
+    touchStart.current={x:t.clientX,y:t.clientY};
   };
 
   const handleGalleryTouchEnd=(e)=>{
-    if(touchStartX.current==null||slideCount<=1)return;
+    if(slideCount<=1)return;
+    const t=touchStart.current;
+    if(t.x==null||t.y==null)return;
     const endX=e.changedTouches[0]?.clientX;
-    if(endX==null)return;
-    const diff=endX-touchStartX.current;
-    if(Math.abs(diff)>48){
-      goToSlide(activeSlide+(diff<0?1:-1));
+    const endY=e.changedTouches[0]?.clientY;
+    if(endX==null||endY==null)return;
+    const dx=endX-t.x;
+    const dy=endY-t.y;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>48){
+      goToSlide(activeSlide+(dx<0?1:-1));
     }
-    touchStartX.current=null;
+    touchStart.current={x:null,y:null};
+  };
+
+  const handleGalleryPointerDown=(e)=>{
+    if(slideCount<=1||e.button!==0)return;
+    pointerStart.current={x:e.clientX,y:e.clientY};
+  };
+
+  const handleGalleryPointerUp=(e)=>{
+    if(slideCount<=1)return;
+    const start=pointerStart.current;
+    if(start.x==null)return;
+    const dx=e.clientX-start.x;
+    const dy=e.clientY-start.y;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>48){
+      goToSlide(activeSlide+(dx<0?1:-1));
+    }
+    pointerStart.current={x:null,y:null};
   };
 
   useEffect(()=>{
     setActiveSlide(i=>Math.min(i,Math.max(slideCount-1,0)));
   },[slideCount]);
+
+  useEffect(()=>{
+    const imagesEl=productImagesRef.current;
+    const scrollEl=productInfoScrollRef.current;
+    if(!imagesEl||!scrollEl)return;
+
+    const syncPanel=()=>{
+      if(window.matchMedia('(max-width: 1024px)').matches){
+        scrollEl.style.maxHeight='';
+        scrollEl.style.overflowY='';
+        return;
+      }
+      const galleryH=Math.ceil(imagesEl.getBoundingClientRect().height);
+      const contentH=scrollEl.scrollHeight;
+      if(contentH>galleryH+2){
+        scrollEl.style.maxHeight=`${galleryH}px`;
+        scrollEl.style.overflowY='auto';
+      }else{
+        scrollEl.style.maxHeight='';
+        scrollEl.style.overflowY='hidden';
+      }
+    };
+
+    syncPanel();
+    const ro=new ResizeObserver(syncPanel);
+    ro.observe(imagesEl);
+    ro.observe(scrollEl);
+    window.addEventListener('resize',syncPanel);
+    return()=>{
+      ro.disconnect();
+      window.removeEventListener('resize',syncPanel);
+    };
+  },[product,selectedPack,openFaq,activeSlide]);
+
+  useEffect(()=>{
+    const el=mainImgRef.current;
+    if(!el||slideCount<=1)return;
+
+    const onTouchMove=(e)=>{
+      const t=touchStart.current;
+      if(t.x==null||t.y==null)return;
+      const dx=e.touches[0].clientX-t.x;
+      const dy=e.touches[0].clientY-t.y;
+      if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>8){
+        e.preventDefault();
+      }
+    };
+
+    el.addEventListener('touchmove',onTouchMove,{passive:false});
+    return()=>el.removeEventListener('touchmove',onTouchMove);
+  },[slideCount]);
+
   const displayTitle=c('hero','title','')||product.name;
   const mainImageUrl=hasGallery?galleryUrls[Math.min(activeSlide,galleryUrls.length-1)]:null;
 
@@ -578,16 +656,18 @@ export default function ProductDetail(){
 
       {/* ── PRODUCT HERO ── */}
       <div className="container product-hero-wrapper">
-        <div className="product-images">
+        <div className="product-images" ref={productImagesRef}>
           <div className="zoom-wrapper">
             <div
-              className={`product-main-img zoom-source ${isZooming?'zooming':''}`}
+              className={`product-main-img zoom-source ${isZooming?'zooming':''} ${slideCount>1?'has-gallery-swipe':''}`}
               ref={mainImgRef}
               onMouseEnter={()=>setIsZooming(true)}
               onMouseLeave={()=>setIsZooming(false)}
               onMouseMove={handleMouseMove}
               onTouchStart={handleGalleryTouchStart}
               onTouchEnd={handleGalleryTouchEnd}
+              onPointerDown={handleGalleryPointerDown}
+              onPointerUp={handleGalleryPointerUp}
             >
               {slideCount>1&&(
                 <>
@@ -661,7 +741,7 @@ export default function ProductDetail(){
         </div>
 
         <div className="product-info">
-          <div className="product-info-scroll">
+          <div className="product-info-scroll" ref={productInfoScrollRef}>
           <div className="product-rating"><span className="stars">★★★★★</span><span className="rating-text">{product.rating}/5 Loved by {product.reviewCount}+ herbalists</span></div>
           <h1 className="product-title">{displayTitle}</h1>
           <div className="product-pricing">
