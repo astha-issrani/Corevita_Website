@@ -53,7 +53,10 @@
   font-size: 12px;
   font-weight: 700;
 }
-.step.active span { background: var(--yellow); }
+.step.active span {
+  background: var(--yellow);
+  color: var(--on-primary, #ffffff);
+}
 .step-divider { color: #ccc; }
 
 .checkout-section h3 {

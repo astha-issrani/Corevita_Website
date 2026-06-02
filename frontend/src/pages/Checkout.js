@@ -92,8 +92,6 @@ export default function Checkout() {
       <div className="checkout-grid">
         {/* Left: Form */}
         <div className="checkout-form-wrap">
-          <div className="checkout-logo">COREVITA</div>
-
           {/* Steps */}
           <div className="checkout-steps">
             <div className={`step ${step >= 1 ? 'active' : ''}`}>

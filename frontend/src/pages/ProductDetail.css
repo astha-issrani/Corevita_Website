@@ -1065,6 +1065,7 @@
 .avatar-upload-btn {
   padding: 8px 16px;
   background: var(--yellow);
+  color: var(--on-primary, #ffffff);
   border: none;
   border-radius: 8px;
   font-size: 13px;
@@ -1072,7 +1073,10 @@
   cursor: pointer;
   transition: background 0.2s;
 }
-.avatar-upload-btn:hover { background: var(--yellow-dark); }
+.avatar-upload-btn:hover {
+  background: var(--yellow-dark);
+  color: var(--on-primary, #ffffff);
+}
 .avatar-remove-btn {
   background: none;
   border: 1.5px solid #fca5a5;
